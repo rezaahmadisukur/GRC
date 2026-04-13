@@ -14,6 +14,11 @@ class CarController extends Controller
     ) {
     }
 
+    public function index()
+    {
+        return "Halaman Daftar Mobil Berhasil Diakses!";
+    }
+
     public function store(StoreCarRequest $request)
     {
         // Change to dto

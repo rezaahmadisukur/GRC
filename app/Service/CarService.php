@@ -20,7 +20,7 @@ class CarService
       'color' => $carDTO->color,
       'transmission' => $carDTO->transmission,
       'price_12h' => $carDTO->price_12h,
-      'price_24' => $carDTO->price_24h
+      'price_24h' => $carDTO->price_24h
     ]);
   }
 
