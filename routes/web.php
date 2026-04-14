@@ -29,7 +29,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+/**
+ * Cars Enpoint
+ */
 Route::get('/cars', [CarController::class, 'index'])->name('cars.index');
-Route::post('/cars/store', [CarController::class, 'store'])->name('cars.store');
+Route::get('/cars/create', [CarController::class, 'create'])->name('cars.create');
+Route::post('/cars', [CarController::class, 'store'])->name('cars.store');
+Route::get('/cars/{car:plate_code}', [CarController::class, 'show'])->name('cars.show');
+Route::get('/cars/{car:plate_code}/edit', [CarController::class, 'edit'])->name('cars.edit');
+Route::put('/cars/{car:plate_code}', [CarController::class, 'update'])->name('cars.update');
+Route::delete('/cars/{car:plate_code}', [CarController::class, 'destroy'])->name('cars.destroy');
 
 require __DIR__ . '/auth.php';

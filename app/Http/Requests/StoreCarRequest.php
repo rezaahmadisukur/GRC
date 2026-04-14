@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreCarRequest extends FormRequest
 {
@@ -21,14 +22,19 @@ class StoreCarRequest extends FormRequest
      */
     public function rules(): array
     {
+        $carId = $this->route('car') ? $this->route('car')->id : null;
+
         return [
             'name' => 'required|string',
-            'plate_code' => 'required|string|unique:cars',
-            'color' => 'required|string',
-            'transmission' => 'required|in:AT,MT',
+            'plate_code' => [
+                'required',
+                Rule::unique('cars', 'plate_code')->ignore($this->route('car')),
+            ],
+            'color' => 'required',
+            'transmission' => 'required',
             'price_12h' => 'required|numeric',
             'price_24h' => 'required|numeric',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048' // max 2mb
+            'image' => 'nullable|image|mimes:jpg,png|max:2048',
         ];
     }
 }
