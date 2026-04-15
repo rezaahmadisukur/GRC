@@ -1,22 +1,13 @@
 <?php
 
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Car;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome', ['cars' => Car::latest()->get()]);
 });
 
 Route::get('/dashboard', function () {
@@ -39,5 +30,9 @@ Route::get('/cars/{car:plate_code}', [CarController::class, 'show'])->name('cars
 Route::get('/cars/{car:plate_code}/edit', [CarController::class, 'edit'])->name('cars.edit');
 Route::put('/cars/{car:plate_code}', [CarController::class, 'update'])->name('cars.update');
 Route::delete('/cars/{car:plate_code}', [CarController::class, 'destroy'])->name('cars.destroy');
+
+
+Route::get('/cars/{car:plate_code}/rent', [BookingController::class, 'create'])->name('bookings.create');
+Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
 
 require __DIR__ . '/auth.php';

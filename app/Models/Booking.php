@@ -21,7 +21,7 @@ class Booking extends Model
         'dp_amount',
         'remains_payment',
         'status',
-        'note'
+        'notes'
     ];
 
     public function car()

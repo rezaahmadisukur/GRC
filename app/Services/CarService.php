@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Services;
 
 use App\DTOs\CarDTO;
 use App\Models\Car;

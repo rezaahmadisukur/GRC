@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use App\DTOs\CarDTO;
 use App\Http\Requests\StoreCarRequest;
 use App\Models\Car;
-use App\Service\CarService;
+use App\Services\CarService;
 use Illuminate\View\View;
 
 class CarController extends Controller
