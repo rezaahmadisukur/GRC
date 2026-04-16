@@ -65,4 +65,11 @@ class CarController extends Controller
         $this->carService->deleteCar($car);
         return redirect()->route('cars.index')->with('success', 'Mobil berhasi dihapus');
     }
+
+    public function indexAdmin()
+    {
+        $cars = Car::latest()->paginate(10);
+
+        return view('admin.cars.index', compact('cars'));
+    }
 }
