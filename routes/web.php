@@ -31,8 +31,13 @@ Route::get('/cars/{car:plate_code}/edit', [CarController::class, 'edit'])->name(
 Route::put('/cars/{car:plate_code}', [CarController::class, 'update'])->name('cars.update');
 Route::delete('/cars/{car:plate_code}', [CarController::class, 'destroy'])->name('cars.destroy');
 
-
-Route::get('/cars/{car:plate_code}/rent', [BookingController::class, 'create'])->name('bookings.create');
+// Route store booking integrated with **cars.show** 
 Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
+
+// Route check booking
+Route::get('/check-booking', function () {
+    return view('bookings.check-form');
+})->name('bookings.check-form');
+Route::post('/check-booking', [BookingController::class, 'check'])->name('bookings.check.status');
 
 require __DIR__ . '/auth.php';

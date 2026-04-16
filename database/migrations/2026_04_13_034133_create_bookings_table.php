@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('car_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
+            $table->string('booking_code')->unique();
 
             $table->string('customer_name');
             $table->string('whatsapp_number');
