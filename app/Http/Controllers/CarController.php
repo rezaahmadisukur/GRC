@@ -29,7 +29,7 @@ class CarController extends Controller
 
     public function create(): View
     {
-        return view('cars.create');
+        return view('admin.cars.create');
     }
 
     public function store(StoreCarRequest $request)
@@ -43,12 +43,12 @@ class CarController extends Controller
         // Call Car Service
         $this->carService->createCar($dto);
 
-        return redirect()->route('cars.index')->with('success', 'Mobil berhasil ditambah!');
+        return redirect()->route('admin.cars.index')->with('success', 'Mobil berhasil ditambah!');
     }
 
     public function edit(Car $car)
     {
-        return view('cars.edit', compact('car'));
+        return view('admin.cars.edit', compact('car'));
     }
 
     public function update(StoreCarRequest $request, Car $car)
@@ -57,13 +57,13 @@ class CarController extends Controller
 
         $this->carService->updateCar($car, $dto);
 
-        return redirect()->route('cars.index')->with('success', 'Data mobil diperbarui');
+        return redirect()->route('admin.cars.index')->with('success', 'Data mobil diperbarui');
     }
 
     public function destroy(Car $car)
     {
         $this->carService->deleteCar($car);
-        return redirect()->route('cars.index')->with('success', 'Mobil berhasi dihapus');
+        return redirect()->route('admin.cars.index')->with('success', 'Mobil berhasi dihapus');
     }
 
     public function indexAdmin()
