@@ -365,8 +365,8 @@
                             {{-- Car Image --}}
                             <div
                                 class="relative h-52 bg-gradient-to-br from-slate-100 via-blue-50 to-slate-100 overflow-hidden">
-                                @if($car->image_url)
-                                    <img src="{{ $car->image_url }}" alt="{{ $car->brand }} {{ $car->model }}"
+                                @if($car->image)
+                                    <img src="{{ asset('storage/' . $car->image) }}" alt="{{ $car->name }}"
                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center">
@@ -383,59 +383,59 @@
                                     </div>
                                 @endif
 
-                                {{-- Type badge --}}
+                                {{-- Plate code badge --}}
                                 <span
-                                    class="absolute top-4 left-4 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold tracking-wide shadow-md shadow-blue-600/30">
-                                    {{ $car->type ?? 'Standar' }}
+                                    class="absolute top-4 left-4 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold tracking-wide shadow-md shadow-blue-600/30 uppercase">
+                                    {{ $car->plate_code }}
                                 </span>
 
-                                {{-- Availability dot --}}
+                                {{-- Availability status --}}
                                 <div
                                     class="absolute top-4 right-4 flex items-center gap-1.5 bg-white/90 backdrop-blur-sm rounded-full px-2.5 py-1 shadow-sm">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                                    <span class="text-xs font-semibold text-slate-700">Tersedia</span>
+                                    <span
+                                        class="w-1.5 h-1.5 rounded-full {{ $car->is_available ? 'bg-green-500' : 'bg-red-500' }}"></span>
+                                    <span
+                                        class="text-xs font-semibold text-slate-700">{{ $car->is_available ? 'Tersedia' : 'Disewa' }}</span>
                                 </div>
                             </div>
 
                             {{-- Car Info --}}
                             <div class="p-6">
-                                {{-- Name & Year --}}
+                                {{-- Car Name --}}
                                 <div class="mb-3">
                                     <h3 class="text-lg font-extrabold text-slate-900 leading-tight">
-                                        {{ $car->brand }} {{ $car->model }}
+                                        {{ $car->name }}
                                     </h3>
                                     <div class="flex items-center gap-2 mt-1">
-                                        <span class="text-xs text-slate-400 font-medium">{{ $car->year ?? '2024' }}</span>
+                                        <span class="text-xs text-slate-400 font-medium">{{ $car->color }}</span>
                                         <span class="w-1 h-1 rounded-full bg-slate-300"></span>
                                         <span
-                                            class="text-xs text-slate-400 font-medium">{{ $car->transmission ?? 'Manual' }}</span>
+                                            class="text-xs text-slate-400 font-medium">{{ $car->transmission == 'AT' ? 'Automatic' : 'Manual' }}</span>
                                     </div>
                                 </div>
 
                                 {{-- Divider --}}
                                 <div class="border-t border-slate-100 my-4"></div>
 
-                                {{-- Price & CTA --}}
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <div class="text-xs text-slate-400 font-medium mb-0.5">Mulai dari</div>
-                                        <div class="flex items-baseline gap-1">
-                                            <span class="text-2xl font-extrabold text-blue-600">
-                                                Rp {{ number_format($car->price_per_day, 0, ',', '.') }}
-                                            </span>
-                                            <span class="text-slate-400 text-sm font-medium">/ hari</span>
-                                        </div>
+                                {{-- Prices --}}
+                                <div class="grid grid-cols-2 gap-3 mb-4">
+                                    <div class="bg-slate-50 rounded-xl p-2.5 text-center">
+                                        <div class="text-xs text-slate-400 font-medium">12 Jam</div>
+                                        <div class="text-lg font-bold text-blue-600">Rp
+                                            {{ number_format($car->price_12h, 0, ',', '.') }}</div>
                                     </div>
-                                    <a href="{{ route('cars.show', $car->plate_code) }}"
-                                        class="group/btn inline-flex items-center gap-1.5 bg-blue-50 hover:bg-blue-600 text-blue-600 hover:text-white px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 border border-blue-100 hover:border-blue-600 hover:shadow-md hover:shadow-blue-600/20">
-                                        Detail
-                                        <svg class="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform duration-200"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="9 18 15 12 9 6" />
-                                        </svg>
-                                    </a>
+                                    <div class="bg-slate-50 rounded-xl p-2.5 text-center">
+                                        <div class="text-xs text-slate-400 font-medium">24 Jam</div>
+                                        <div class="text-lg font-bold text-blue-600">Rp
+                                            {{ number_format($car->price_24h, 0, ',', '.') }}</div>
+                                    </div>
                                 </div>
+
+                                {{-- CTA Button --}}
+                                <a href="{{ route('cars.show', $car->plate_code) }}"
+                                    class="group/btn block text-center bg-blue-50 hover:bg-blue-600 text-blue-600 hover:text-white py-3 rounded-xl font-bold text-sm transition-all duration-200 border border-blue-100 hover:border-blue-600 hover:shadow-md hover:shadow-blue-600/20">
+                                    Lihat Detail
+                                </a>
                             </div>
                         </div>
                     @endforeach
