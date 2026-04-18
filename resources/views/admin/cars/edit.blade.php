@@ -5,7 +5,7 @@
     <div class="mb-8 max-w-4xl mx-auto">
       <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 class="text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-slate-800 tracking-tight">Ubah Data Kendaraan</h1>
+          <h1 class="text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-slate-800 tracking-tight">Ubah Data Mobil</h1>
           <p class="text-slate-500 mt-1">Perbarui informasi dan detail kendaraan.</p>
         </div>
         <a href="{{ route('admin.cars.index') }}"
@@ -14,7 +14,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
             </path>
           </svg>
-          Back to List
+          Kembali ke Daftar
         </a>
       </div>
     </div>
@@ -50,7 +50,7 @@
             <!-- Vehicle Name -->
             <div class="group">
               <label for="name" class="block text-sm font-medium text-slate-700 mb-2">Nama Mobil</label>
-              <input type="text" id="name" name="name" value="{{ old('name', $car->name) }}" required
+              <input type="text" id="name" name="name" value="{{ old('name', $car->name) }}"
                 class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 @error('name') border-red-500 focus:ring-red-500/10 @enderror"
                 placeholder="e.g Toyota Avanza, Honda Innova">
               @error('name')
@@ -62,7 +62,7 @@
             <div class="group">
               <label for="plate_code" class="block text-sm font-medium text-slate-700 mb-2">Kode Plat
                 <input type="text" id="plate_code" name="plate_code" value="{{ old('plate_code', $car->plate_code) }}"
-                  required maxlength="3"
+                  maxlength="3"
                   class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 uppercase tracking-widest font-medium @error('plate_code') border-red-500 focus:ring-red-500/10 @enderror"
                   placeholder="TRM">
                 @error('plate_code')
@@ -73,7 +73,7 @@
             <!-- Color -->
             <div class="group">
               <label for="color" class="block text-sm font-medium text-slate-700 mb-2">Warna Mobil</label>
-              <input type="text" id="color" name="color" value="{{ old('color', $car->color) }}" required
+              <input type="text" id="color" name="color" value="{{ old('color', $car->color) }}"
                 class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 @error('color') border-red-500 focus:ring-red-500/10 @enderror"
                 placeholder="Black, White, Silver">
               @error('color')
@@ -111,7 +111,7 @@
               <div class="relative">
                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-medium">Rp</span>
                 <input type="number" id="price_12h" name="price_12h" value="{{ old('price_12h', $car->price_12h) }}"
-                  required min="0"
+                  min="0"
                   class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 @error('price_12h') border-red-500 focus:ring-red-500/10 @enderror"
                   placeholder="350000">
               </div>
@@ -126,7 +126,7 @@
               <div class="relative">
                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-medium">Rp</span>
                 <input type="number" id="price_24h" name="price_24h" value="{{ old('price_24h', $car->price_24h) }}"
-                  required min="0"
+                  min="0"
                   class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 @error('price_24h') border-red-500 focus:ring-red-500/10 @enderror"
                   placeholder="550000">
               </div>
@@ -157,14 +157,14 @@
 
             <!-- Availability Status -->
             <div class="md:col-span-2 group">
-              <label class="block text-sm font-medium text-slate-700 mb-3">Availability Status</label>
+              <label class="block text-sm font-medium text-slate-700 mb-3">Status Ketersediaan</label>
               <label class="relative inline-flex items-center cursor-pointer">
                 <input type="hidden" name="is_available" value="0">
                 <input type="checkbox" name="is_available" value="1" class="sr-only peer" {{ old('is_available', $car->is_available) ? 'checked' : '' }}>
                 <div
                   class="w-14 h-7 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-500/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-emerald-500">
                 </div>
-                <span class="ms-4 text-sm font-medium text-slate-700">Vehicle is available for rent</span>
+                <span class="ms-4 text-sm font-medium text-slate-700">Kendaraan tersedia untuk disewa</span>
               </label>
             </div>
           </div>
@@ -177,7 +177,7 @@
             </a>
             <button type="submit"
               class="px-8 py-3.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 hover:-translate-y-0.5 transition-all duration-200">
-              Update Vehicle
+              Perbaharui Data Mobil
             </button>
           </div>
         </form>

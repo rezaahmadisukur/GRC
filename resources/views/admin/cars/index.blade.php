@@ -142,8 +142,8 @@
                       <div class="flex space-x-2">
                         <a href="{{ route('admin.cars.edit', $car) }}"
                           class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                        <form action="{{ route('admin.cars.destroy', $car) }}" method="POST"
-                          onsubmit="return confirm('Apakah Anda yakin ingin menghapus mobil ini?')">
+                        <form action="{{ route('admin.cars.destroy', $car) }}" method="POST" class="delete-form"
+                          data-car-name="{{ $car->name }}">
                           @csrf
                           @method('DELETE')
                           <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
@@ -172,5 +172,99 @@
       </div>
     </div>
   </div>
+
+  <!-- Custom Confirm Delete Modal -->
+  <div id="deleteConfirmModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm transition-opacity" id="deleteModalOverlay">
+    </div>
+    <div class="flex items-center justify-center min-h-screen p-4">
+      <div
+        class="bg-white rounded-xl shadow-2xl max-w-md w-full transform transition-all duration-300 scale-95 opacity-0"
+        id="deleteModalBox">
+        <div class="p-6">
+          <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-red-100">
+            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+              </path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-center text-gray-900 mb-2">Konfirmasi Hapus</h3>
+          <p class="text-gray-600 text-center mb-6">
+            Anda yakin ingin menghapus mobil <strong id="deleteCarName" class="text-gray-900"></strong>?<br>
+            <span class="text-sm text-gray-500">Tindakan ini tidak dapat dibatalkan.</span>
+          </p>
+          <div class="flex gap-3 justify-center">
+            <button id="cancelDeleteBtn"
+              class="px-6 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-medium">
+              Batal
+            </button>
+            <button id="confirmDeleteBtn"
+              class="px-6 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium">
+              Ya, Hapus
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let activeFormToSubmit = null;
+    const modal = document.getElementById('deleteConfirmModal');
+    const modalOverlay = document.getElementById('deleteModalOverlay');
+    const modalBox = document.getElementById('deleteModalBox');
+    const deleteCarName = document.getElementById('deleteCarName');
+    const cancelBtn = document.getElementById('cancelDeleteBtn');
+    const confirmBtn = document.getElementById('confirmDeleteBtn');
+
+    // Listen all delete forms
+    document.querySelectorAll('.delete-form').forEach(form => {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        activeFormToSubmit = this;
+
+        // Show car name in modal
+        deleteCarName.textContent = this.dataset.carName;
+
+        // Open modal with animation
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+          modalOverlay.classList.add('opacity-100');
+          modalBox.classList.remove('scale-95', 'opacity-0');
+          modalBox.classList.add('scale-100', 'opacity-100');
+        }, 10);
+      });
+    });
+
+    // Cancel button
+    cancelBtn.addEventListener('click', closeDeleteModal);
+    modalOverlay.addEventListener('click', closeDeleteModal);
+
+    function closeDeleteModal() {
+      modalBox.classList.remove('scale-100', 'opacity-100');
+      modalBox.classList.add('scale-95', 'opacity-0');
+      modalOverlay.classList.remove('opacity-100');
+
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        activeFormToSubmit = null;
+      }, 200);
+    }
+
+    // Confirm button - submit the actual form
+    confirmBtn.addEventListener('click', function () {
+      if (activeFormToSubmit) {
+        activeFormToSubmit.submit();
+      }
+    });
+
+    // Close with Escape key
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        closeDeleteModal();
+      }
+    });
+  </script>
 
 </x-admin-layout>
