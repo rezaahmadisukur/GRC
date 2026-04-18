@@ -1,3 +1,25 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --primary: #1a1a1a;
+    --secondary: #2d2d2d;
+    --accent: #0ea5e9;
+    --accent-dark: #0284c7;
+    --accent-light: #06b6d4;
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+    --border-light: #e2e8f0;
+    --bg-light: #f8fafc;
+}
+
+* {
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    color: var(--text-dark);
+}
