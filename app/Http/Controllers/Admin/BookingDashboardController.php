@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\Car;
 use Illuminate\Http\Request;
 
 class BookingDashboardController extends Controller
@@ -50,5 +51,32 @@ class BookingDashboardController extends Controller
         $booking->update(['status' => $request->status]);
 
         return back()->with('success', 'Status booking berhasil diperbarui!');
+    }
+
+    public function indexDashboard()
+    {
+        $stats = [
+            'totalCars' => Car::count(),
+            'availableCars' => Car::where('is_available', true)->count(),
+            'pendingBookings' => Booking::where('status', 'pending')->count(),
+            'activeBookings' => Booking::where('status', 'active')->count(),
+            'totalRevenue' => Booking::where('status', 'completed')->sum('total_price')
+        ];
+
+        // DATA GRAFIK: Pendapatan 7 Hari Terakhir
+        $chartData = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->format('Y-m-d');
+            $revenue = Booking::where('status', 'completed')
+                ->whereDate('created_at', $date)
+                ->sum('total_price');
+
+            $chartData['labels'][] = now()->subDays($i)->format('D'); // Nama hari (Mon, Tue, dst)
+            $chartData['data'][] = $revenue;
+        }
+
+        $recentBookings = Booking::with('car')->latest()->take(5)->get();
+
+        return view('dashboard', compact('stats', 'recentBookings', 'chartData'));
     }
 }

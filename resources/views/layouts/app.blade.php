@@ -18,8 +18,7 @@
 
 <body class="font-sans antialiased">
 
-
-    <div class="min-h-screen bg-gray-100">
+    <div class="min-h-screen bg-white bg-soft-glow antialiased">
         <x-user.user-navbar />
 
         <!-- Page Heading -->
