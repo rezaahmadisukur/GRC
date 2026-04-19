@@ -27,14 +27,7 @@ Route::post('/check-booking', [BookingController::class, 'check'])->name('bookin
  */
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard', [
-            'totalCars' => Car::count(),
-            'availableCars' => Car::where('is_available', true)->count(),
-            'pendingBookings' => Booking::where('status', 'pending')->count(),
-            'recentBookings' => Booking::latest()->take(5)->get(),
-        ]);
-    })->name('dashboard');
+    Route::get('/dashboard', [BookingDashboardController::class, 'indexDashboard'])->name('dashboard');
 
 
     Route::prefix('admin')->name('admin.')->group(function () {
