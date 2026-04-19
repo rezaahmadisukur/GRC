@@ -360,78 +360,103 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
                     @foreach($cars as $car)
                         <div
-                            class="group bg-white rounded-3xl shadow-md shadow-slate-200/60 border border-slate-100 overflow-hidden hover:shadow-xl hover:shadow-slate-200/80 hover:-translate-y-1 transition-all duration-300">
-
-                            {{-- Car Image --}}
-                            <div
-                                class="relative h-52 bg-gradient-to-br from-slate-100 via-blue-50 to-slate-100 overflow-hidden">
+                            class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-lg transition-all duration-300">
+                            <!-- Car Image -->
+                            <div class="relative h-52 bg-gray-100 overflow-hidden">
                                 @if($car->image)
                                     <img src="{{ asset('storage/' . $car->image) }}" alt="{{ $car->name }}"
-                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 {{ !$car->is_available ? 'opacity-60 grayscale-[30%]' : '' }}">
                                 @else
-                                    <div class="w-full h-full flex items-center justify-center">
-                                        <div class="w-20 h-20 rounded-2xl bg-blue-100 flex items-center justify-center">
-                                            <svg class="w-10 h-10 text-blue-500" viewBox="0 0 24 24" fill="none"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round">
-                                                <path
-                                                    d="M5 17H3a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h1l3-5h10l3 5h1a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2" />
-                                                <circle cx="7.5" cy="17.5" r="2.5" />
-                                                <circle cx="16.5" cy="17.5" r="2.5" />
-                                            </svg>
+                                    <div class="w-full h-full flex items-center justify-center bg-gray-200 {{ !$car->is_available ? 'opacity-60 grayscale-[30%]' : '' }}">
+                                        <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                @endif
+
+                                @if($car->is_available)
+                                    <!-- Availability Badge -->
+                                    <div class="absolute top-4 left-4">
+                                        <span class="px-3 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">
+                                            Tersedia
+                                        </span>
+                                    </div>
+                                @else
+                                    <!-- Sedang Disewa Badge Center -->
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="bg-red-600/90 backdrop-blur-sm px-6 py-3 rounded-xl shadow-lg transform rotate-[-2deg]">
+                                            <span class="text-white font-bold text-lg tracking-wide">SEDANG DISEWA</span>
                                         </div>
                                     </div>
                                 @endif
 
-                                {{-- Plate code badge --}}
-                                <span
-                                    class="absolute top-4 left-4 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold tracking-wide shadow-md shadow-blue-600/30 uppercase">
-                                    {{ $car->plate_code }}
-                                </span>
-
-                                {{-- Availability status --}}
-                                <div
-                                    class="absolute top-4 right-4 flex items-center gap-1.5 bg-white/90 backdrop-blur-sm rounded-full px-2.5 py-1 shadow-sm">
+                                <!-- Plate Code Badge -->
+                                <div class="absolute top-4 right-4">
                                     <span
-                                        class="w-1.5 h-1.5 rounded-full {{ $car->is_available ? 'bg-green-500' : 'bg-red-500' }}"></span>
-                                    <span
-                                        class="text-xs font-semibold text-slate-700">{{ $car->is_available ? 'Tersedia' : 'Disewa' }}</span>
+                                        class="px-3 py-1 bg-white/90 backdrop-blur text-gray-800 text-xs font-bold rounded-full">
+                                        {{ $car->plate_code }}
+                                    </span>
                                 </div>
                             </div>
 
-                            {{-- Car Info --}}
-                            <div class="p-6">
-                                {{-- Car Name --}}
+                            <!-- Car Info -->
+                            <div class="p-5">
                                 <div class="mb-3">
-                                    <h3 class="text-lg font-extrabold text-slate-900 leading-tight">
-                                        {{ $car->name }}
-                                    </h3>
-                                    <div class="flex items-center gap-2 mt-1">
-                                        <span class="text-xs text-slate-400 font-medium">{{ $car->color }}</span>
-                                        <span class="w-1 h-1 rounded-full bg-slate-300"></span>
-                                        <span
-                                            class="text-xs text-slate-400 font-medium">{{ $car->transmission == 'AT' ? 'Automatic' : 'Manual' }}</span>
+                                    <h3 class="text-lg font-bold text-gray-900">{{ $car->name }}</h3>
+                                    <p class="text-sm text-gray-500">{{ $car->category }}</p>
+                                </div>
+
+                                <!-- Features -->
+                                <div class="flex items-center gap-4 mb-4 text-sm text-gray-600">
+                                    <div class="flex items-center gap-1.5">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z">
+                                            </path>
+                                        </svg>
+                                        {{ $car->seats }} Kursi
+                                    </div>
+                                    <div class="flex items-center gap-1.5">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                                            </path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                        {{ $car->transmission }}
+                                    </div>
+                                    <div class="flex items-center gap-1.5">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z">
+                                            </path>
+                                        </svg>
+                                        {{ $car->fuel_type }}
                                     </div>
                                 </div>
 
-                                {{-- Divider --}}
-                                <div class="border-t border-slate-100 my-4"></div>
-
-                                {{-- Prices --}}
+                                <!-- Price -->
                                 <div class="grid grid-cols-2 gap-3 mb-4">
                                     <div class="bg-slate-50 rounded-xl p-2.5 text-center">
                                         <div class="text-xs text-slate-400 font-medium">12 Jam</div>
                                         <div class="text-lg font-bold text-blue-600">Rp
-                                            {{ number_format($car->price_12h, 0, ',', '.') }}</div>
+                                            {{ number_format($car->price_12h, 0, ',', '.') }}
+                                        </div>
                                     </div>
                                     <div class="bg-slate-50 rounded-xl p-2.5 text-center">
                                         <div class="text-xs text-slate-400 font-medium">24 Jam</div>
                                         <div class="text-lg font-bold text-blue-600">Rp
-                                            {{ number_format($car->price_24h, 0, ',', '.') }}</div>
+                                            {{ number_format($car->price_24h, 0, ',', '.') }}
+                                        </div>
                                     </div>
                                 </div>
 
-                                {{-- CTA Button --}}
+                                <!-- Action Button -->
                                 <a href="{{ route('cars.show', $car->plate_code) }}"
                                     class="group/btn block text-center bg-blue-50 hover:bg-blue-600 text-blue-600 hover:text-white py-3 rounded-xl font-bold text-sm transition-all duration-200 border border-blue-100 hover:border-blue-600 hover:shadow-md hover:shadow-blue-600/20">
                                     Lihat Detail

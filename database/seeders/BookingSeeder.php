@@ -7,6 +7,7 @@ use App\Models\Car;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class BookingSeeder extends Seeder
 {
@@ -43,20 +44,25 @@ class BookingSeeder extends Seeder
             $price = $duration >= 24 ? $car->price_24h * ceil($duration / 24) : $car->price_12h;
             $dpAmount = $price * 0.3;
 
-            Booking::create([
-                'car_id' => $car->id,
-                'booking_code' => 'GRM-' . strtoupper(\Illuminate\Support\Str::random(6)),
-                'customer_name' => $customer['name'],
-                'whatsapp_number' => $customer['whatsapp'],
-                'start_date' => $startDate,
-                'duration_hours' => $duration,
-                'end_date' => $endDate,
-                'total_price' => $price,
-                'dp_amount' => $dpAmount,
-                'remains_payment' => $price - $dpAmount,
-                'status' => $statuses[$index % count($statuses)],
-                'notes' => 'Pemesanan otomatis dari seeder',
-            ]);
+            try {
+                Booking::create([
+                    'car_id' => $car->id,
+                    'user_id' => 1,
+                    'booking_code' => 'RENT-' . date('ymd') . '-' . strtoupper(Str::random(4)),
+                    'customer_name' => $customer['name'],
+                    'whatsapp_number' => $customer['whatsapp'],
+                    'start_date' => $startDate,
+                    'duration_hours' => $duration,
+                    'end_date' => $endDate,
+                    'total_price' => $price,
+                    'dp_amount' => (int) $dpAmount,
+                    'remains_payment' => (int) ($price - $dpAmount),
+                    'status' => $statuses[$index % count($statuses)],
+                    'notes' => 'Pemesanan otomatis dari seeder',
+                ]);
+            } catch (\Exception $e) {
+                $this->command->error("Gagal insert booking: " . $e->getMessage());
+            }
         }
     }
 }

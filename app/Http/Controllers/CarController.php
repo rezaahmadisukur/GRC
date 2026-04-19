@@ -7,6 +7,7 @@ use App\DTOs\CarDTO;
 use App\Http\Requests\StoreCarRequest;
 use App\Models\Car;
 use App\Services\CarService;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CarController extends Controller
@@ -16,10 +17,10 @@ class CarController extends Controller
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $cars = $this->carService->getAllCars();
-        return view('cars.index', $cars);
+        $cars = $this->carService->getAllCars($request);
+        return view('cars.index', compact('cars'));
     }
 
     public function show(Car $car)

@@ -28,4 +28,25 @@ class Car extends Model
     {
         return $this->hasMany(Booking::class);
     }
+
+    /**
+     * Scope Filter
+     */
+    public function scopeFilter($query, array $filters)
+    {
+        return $query->when($filters['search'] ?? null, function ($q, $search) {
+            $q->where('name', 'like', '%' . $search . '%');
+        })->when($filters['category'] ?? null, function ($q, $category) {
+            $q->where('category', $category);
+        })->when($filters['seats'] ?? null, function ($q, $seats) {
+            if ($seats == '7+') {
+                return $q->where('seats', '>=', 7);
+            }
+            return $q->where('seats', $seats);
+        })->when($filters['transmission'] ?? null, function ($q, $transmission) {
+            $q->where('transmission', $transmission);
+        })->when($filters['fuel_type'] ?? null, function ($q, $fuel) {
+            $q->where('fuel_type', $fuel);
+        });
+    }
 }
