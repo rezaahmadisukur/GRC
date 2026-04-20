@@ -160,16 +160,20 @@
                   <td class="px-6 py-4 text-right">
                     <div class="flex items-center justify-end gap-2 flex-wrap">
                       @if($booking->status == 'pending')
-                        <form method="POST" action="{{ route('admin.bookings.update-status', $booking) }}"
-                          class="inline-block">
+                        <button type="button"
+                          class="px-3 py-1.5 rounded-md text-xs font-medium bg-emerald-600 text-white hover:bg-emerald-700 transition-all duration-200 shadow-sm hover:shadow active:scale-95 open-dp-modal"
+                          data-booking-id="{{ $booking->id }}" data-booking-code="{{ $booking->booking_code }}"
+                          data-customer-name="{{ $booking->customer_name }}" data-total-price="{{ $booking->total_price }}"
+                          data-current-dp="{{ $booking->dp_amount }}">
+                          Setujui
+                        </button>
+
+                        <form id="confirm-form-{{ $booking->id }}" method="POST"
+                          action="{{ route('admin.bookings.update-status', $booking) }}" class="hidden">
                           @csrf
                           @method('PATCH')
                           <input type="hidden" name="status" value="confirmed">
-                          <button type="submit"
-                            class="px-3 py-1.5 rounded-md text-xs font-medium bg-emerald-600 text-white hover:bg-emerald-700 transition-all duration-200 shadow-sm hover:shadow active:scale-95"
-                            data-booking-id="{{ $booking->id }}">
-                            Setujui
-                          </button>
+                          <input type="hidden" name="dp_amount" id="dp-input-{{ $booking->id }}">
                         </form>
                         <form method="POST" action="{{ route('admin.bookings.update-status', $booking) }}"
                           class="inline-block">
@@ -241,4 +245,143 @@
       @endif
     </div>
   </div>
+
+  <!-- Modal Konfirmasi DP -->
+  <div id="dp-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" id="dp-modal-backdrop"></div>
+
+    <div
+      class="relative bg-white rounded-2xl shadow-xl max-w-md w-full transform transition-all duration-300 scale-95 opacity-0"
+      id="dp-modal-content">
+      <div class="p-6 border-b border-gray-100">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-gray-900">Konfirmasi Pemesanan</h3>
+          <button type="button" id="close-modal-btn"
+            class="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-lg hover:bg-gray-100">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="p-6 space-y-5">
+        <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-100">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
+              <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="font-semibold text-gray-900" id="modal-customer-name">-</p>
+              <p class="text-sm text-gray-500" id="modal-booking-code">-</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gray-50 rounded-xl p-4">
+          <div class="flex justify-between items-center mb-3">
+            <span class="text-gray-600">Total Harga</span>
+            <span class="font-semibold text-gray-900" id="modal-total-price">Rp 0</span>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Uang Muka (DP)</label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">Rp</span>
+              <input type="number" id="modal-dp-input" min="0"
+                class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl text-lg font-semibold focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                placeholder="Masukkan nominal DP">
+            </div>
+          </div>
+
+          <div class="mt-4 pt-4 border-t border-gray-200 flex justify-between items-center">
+            <span class="text-gray-600">Sisa Pembayaran</span>
+            <span class="font-bold text-lg text-emerald-600" id="modal-remaining">Rp 0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-6 border-t border-gray-100 bg-gray-50 rounded-b-2xl flex gap-3">
+        <button type="button" id="modal-cancel-btn"
+          class="flex-1 px-4 py-3 rounded-xl bg-white border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition-all">
+          Batal
+        </button>
+        <button type="button" id="modal-confirm-btn"
+          class="flex-1 px-4 py-3 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700 shadow-sm hover:shadow transition-all">
+          Konfirmasi
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let selectedBookingId = null;
+    let totalPrice = 0;
+
+    const modal = document.getElementById('dp-modal');
+    const modalContent = document.getElementById('dp-modal-content');
+    const modalBackdrop = document.getElementById('dp-modal-backdrop');
+    const dpInput = document.getElementById('modal-dp-input');
+    const remainingEl = document.getElementById('modal-remaining');
+
+    // Format Rupiah
+    function formatIDR(amount) {
+      return 'Rp ' + new Intl.NumberFormat('id-ID').format(amount);
+    }
+
+    // Open Modal
+    document.querySelectorAll('.open-dp-modal').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedBookingId = btn.dataset.bookingId;
+        totalPrice = parseInt(btn.dataset.totalPrice);
+        const currentDp = parseInt(btn.dataset.currentDp) || 0;
+
+        document.getElementById('modal-customer-name').textContent = btn.dataset.customerName;
+        document.getElementById('modal-booking-code').textContent = '#' + btn.dataset.bookingCode;
+        document.getElementById('modal-total-price').textContent = formatIDR(totalPrice);
+
+        dpInput.value = currentDp;
+        remainingEl.textContent = formatIDR(totalPrice - currentDp);
+
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+          modalContent.classList.remove('scale-95', 'opacity-0');
+          modalContent.classList.add('scale-100', 'opacity-100');
+          dpInput.focus();
+        }, 10);
+      });
+    });
+
+    // Close Modal
+    function closeModal() {
+      modalContent.classList.remove('scale-100', 'opacity-100');
+      modalContent.classList.add('scale-95', 'opacity-0');
+      setTimeout(() => modal.classList.add('hidden'), 200);
+    }
+
+    document.getElementById('close-modal-btn').addEventListener('click', closeModal);
+    document.getElementById('modal-cancel-btn').addEventListener('click', closeModal);
+    modalBackdrop.addEventListener('click', closeModal);
+
+    // Calculate remaining when DP input changes
+    dpInput.addEventListener('input', () => {
+      const dp = parseInt(dpInput.value) || 0;
+      remainingEl.textContent = formatIDR(totalPrice - dp);
+    });
+
+    // Submit confirm
+    document.getElementById('modal-confirm-btn').addEventListener('click', () => {
+      const dp = parseInt(dpInput.value) || 0;
+      document.getElementById('dp-input-' + selectedBookingId).value = dp;
+      document.getElementById('confirm-form-' + selectedBookingId).submit();
+    });
+
+    // Close on ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
 </x-admin-layout>

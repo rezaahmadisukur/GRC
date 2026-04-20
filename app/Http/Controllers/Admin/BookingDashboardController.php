@@ -22,10 +22,9 @@ class BookingDashboardController extends Controller
     public function updateStatus(Request $request, Booking $booking)
     {
         $request->validate([
-            'status' => 'required|in:pending,confirmed,completed,cancelled'
+            'status' => 'required|in:pending,confirmed,completed,cancelled',
+            'dp_amount' => 'nullable|numeric|min:0'
         ]);
-
-        // dd($booking);
 
         // Jika admin ingin konfirmasi, cek terlebih dahulu apakah mobil
         if ($request->status == 'confirmed') {
@@ -33,8 +32,14 @@ class BookingDashboardController extends Controller
                 return back()->with('error', 'Gagal! Mobil ini sudah dikonfirmasi untuk pesanan lain.');
             }
 
+            $dp = $request->input('dp_amount', 0);
+
             // If it's safe, then confirm and lock the car.
-            $booking->update(['status' => 'active']);
+            $booking->update([
+                'status' => 'active',
+                'dp_amount' => $dp,
+                'remains_payment' => $booking->total_price - $dp
+            ]);
             $booking->car->update(['is_available' => false]);
 
             return back()->with('success', 'Booking berhasil dikonfirmasi!');
