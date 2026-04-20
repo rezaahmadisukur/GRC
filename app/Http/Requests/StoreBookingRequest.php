@@ -28,7 +28,8 @@ class StoreBookingRequest extends FormRequest
             'start_date' => 'required|date',
             'duration_type' => 'required|in:12,24',
             'extra_hours' => 'nullable|numeric|min:0',
-            'notes' => 'nullable|string'
+            'notes' => 'nullable|string',
+            'terms' => 'accepted'
         ];
     }
 }

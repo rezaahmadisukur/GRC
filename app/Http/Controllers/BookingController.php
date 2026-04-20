@@ -55,9 +55,12 @@ class BookingController extends Controller
             "*Total:* Rp " . number_format($calc['total_price'], 0, ',', '.') . "\n\n" .
             "Halo Admin, saya sudah melakukan booking di website. Mohon instruksi selanjutnya.";
 
+
+        $adminNumber = config('services.whatsapp.number');
+
         // 2. Gunakan rawurlencode untuk mengubah \n menjadi %0A secara aman
         // Jangan gabungkan string URL dengan variabel mentah yang ada \n nya
-        $waURL = "https://wa.me/6289671363364?text=" . rawurlencode($message);
+        $waURL = "https://wa.me/" . $adminNumber . "?text=" . rawurlencode($message);
 
         return redirect()->away($waURL);
     }
@@ -65,32 +68,29 @@ class BookingController extends Controller
     public function check(Request $request)
     {
         $request->validate([
-            'booking_code' => 'required|string'
+            'query' => 'required|string'
         ]);
 
-        $booking = Booking::with('car')->where('booking_code', $request->booking_code)->first();
+        $search = $request->input('query');
 
-        if (!$booking) {
-            return back()->with('error', 'Yah, Kode Booking-nya nggak ketemu nih. Coba cek lagi ya!');
+
+
+        $bookings = Booking::with('car')
+            ->where('booking_code', $search)
+            ->orWhere('whatsapp_number', $search)
+            ->latest()
+            ->get();
+
+        if ($bookings->isEmpty()) {
+            return back()->with('error', 'Data nggak ketemu nih. Coba cek lagi kode atau nomor WA-nya ya!');
         }
 
-        if (!$booking) {
-            // Kalau ngetes pake Postman (Accept: application/json)
-            if ($request->wantsJson()) {
-                return response()->json(['message' => 'Kode booking salah!'], 404);
-            }
-            return back()->with('error', 'Kode tidak ditemukan.');
+        if ($bookings->count() === 1 && $bookings->first()->booking_code === $search) {
+            $booking = $bookings->first();
+            return view('bookings.status', compact('booking'));
         }
 
-        // DISINI KUNCINYA:
-        // Kalau lu ngetes lewat Postman, dia bakal balikin data JSON
-        if ($request->wantsJson() || $request->ajax()) {
-            return response()->json([
-                'status' => 'success',
-                'data' => $booking
-            ]);
-        }
+        return view('bookings.index', compact('bookings'));
 
-        return view('bookings.status', compact('booking'));
     }
 }

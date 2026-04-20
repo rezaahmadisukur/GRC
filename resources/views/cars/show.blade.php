@@ -14,10 +14,10 @@
       </div>
 
       <!-- Main Grid Layout -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
         <!-- Left Column: Car Images & Details -->
-        <div class="lg:col-span-2">
+        <div class="lg:col-span-1">
 
           <!-- Hero Image Section -->
           <div class="relative mb-8 group overflow-hidden rounded-2xl shadow-xl">
@@ -223,6 +223,21 @@
                 </label>
                 <textarea id="notes" name="notes" rows="3" placeholder="Ada permintaan atau catatan khusus?"
                   class="w-full px-4 py-3 rounded-lg border border-var(--border-light) focus:outline-none focus:ring-2 focus:ring-var(--accent) focus:border-transparent transition-all duration-200 placeholder:text-slate-400 resize-none"></textarea>
+              </div>
+
+              <!-- Terms & Conditions Checkbox -->
+              <div>
+                <label class="flex items-start gap-3 cursor-pointer">
+                  <input type="checkbox" name="terms" id="terms"
+                    class="mt-1 w-5 h-5 rounded border-var(--border-light) text-var(--accent) focus:ring-var(--accent) cursor-pointer">
+                  <span class="text-sm text-var(--primary)">
+                    Saya menyetujui <span class="text-var(--accent) font-medium">Syarat & Ketentuan</span> yang berlaku
+                    untuk pemesanan ini <span class="text-red-500">*</span>
+                  </span>
+                </label>
+                @error('terms')
+                  <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
               </div>
 
               <!-- Submit Button -->
