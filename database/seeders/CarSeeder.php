@@ -48,7 +48,7 @@ class CarSeeder extends Seeder
                 'fuel_type' => $carData['fuel'][array_rand($carData['fuel'])],
                 'price_12h' => $basePrice,
                 'price_24h' => (int) ($basePrice * 1.5),
-                'is_available' => (bool) rand(0, 1),
+                'is_available' => 1,
                 'image' => null,
             ]);
         }

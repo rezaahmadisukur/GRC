@@ -32,9 +32,6 @@ class BookingSeeder extends Seeder
             ['name' => 'Hendra Wijaya', 'whatsapp' => '081922334455'],
             ['name' => 'Rina Sari', 'whatsapp' => '083866778899'],
         ];
-
-        $statuses = ['pending', 'active', 'completed', 'cancelled'];
-
         foreach ($customers as $index => $customer) {
             $car = $cars->random();
             $duration = rand(12, 72);
@@ -42,12 +39,10 @@ class BookingSeeder extends Seeder
             $endDate = $startDate->copy()->addHours($duration);
 
             $price = $duration >= 24 ? $car->price_24h * ceil($duration / 24) : $car->price_12h;
-            $dpAmount = $price * 0.3;
 
             try {
                 Booking::create([
                     'car_id' => $car->id,
-                    'user_id' => 1,
                     'booking_code' => 'RENT-' . date('ymd') . '-' . strtoupper(Str::random(4)),
                     'customer_name' => $customer['name'],
                     'whatsapp_number' => $customer['whatsapp'],
@@ -55,9 +50,9 @@ class BookingSeeder extends Seeder
                     'duration_hours' => $duration,
                     'end_date' => $endDate,
                     'total_price' => $price,
-                    'dp_amount' => (int) $dpAmount,
-                    'remains_payment' => (int) ($price - $dpAmount),
-                    'status' => $statuses[$index % count($statuses)],
+                    'dp_amount' => 0,
+                    'remains_payment' => 0,
+                    'status' => 'pending',
                     'notes' => 'Pemesanan otomatis dari seeder',
                 ]);
             } catch (\Exception $e) {

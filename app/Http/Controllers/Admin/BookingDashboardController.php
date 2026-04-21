@@ -60,12 +60,20 @@ class BookingDashboardController extends Controller
 
     public function indexDashboard()
     {
+        // Statistik Utama Dashboard
         $stats = [
-            'totalCars' => Car::count(),
-            'availableCars' => Car::where('is_available', true)->count(),
-            'pendingBookings' => Booking::where('status', 'pending')->count(),
+            'monthlyRevenue' => Booking::where('status', 'completed')
+                ->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->sum('total_price'),
+
+            'totalDP' => Booking::sum('dp_amount'),
+
             'activeBookings' => Booking::where('status', 'active')->count(),
-            'totalRevenue' => Booking::where('status', 'completed')->sum('total_price')
+
+            'availableCars' => Car::where('is_available', true)->count(),
+
+            'totalCars' => Car::count(),
         ];
 
         // DATA GRAFIK: Pendapatan 7 Hari Terakhir
@@ -76,12 +84,19 @@ class BookingDashboardController extends Controller
                 ->whereDate('created_at', $date)
                 ->sum('total_price');
 
-            $chartData['labels'][] = now()->subDays($i)->format('D'); // Nama hari (Mon, Tue, dst)
+            $chartData['labels'][] = now()->subDays($i)->translatedFormat('D'); // Nama hari Bahasa Indonesia
             $chartData['data'][] = $revenue;
         }
 
+        // Top 3 Unit Terpopuler
+        $popularCars = Car::withCount('bookings')
+            ->orderBy('bookings_count', 'desc')
+            ->take(3)
+            ->get();
+
+        // 5 Booking Terbaru
         $recentBookings = Booking::with('car')->latest()->take(5)->get();
 
-        return view('dashboard', compact('stats', 'recentBookings', 'chartData'));
+        return view('dashboard', compact('stats', 'chartData', 'popularCars', 'recentBookings'));
     }
 }

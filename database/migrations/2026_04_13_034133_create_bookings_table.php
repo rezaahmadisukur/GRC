@@ -14,7 +14,7 @@ return new class extends Migration {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('car_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('admin_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('booking_code')->unique();
 
             $table->string('customer_name');
@@ -26,7 +26,7 @@ return new class extends Migration {
 
             $table->integer('total_price');
             $table->integer('dp_amount')->default(0); // Bisa diisi Admin pas approve
-            $table->integer('remains_payment');
+            $table->integer('remains_payment')->default(0);
 
             // Ini kunci buat "Approve" Admin
             $table->enum('status', ['pending', 'active', 'completed', 'cancelled'])->default('pending');

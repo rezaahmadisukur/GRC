@@ -27,16 +27,16 @@
     <form method="POST" action="{{ route('login') }}" class="space-y-4">
         @csrf
 
-        <!-- Email Address -->
+        <!-- username Address -->
         <div>
-            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                {{ __('Email') }}
+            <label for="username" class="block text-sm font-medium text-gray-700 mb-2">
+                {{ __('Username') }}
             </label>
-            <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
+            <input id="username" type="username" name="username" value="{{ old('username') }}" required autofocus
                 autocomplete="username"
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-                placeholder="nama@email.com" />
-            @error('email')
+                placeholder="Masukan identitasmu...." />
+            @error('username')
                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
             @enderror
         </div>
