@@ -1,5 +1,3 @@
-{{-- Use Admin Layout --}}
-
 <x-admin-layout>
   <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -12,16 +10,23 @@
 
       {{-- Statistic Cards --}}
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        {{-- Total Omzet Bulan Ini --}}
+
+        {{-- Main Amount Card - Dynamic based on role --}}
         <div
           class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm font-medium text-gray-500 mb-1">Total Omzet Bulan Ini</p>
+              <p class="text-sm font-medium text-gray-500 mb-1">{{ $stats['label'] }}</p>
               <p class="text-2xl font-bold text-gray-900">Rp
-                {{ number_format($stats['monthlyRevenue'] ?? 0, 0, ',', '.') }}
+                {{ number_format($stats['primaryAmount'] ?? 0, 0, ',', '.') }}
               </p>
-              <p class="text-xs text-gray-500 mt-1">Sampai tanggal hari ini</p>
+              <p class="text-xs text-gray-500 mt-1">
+                @if($user->role === 'owner')
+                  Sampai tanggal hari ini
+                @else
+                  Hari ini
+                @endif
+              </p>
             </div>
             <div class="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center">
               <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -41,7 +46,13 @@
               <p class="text-2xl font-bold text-gray-900">Rp
                 {{ number_format($stats['totalDP'] ?? 0, 0, ',', '.') }}
               </p>
-              <p class="text-xs text-gray-500 mt-1">Dari semua booking</p>
+              <p class="text-xs text-gray-500 mt-1">
+                @if($user->role === 'owner')
+                  Dari semua booking
+                @else
+                  Hari ini
+                @endif
+              </p>
             </div>
             <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
               <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,63 +81,86 @@
           </div>
         </div>
 
-        {{-- Mobil Tersedia --}}
-        <div
-          class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm font-medium text-gray-500 mb-1">Mobil Tersedia</p>
-              <p class="text-2xl font-bold text-gray-900">{{ $stats['availableCars'] ?? 0 }}</p>
-              <p class="text-xs text-gray-500 mt-1">Dari {{ $stats['totalCars'] ?? 0 }} total unit</p>
-            </div>
-            <div class="w-12 h-12 rounded-full bg-indigo-50 flex items-center justify-center">
-              <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-              </svg>
+        {{-- 4th Card - Dynamic based on role --}}
+        @if($user->role === 'owner')
+          {{-- Mobil Tersedia --}}
+          <div
+            class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-gray-500 mb-1">Mobil Tersedia</p>
+                <p class="text-2xl font-bold text-gray-900">{{ $stats['availableCars'] ?? 0 }}</p>
+                <p class="text-xs text-gray-500 mt-1">Total Staff: {{ $stats['staffCount'] ?? 0 }}</p>
+              </div>
+              <div class="w-12 h-12 rounded-full bg-indigo-50 flex items-center justify-center">
+                <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+              </div>
             </div>
           </div>
-        </div>
+        @else
+          {{-- Pending Approval (For Admin Role) --}}
+          <div
+            class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-gray-500 mb-1">Menunggu Persetujuan</p>
+                <p class="text-2xl font-bold text-gray-900">{{ $stats['pendingApproval'] ?? 0 }}</p>
+                <p class="text-xs text-gray-500 mt-1">Booking perlu di-approve</p>
+              </div>
+              <div class="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center">
+                <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        @endif
 
       </div>
 
       {{-- Middle Section: Chart + Popular Cars --}}
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        {{-- Chart Pendapatan --}}
-        <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3 class="text-lg font-semibold text-gray-900 mb-4">Tren Pendapatan (7 Hari Terakhir)</h3>
-          <div class="h-64">
-            <canvas id="revenueChart"></canvas>
+      @if($user->role === 'owner' && !empty($chartData))
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          {{-- Chart Pendapatan --}}
+          <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Tren Pendapatan (7 Hari Terakhir)</h3>
+            <div class="h-64">
+              <canvas id="revenueChart"></canvas>
+            </div>
+          </div>
+
+          {{-- Unit Terpopuler --}}
+          <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100">
+              <h3 class="font-semibold text-gray-900">Unit Terpopuler</h3>
+            </div>
+            <div class="p-4 space-y-3">
+              @foreach($popularCars as $index => $car)
+                <div class="flex items-center gap-3 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <div
+                    class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-sm">
+                    {{ $index + 1 }}
+                  </div>
+                  <div class="flex-1">
+                    <p class="font-medium text-gray-900">{{ $car->name ?? 'Mobil ' . $car->id }}</p>
+                    <p class="text-xs text-gray-500">{{ $car->bookings_count }} kali disewa</p>
+                  </div>
+                </div>
+              @endforeach
+
+              @if($popularCars->isEmpty())
+                <div class="text-center py-8 text-gray-400 text-sm">
+                  Belum ada data peminjaman
+                </div>
+              @endif
+            </div>
           </div>
         </div>
-
-        {{-- Unit Terpopuler --}}
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div class="px-6 py-4 border-b border-gray-100">
-            <h3 class="font-semibold text-gray-900">Unit Terpopuler</h3>
-          </div>
-          <div class="p-4 space-y-3">
-            @foreach($popularCars as $index => $car)
-              <div class="flex items-center gap-3 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
-                <div
-                  class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-sm">
-                  {{ $index + 1 }}
-                </div>
-                <div class="flex-1">
-                  <p class="font-medium text-gray-900">{{ $car->name ?? 'Mobil ' . $car->id }}</p>
-                  <p class="text-xs text-gray-500">{{ $car->bookings_count }} kali disewa</p>
-                </div>
-              </div>
-            @endforeach
-
-            @if($popularCars->isEmpty())
-              <div class="text-center py-8 text-gray-400 text-sm">
-                Belum ada data peminjaman
-              </div>
-            @endif
-          </div>
-        </div>
-      </div>
+      @endif
 
       {{-- Bottom Section: Aktivitas Terbaru --}}
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -170,6 +204,9 @@
                     Mobil
                   </th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Admin
+                  </th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
                   </th>
                   <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -188,6 +225,9 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-gray-700">
                       {{ $booking->car->name ?? '-' }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-500 text-sm">
+                      {{ $booking->admin->name ?? '-' }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       @php
@@ -218,67 +258,69 @@
     </div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const ctx = document.getElementById('revenueChart').getContext('2d');
+  @if($user->role === 'owner' && !empty($chartData))
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('revenueChart').getContext('2d');
 
-      // Gradasi Warna buat Area Grafik
-      const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-      gradient.addColorStop(0, 'rgba(16, 185, 129, 0.4)'); // Emerald
-      gradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
+        // Gradasi Warna buat Area Grafik
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(16, 185, 129, 0.4)'); // Emerald
+        gradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
 
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: @json($chartData['labels'] ?? []),
-          datasets: [{
-            label: 'Pendapatan (Rp)',
-            data: @json($chartData['data'] ?? []),
-            borderColor: '#10b981', // Emerald-500
-            borderWidth: 3,
-            fill: true,
-            backgroundColor: gradient,
-            tension: 0.4, // Bikin garisnya melengkung smooth
-            pointBackgroundColor: '#10b981',
-            pointRadius: 4,
-            pointHoverRadius: 6
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: function (context) {
-                  return 'Rp ' + context.raw.toLocaleString('id-ID');
-                }
-              }
-            }
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: @json($chartData['labels'] ?? []),
+            datasets: [{
+              label: 'Pendapatan (Rp)',
+              data: @json($chartData['data'] ?? []),
+              borderColor: '#10b981', // Emerald-500
+              borderWidth: 3,
+              fill: true,
+              backgroundColor: gradient,
+              tension: 0.4, // Bikin garisnya melengkung smooth
+              pointBackgroundColor: '#10b981',
+              pointRadius: 4,
+              pointHoverRadius: 6
+            }]
           },
-          scales: {
-            y: {
-              beginAtZero: true,
-              grid: {
-                display: true,
-                color: 'rgba(0, 0, 0, 0.05)',
-                drawBorder: false
-              },
-              ticks: {
-                callback: function (value) {
-                  return 'Rp ' + value.toLocaleString('id-ID');
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    return 'Rp ' + context.raw.toLocaleString('id-ID');
+                  }
                 }
               }
             },
-            x: {
-              grid: {
-                display: false
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: {
+                  display: true,
+                  color: 'rgba(0, 0, 0, 0.05)',
+                  drawBorder: false
+                },
+                ticks: {
+                  callback: function (value) {
+                    return 'Rp ' + value.toLocaleString('id-ID');
+                  }
+                }
+              },
+              x: {
+                grid: {
+                  display: false
+                }
               }
             }
           }
-        }
+        });
       });
-    });
-  </script>
+    </script>
+  @endif
 </x-admin-layout>
