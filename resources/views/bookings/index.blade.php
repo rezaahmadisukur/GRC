@@ -123,7 +123,7 @@
                     <p class="text-[11px] text-amber-700 leading-relaxed">
                       <strong>Info:</strong> Untuk alasan keamanan, detail lengkap hanya bisa dibuka menggunakan <b>Kode
                         Booking</b>
-                      lengkap yang Anda terima via WhatsApp.
+                      lengkap yang Anda terima via WhatsApp
                     </p>
                   </div>
 
