@@ -3,8 +3,8 @@
 
 <aside
   class="fixed top-0 left-0 z-40 h-screen bg-gray-900 border-r border-gray-800 transition-all duration-300 ease-in-out md:translate-x-0"
-  :class="{ 'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen, 'w-64': !sidebarCollapsed, 'md:w-20': sidebarCollapsed, 'w-64': true }"
-  x-cloak>
+  :class="sidebarCollapsed ? 'md:w-20 w-64' : 'w-64'"
+  :class="{ 'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen }">
 
   <div class="h-16 flex items-center px-6 border-b border-gray-800" :class="{ 'justify-center': sidebarCollapsed }">
     <a href="{{ route('dashboard') }}" class="flex items-center gap-3">

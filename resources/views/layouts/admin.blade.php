@@ -16,12 +16,47 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased bg-gray-50" x-data="{ sidebarOpen: false, sidebarCollapsed: false }">
+<body class="font-sans antialiased bg-gray-50" x-data="{ 
+  sidebarOpen: false, 
+  sidebarCollapsed: localStorage.getItem('sidebarCollapsed') === 'true' 
+}" @sidebar-toggle.window="localStorage.setItem('sidebarCollapsed', sidebarCollapsed)">
+
+  <style>
+    /* Anti blink sidebar - dijalankan SEBELUM Alpine load */
+    html.sidebar-collapsed aside {
+      width: 5rem !important;
+    }
+
+    html.sidebar-collapsed .main-content {
+      margin-left: 5rem !important;
+    }
+
+    /* Nonaktifkan transisi ketika halaman pertama kali load */
+    body.loading * {
+      transition: none !important;
+    }
+  </style>
+
+  <script>
+    (function () {
+      const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+      if (isCollapsed) {
+        document.documentElement.classList.add('sidebar-collapsed');
+      }
+      // Tambahkan class loading untuk disable transisi sementara
+      document.body.classList.add('loading');
+      // Hapus setelah halaman selesai load
+      window.addEventListener('load', function () {
+        setTimeout(() => document.body.classList.remove('loading'), 10);
+      });
+    })();
+  </script>
+
   <div class="flex min-h-screen overflow-hidden">
 
     @include('layouts.navigation')
 
-    <div class="flex-1 flex flex-col min-h-screen transition-all duration-300 bg-gray-50"
+    <div class="main-content flex-1 flex flex-col min-h-screen transition-all duration-300 bg-gray-50"
       :class="sidebarCollapsed ? 'md:ml-20' : 'md:ml-64'">
 
       <header class="md:hidden bg-white border-b px-4 py-3 flex items-center justify-between sticky top-0 z-20">
