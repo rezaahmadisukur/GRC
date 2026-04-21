@@ -36,11 +36,11 @@
                 @endif
 
                 <div class="relative z-10 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300
-                                                    @if($currentStatus >= $index)
-                                                      bg-emerald-500 text-white
-                                                    @else
-                                                      bg-gray-200 text-gray-400
-                                                    @endif">
+                                                          @if($currentStatus >= $index)
+                                                            bg-emerald-500 text-white
+                                                          @else
+                                                            bg-gray-200 text-gray-400
+                                                          @endif">
                   @if($currentStatus > $index)
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -51,11 +51,11 @@
                 </div>
 
                 <p class="mt-3 text-sm font-medium text-center
-                                                    @if($currentStatus >= $index)
-                                                      text-emerald-600
-                                                    @else
-                                                      text-gray-400
-                                                    @endif">
+                                                          @if($currentStatus >= $index)
+                                                            text-emerald-600
+                                                          @else
+                                                            text-gray-400
+                                                          @endif">
                   {{ $statusName }}
                 </p>
               </div>
@@ -83,11 +83,11 @@
             <div class="flex items-start gap-4">
               <div class="flex flex-col items-center">
                 <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0
-                                                    @if($currentStatus >= $index)
-                                                      bg-emerald-500 text-white
-                                                    @else
-                                                      bg-gray-200 text-gray-400
-                                                    @endif">
+                                                          @if($currentStatus >= $index)
+                                                            bg-emerald-500 text-white
+                                                          @else
+                                                            bg-gray-200 text-gray-400
+                                                          @endif">
                   @if($currentStatus > $index)
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -106,11 +106,11 @@
 
               <div class="pt-2">
                 <p class="font-medium
-                                                    @if($currentStatus >= $index)
-                                                      text-emerald-600
-                                                    @else
-                                                      text-gray-400
-                                                    @endif">
+                                                          @if($currentStatus >= $index)
+                                                            text-emerald-600
+                                                          @else
+                                                            text-gray-400
+                                                          @endif">
                   {{ $statusName }}
                 </p>
               </div>
@@ -144,9 +144,23 @@
 
             <div class="flex justify-between items-center border-b border-gray-100 pb-4">
               <span class="text-gray-500">Durasi</span>
-              <span
-                class="font-medium text-gray-900">{{ \Carbon\Carbon::parse($booking->end_date)->diffInDays($booking->start_date) }}
-                Hari</span>
+              <span class="font-medium text-gray-900">
+                @php
+                  $hours = $booking->duration_hours;
+                  if ($hours < 24) {
+                    echo "{$hours} Jam";
+                  } else {
+                    $days = floor($hours / 24);
+                    $remainingHours = $hours % 24;
+
+                    if ($remainingHours == 0) {
+                      echo "{$days} Hari";
+                    } else {
+                      echo "{$days} Hari {$remainingHours} Jam";
+                    }
+                  }
+                @endphp
+              </span>
             </div>
 
             <div class="flex justify-between items-center border-b border-gray-100 pb-4">
@@ -190,32 +204,7 @@
                   </svg>
                 </div>
               @endif
-
-              @if($booking->car->is_available)
-                <!-- Availability Badge -->
-                <div class="absolute top-4 left-4">
-                  <span class="px-3 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">
-                    Tersedia
-                  </span>
-                </div>
-              @else
-                <!-- Sedang Disewa Badge Center -->
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <div class="bg-red-600/90 backdrop-blur-sm px-6 py-3 rounded-xl shadow-lg transform rotate-[-2deg]">
-                    <span class="text-white font-bold text-lg tracking-wide">SEDANG DISEWA</span>
-                  </div>
-                </div>
-              @endif
-
-              <!-- Plate Code Badge -->
-              <div class="absolute top-4 right-4">
-                <span class="px-3 py-1 bg-white/90 backdrop-blur text-gray-800 text-xs font-bold rounded-full">
-                  {{ $booking->car->plate_code }}
-                </span>
-              </div>
             </div>
-
-            {{-- ------------------------------------ --}}
 
             <div class="space-y-5">
               <div class="flex justify-between items-center border-b border-gray-100 pb-4">

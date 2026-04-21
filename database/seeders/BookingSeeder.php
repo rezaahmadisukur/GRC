@@ -51,7 +51,7 @@ class BookingSeeder extends Seeder
                     'end_date' => $endDate,
                     'total_price' => $price,
                     'dp_amount' => 0,
-                    'remains_payment' => 0,
+                    'remains_payment' => $price,
                     'status' => 'pending',
                     'notes' => 'Pemesanan otomatis dari seeder',
                 ]);
