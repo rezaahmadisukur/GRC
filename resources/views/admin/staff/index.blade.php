@@ -1,13 +1,16 @@
 <x-admin-layout>
 
+  <x-slot name="header">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800">Manajemen Staff</h1>
+      <p class="text-gray-500 mt-1">Kelola admin dan staff sistem</p>
+    </div>
+  </x-slot>
+
   <div class="container mx-auto px-4 py-6">
 
     <!-- Header Section -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-800">Manajemen Staff</h1>
-        <p class="text-gray-500 mt-1">Kelola admin dan staff sistem</p>
-      </div>
       <button onclick="openModal()"
         class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 w-fit">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
