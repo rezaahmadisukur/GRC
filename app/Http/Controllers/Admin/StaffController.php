@@ -38,4 +38,15 @@ class StaffController extends Controller
         ]);
         return back()->with('success', 'Status admin berhasil diubah!');
     }
+
+    public function resetPassword(User $user)
+    {
+        // Reset to default password 'grcrental123'
+        $user->update([
+            'password' => Hash::make('grcrental123'),
+            'must_change_password' => true
+        ]);
+
+        return back()->with('success', 'Password ' . $user->name . ' berhasil direset jadi: grcrental123');
+    }
 }

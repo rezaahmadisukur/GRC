@@ -26,34 +26,40 @@ Route::post('/check-booking', [BookingController::class, 'check'])->name('bookin
  * Protected Access (Owner & Admin)
  */
 
-Route::middleware(['auth',])->group(function () {
-    Route::get('/dashboard', [BookingDashboardController::class, 'indexDashboard'])->name('dashboard');
+Route::middleware(['auth'])->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Group Operasional (Admin & Owner bisa akses)
-    Route::prefix('admin')->name('admin.')->group(function () {
-        Route::get('/bookings', [BookingDashboardController::class, 'index'])->name('bookings.index');
-        Route::patch('/bookings/{booking}/status', [BookingDashboardController::class, 'updateStatus'])->name('bookings.update-status');
+    Route::middleware(['force.password.change'])->group(function () {
 
-        Route::get('/cars', [CarController::class, 'indexAdmin'])->name('cars.index');
-        Route::get('/cars/create', [CarController::class, 'create'])->name('cars.create');
-        Route::post('/cars', [CarController::class, 'store'])->name('cars.store');
-        Route::get('/cars/{car:plate_code}/edit', [CarController::class, 'edit'])->name('cars.edit');
-        Route::put('/cars/{car:plate_code}', [CarController::class, 'update'])->name('cars.update');
-        Route::delete('/cars/{car:plate_code}', [CarController::class, 'destroy'])->name('cars.destroy');
+        Route::get('/dashboard', [BookingDashboardController::class, 'indexDashboard'])->name('dashboard');
+        // Group Operasional (Admin & Owner bisa akses)
+        Route::prefix('admin')->name('admin.')->group(function () {
+            Route::get('/bookings', [BookingDashboardController::class, 'index'])->name('bookings.index');
+            Route::patch('/bookings/{booking}/status', [BookingDashboardController::class, 'updateStatus'])->name('bookings.update-status');
 
-        /**
-         * KHUSUS OWNER (Super Admin)
-         */
-        Route::middleware(['role:owner'])->group(function () {
-            Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
-            Route::post('/staff', [StaffController::class, 'store'])->name('staff.store');
-            Route::patch('/staff/{user}/toggle', [StaffController::class, 'toggleStatus'])->name('staff.toggle');
+            Route::get('/cars', [CarController::class, 'indexAdmin'])->name('cars.index');
+            Route::get('/cars/create', [CarController::class, 'create'])->name('cars.create');
+            Route::post('/cars', [CarController::class, 'store'])->name('cars.store');
+            Route::get('/cars/{car:plate_code}/edit', [CarController::class, 'edit'])->name('cars.edit');
+            Route::put('/cars/{car:plate_code}', [CarController::class, 'update'])->name('cars.update');
+            Route::delete('/cars/{car:plate_code}', [CarController::class, 'destroy'])->name('cars.destroy');
+
+            /**
+             * KHUSUS OWNER (Super Admin)
+             */
+            Route::middleware(['role:owner'])->group(function () {
+                Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
+                Route::post('/staff', [StaffController::class, 'store'])->name('staff.store');
+                Route::patch('/staff/{user}/toggle', [StaffController::class, 'toggleStatus'])->name('staff.toggle');
+
+                Route::patch('/staff/{user}/reset-password', [StaffController::class, 'resetPassword'])->name('staff.reset-password');
+            });
         });
     });
+
 });
 
 

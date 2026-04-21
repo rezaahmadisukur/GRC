@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
@@ -22,6 +23,7 @@ class PasswordController extends Controller
 
         $request->user()->update([
             'password' => Hash::make($validated['password']),
+            'must_change_password' => false
         ]);
 
         return back()->with('status', 'password-updated');

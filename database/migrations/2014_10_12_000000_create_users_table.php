@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('username')->unique();
             $table->string('password');
+            $table->boolean('must_change_password')->default(false);
             $table->enum('role', ['owner', 'admin'])->default('admin'); // Tambah Role
             $table->boolean('is_active')->default(true); // Tambah status aktif
             $table->rememberToken();
