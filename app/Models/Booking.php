@@ -22,6 +22,10 @@ class Booking extends Model
         'total_price',
         'dp_amount',
         'remains_payment',
+        'actual_end_date',
+        'penalty_amount',
+        'final_total_price',
+        'return_notes',
         'status',
         'notes'
     ];

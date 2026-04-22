@@ -187,16 +187,21 @@
                           </button>
                         </form>
                       @elseif($booking->status == 'active')
-                        <form method="POST" action="{{ route('admin.bookings.update-status', $booking) }}"
-                          class="inline-block">
+                        <button type="button"
+                          class="px-3 py-1.5 rounded-md text-xs font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow active:scale-95 open-complete-modal"
+                          data-booking-id="{{ $booking->id }}" data-booking-code="{{ $booking->booking_code }}"
+                          data-customer-name="{{ $booking->customer_name }}" data-total-price="{{ $booking->total_price }}"
+                          data-end-date="{{ $booking->end_date->format('d M Y H:i') }}">
+                          Selesai
+                        </button>
+
+                        <form id="complete-form-{{ $booking->id }}" method="POST"
+                          action="{{ route('admin.bookings.update-status', $booking) }}" class="hidden">
                           @csrf
                           @method('PATCH')
                           <input type="hidden" name="status" value="completed">
-                          <button type="submit"
-                            class="px-3 py-1.5 rounded-md text-xs font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow active:scale-95"
-                            data-booking-id="{{ $booking->id }}">
-                            Selesai
-                          </button>
+                          <input type="hidden" name="penalty_amount" id="penalty-input-{{ $booking->id }}">
+                          <input type="hidden" name="return_notes" id="notes-input-{{ $booking->id }}">
                         </form>
                       @endif
                       {{-- <button
@@ -243,6 +248,84 @@
           </div>
         </div>
       @endif
+    </div>
+  </div>
+
+  <!-- Modal Penalty & Selesai Booking -->
+  <div id="complete-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" id="complete-modal-backdrop"></div>
+
+    <div
+      class="relative bg-white rounded-2xl shadow-xl max-w-md w-full transform transition-all duration-300 scale-95 opacity-0"
+      id="complete-modal-content">
+      <div class="p-6 border-b border-gray-100">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-gray-900">Selesaikan Pemesanan</h3>
+          <button type="button" id="close-complete-modal-btn"
+            class="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-lg hover:bg-gray-100">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="p-6 space-y-5">
+        <div class="bg-blue-50 rounded-xl p-4 border border-blue-100">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="font-semibold text-gray-900" id="complete-modal-customer-name">-</p>
+              <p class="text-sm text-gray-500" id="complete-modal-booking-code">-</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gray-50 rounded-xl p-4 space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">Total Harga Sewa</span>
+            <span class="font-semibold text-gray-900" id="complete-modal-total-price">Rp 0</span>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Denda Keterlambatan / Kerusakan</label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">Rp</span>
+              <input type="number" id="complete-modal-penalty-input" min="0" value="0"
+                class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl text-lg font-semibold focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="Masukkan nominal denda">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Catatan Pengembalian</label>
+            <textarea id="complete-modal-notes-input" rows="2"
+              class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+              placeholder="Catatan kondisi mobil, dll (opsional)"></textarea>
+          </div>
+
+          <div class="pt-4 border-t border-gray-200 flex justify-between items-center">
+            <span class="text-gray-600 font-medium">Total Akhir</span>
+            <span class="font-bold text-xl text-blue-600" id="complete-modal-final-total">Rp 0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-6 border-t border-gray-100 bg-gray-50 rounded-b-2xl flex gap-3">
+        <button type="button" id="complete-modal-cancel-btn"
+          class="flex-1 px-4 py-3 rounded-xl bg-white border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition-all">
+          Batal
+        </button>
+        <button type="button" id="complete-modal-confirm-btn"
+          class="flex-1 px-4 py-3 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 shadow-sm hover:shadow transition-all">
+          Selesaikan Booking
+        </button>
+      </div>
     </div>
   </div>
 
@@ -382,6 +465,77 @@
     // Close on ESC key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeModal();
+    });
+
+    // ================================================
+    // COMPLETE / PENALTY MODAL
+    // ================================================
+    let selectedCompleteBookingId = null;
+    let completeTotalPrice = 0;
+
+    const completeModal = document.getElementById('complete-modal');
+    const completeModalContent = document.getElementById('complete-modal-content');
+    const completeModalBackdrop = document.getElementById('complete-modal-backdrop');
+    const penaltyInput = document.getElementById('complete-modal-penalty-input');
+    const finalTotalEl = document.getElementById('complete-modal-final-total');
+    const notesInput = document.getElementById('complete-modal-notes-input');
+
+    // Open Complete Modal
+    document.querySelectorAll('.open-complete-modal').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedCompleteBookingId = btn.dataset.bookingId;
+        completeTotalPrice = parseInt(btn.dataset.totalPrice);
+
+        document.getElementById('complete-modal-customer-name').textContent = btn.dataset.customerName;
+        document.getElementById('complete-modal-booking-code').textContent = '#' + btn.dataset.bookingCode;
+        document.getElementById('complete-modal-total-price').textContent = formatIDR(completeTotalPrice);
+
+        penaltyInput.value = 0;
+        notesInput.value = '';
+        finalTotalEl.textContent = formatIDR(completeTotalPrice);
+
+        completeModal.classList.remove('hidden');
+        setTimeout(() => {
+          completeModalContent.classList.remove('scale-95', 'opacity-0');
+          completeModalContent.classList.add('scale-100', 'opacity-100');
+          penaltyInput.focus();
+        }, 10);
+      });
+    });
+
+    // Close Complete Modal
+    function closeCompleteModal() {
+      completeModalContent.classList.remove('scale-100', 'opacity-100');
+      completeModalContent.classList.add('scale-95', 'opacity-0');
+      setTimeout(() => completeModal.classList.add('hidden'), 200);
+    }
+
+    document.getElementById('close-complete-modal-btn').addEventListener('click', closeCompleteModal);
+    document.getElementById('complete-modal-cancel-btn').addEventListener('click', closeCompleteModal);
+    completeModalBackdrop.addEventListener('click', closeCompleteModal);
+
+    // Calculate final total when penalty input changes
+    penaltyInput.addEventListener('input', () => {
+      const penalty = parseInt(penaltyInput.value) || 0;
+      finalTotalEl.textContent = formatIDR(completeTotalPrice + penalty);
+    });
+
+    // Submit complete booking
+    document.getElementById('complete-modal-confirm-btn').addEventListener('click', () => {
+      const penalty = parseInt(penaltyInput.value) || 0;
+      const notes = notesInput.value || '';
+
+      document.getElementById('penalty-input-' + selectedCompleteBookingId).value = penalty;
+      document.getElementById('notes-input-' + selectedCompleteBookingId).value = notes;
+      document.getElementById('complete-form-' + selectedCompleteBookingId).submit();
+    });
+
+    // Close both modals on ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeCompleteModal();
+      }
     });
   </script>
 </x-admin-layout>

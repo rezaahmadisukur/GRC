@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Car;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class BookingDashboardController extends Controller
 {
@@ -23,7 +24,9 @@ class BookingDashboardController extends Controller
     {
         $request->validate([
             'status' => 'required|in:pending,confirmed,completed,cancelled',
-            'dp_amount' => 'nullable|numeric|min:0'
+            'dp_amount' => 'nullable|numeric|min:0',
+            'penalty_amount' => 'nullable|numeric|min:0',
+            'return_notes' => 'nullable|string'
         ]);
 
         // 1. Logic KONFIRMASI (Admin setujui booking)
@@ -47,8 +50,17 @@ class BookingDashboardController extends Controller
 
         // 2. Logic SELESAI (Sewa Berakhir)
         if ($request->status == 'completed') {
+            $actualReturn = now();
+            $scheduledReturn = Carbon::parse($booking->end_date);
+
+            $penalty = $request->input('penalty_amount', 0);
+
             $booking->update([
                 'status' => 'completed',
+                'actual_end_date' => $actualReturn,
+                'penalty_amount' => $penalty,
+                'final_total_price' => $booking->total_price + $penalty,
+                'return_notes' => $request->return_notes,
                 'remains_payment' => 0 // <--- Anggap Lunas pas selesai
             ]);
 
@@ -68,13 +80,6 @@ class BookingDashboardController extends Controller
             ]);
             return back()->with('success', 'Booking telah dibatalkan.');
         }
-
-        // if (in_array($request->status, ['cancelled', 'completed'])) {
-        //     $booking->update(['status' => $request->status]);
-        //     $booking->car->update(['is_available' => true]);
-
-        //     return back()->with('success', 'Status diperbarui, mobil tersedia kembali.');
-        // }
 
         $booking->update(['status' => $request->status]);
 

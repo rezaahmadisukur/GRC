@@ -28,6 +28,11 @@ return new class extends Migration {
             $table->integer('dp_amount')->default(0); // Bisa diisi Admin pas approve
             $table->integer('remains_payment')->default(0);
 
+            $table->dateTime('actual_end_date')->nullable();
+            $table->integer('penalty_amount')->default(0);
+            $table->integer('final_total_price')->nullable();
+            $table->text('return_notes')->nullable();
+
             // Ini kunci buat "Approve" Admin
             $table->enum('status', ['pending', 'active', 'completed', 'cancelled'])->default('pending');
             $table->text('notes')->nullable();
