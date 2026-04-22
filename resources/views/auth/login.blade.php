@@ -6,7 +6,7 @@
             <!-- Header -->
             <div class="mb-8 text-center">
                 <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight mb-2">
-                    Selamat datang 👋
+                    Selamat Datang
                 </h1>
                 <p class="text-slate-500 text-sm md:text-base">
                     Masukkan kredensial Anda untuk melanjutkan
