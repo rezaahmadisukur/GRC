@@ -52,7 +52,7 @@
                           @endif
                         </td>
                         <td class="px-6 py-4">
-                          <form action="{{ route('admin.staff.toggle', $staff->id) }}" method="POST" class="inline">
+                          <form action="{{ route('admin.staff.toggle', $staff->id) }}" method="POST" class="inline mr-2">
                             @csrf
                             @method('PATCH')
                             <button type="submit" class="px-4 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 
@@ -61,6 +61,15 @@
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200' 
                                                                   }}">
                               {{ $staff->is_active ? 'Nonaktifkan' : 'Aktifkan' }}
+                            </button>
+                          </form>
+
+                          <form action="{{ route('admin.staff.reset-password', $staff->id) }}" method="POST" class="inline reset-password-form">
+                            @csrf
+                            @method('PATCH')
+                            <input type="hidden" name="staff_name" value="{{ $staff->name }}">
+                            <button type="submit" class="px-4 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 bg-blue-100 text-blue-700 hover:bg-blue-200">
+                              Reset Password
                             </button>
                           </form>
                         </td>
@@ -221,6 +230,31 @@
         e.preventDefault();
         alert('Password dan Konfirmasi Password tidak cocok!');
       }
+    });
+
+    // Reset Password Confirmation with SweetAlert2
+    document.querySelectorAll('.reset-password-form').forEach(form => {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const staffName = this.querySelector('input[name="staff_name"]').value;
+        
+        Swal.fire({
+          title: 'Reset Password?',
+          html: `Anda yakin ingin mereset password untuk <strong>${staffName}</strong>?<br><br>Password akan direset menjadi: <code class="bg-gray-100 px-2 py-1 rounded">grcrental123</code>`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#2563eb',
+          cancelButtonColor: '#6b7280',
+          confirmButtonText: 'Ya, Reset Password',
+          cancelButtonText: 'Batal',
+          reverseButtons: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.submit();
+          }
+        });
+      });
     });
   </script>
 

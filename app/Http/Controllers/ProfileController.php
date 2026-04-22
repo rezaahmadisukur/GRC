@@ -7,7 +7,9 @@ use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -57,5 +59,28 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function showForceChangePassword()
+    {
+        if (!auth()->user()->must_change_password) {
+            return redirect()->route('dashboard');
+        }
+
+        return view('auth.force-change-password');
+    }
+
+    public function updateForceChangePassword(Request $request)
+    {
+        $request->validate([
+            'password' => ['required', 'confirmed', Password::defaults()]
+        ]);
+
+        $request->user()->update([
+            'password' => Hash::make($request->password),
+            'must_change_password' => false
+        ]);
+
+        return redirect()->route('dashboard')->with('success', 'Password berhasil diperbarui!');
     }
 }

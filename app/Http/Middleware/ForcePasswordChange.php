@@ -15,19 +15,18 @@ class ForcePasswordChange
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Cek: Apakah user sudah login?
-        // Cek: Apakah bendera must_change_password bernilai true?
-        // Cek: Supaya gak looping, jangan hadang kalau dia emang lagi mau ganti password (route profile)
         if (auth()->check() && auth()->user()->must_change_password) {
+            // Nama route baru yang akan kita buat nanti
             $allowedRoutes = [
-                'profile.edit',
-                'profile.update',
-                'logout'
+                'password.force-change', // Halaman form ganti password
+                'password.force-update', // Proses simpan passwordnya
+                'logout'                 // Biar dia tetep bisa logout kalau gak jadi ganti
             ];
+
             if (!in_array($request->route()->getName(), $allowedRoutes)) {
                 return redirect()
-                    ->route('profile.edit')
-                    ->with('error', 'Keamanan: Anda wajib mengganti password default dari Owner sebelum bisa mengakses fitur lain.');
+                    ->route('password.force-change')
+                    ->with('error', 'Pembaruan Keamanan: Silakan ganti password Anda.');
             }
         }
 

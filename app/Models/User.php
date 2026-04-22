@@ -21,7 +21,7 @@ class User extends Authenticatable
         'name',
         'username',
         'password',
-        'must_change_passowrd',
+        'must_change_password',
         'role',
         'is_active'
     ];

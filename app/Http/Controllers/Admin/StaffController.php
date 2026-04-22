@@ -41,6 +41,7 @@ class StaffController extends Controller
 
     public function resetPassword(User $user)
     {
+
         // Reset to default password 'grcrental123'
         $user->update([
             'password' => Hash::make('grcrental123'),

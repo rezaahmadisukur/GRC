@@ -32,6 +32,9 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::get('/force-change-password', [ProfileController::class, 'showForceChangePassword'])->name('password.force-change');
+    Route::patch('/force-change-password', [ProfileController::class, 'updateForceChangePassword'])->name('password.force-update');
+
     Route::middleware(['force.password.change'])->group(function () {
 
         Route::get('/dashboard', [BookingDashboardController::class, 'indexDashboard'])->name('dashboard');
