@@ -73,7 +73,16 @@ class ProfileController extends Controller
     public function updateForceChangePassword(Request $request)
     {
         $request->validate([
-            'password' => ['required', 'confirmed', Password::defaults()]
+            'password' => [
+                'required',
+                'confirmed',
+                Password::defaults(),
+                function ($attribute, $value, $fail) use ($request) {
+                    if (Hash::check($value, $request->user()->password)) {
+                        $fail('Jangan pake password lama, gunakan password baru');
+                    }
+                }
+            ]
         ]);
 
         $request->user()->update([
