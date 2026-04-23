@@ -141,17 +141,6 @@
                         Menampilkan <span class="font-bold text-gray-900 text-lg">{{ $cars->count() }}</span> mobil tersedia
                     </p>
                 </div>
-                
-                <!-- Sort Option (Optional) -->
-                <div class="flex items-center gap-2 text-sm">
-                    <span class="text-gray-500">Urutkan:</span>
-                    <select class="px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-gray-700 font-medium cursor-pointer hover:border-gray-300 transition-all">
-                        <option>Terbaru</option>
-                        <option>Harga Terendah</option>
-                        <option>Harga Tertinggi</option>
-                        <option>Nama A-Z</option>
-                    </select>
-                </div>
             </div>
 
             <!-- Cars Grid atau Skeleton Loading -->

@@ -5,24 +5,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-
   <title>{{ config('app.name', 'Laravel') }}</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.bunny.net">
   <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-  <!-- Scripts -->
+  <!-- ✅ Vite DULU, baru style kustom di bawahnya -->
   @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
 
-<body class="theme-admin font-sans antialiased bg-gray-50" x-data="{ 
-  sidebarOpen: false, 
-  sidebarCollapsed: localStorage.getItem('sidebarCollapsed') === 'true' 
-}" @sidebar-toggle.window="localStorage.setItem('sidebarCollapsed', sidebarCollapsed)">
-
+  <!-- ✅ Style kustom SETELAH Vite agar tidak tertimpa Tailwind -->
   <style>
-    /* Anti blink sidebar - dijalankan SEBELUM Alpine load */
+    [x-cloak] {
+      display: none !important;
+    }
+
     html.sidebar-collapsed aside {
       width: 5rem !important;
     }
@@ -31,81 +28,139 @@
       margin-left: 5rem !important;
     }
 
-    /* Nonaktifkan transisi ketika halaman pertama kali load */
-    body.loading * {
+    html:not(.sidebar-collapsed) aside {
+      width: 18rem !important;
+    }
+
+    html:not(.sidebar-collapsed) .main-content {
+      margin-left: 18rem !important;
+    }
+
+    @media (max-width: 767px) {
+
+      html.sidebar-collapsed .main-content,
+      html:not(.sidebar-collapsed) .main-content {
+        margin-left: 0 !important;
+      }
+    }
+
+    .no-transition * {
+      transition: none !important;
+    }
+
+    /* ✅ Fix: Nav item TIDAK boleh punya transition saat pertama load */
+    /* Transition hanya untuk hover state, BUKAN untuk perubahan warna active */
+    .nav-item {
+      transition: background-color 0s, color 0s;
+      /* instant, no transition */
+    }
+
+    /* Hover boleh pakai transition tapi hanya item yang TIDAK active */
+    .nav-item:not(.active):hover {
+      transition: background-color 150ms ease, color 150ms ease;
+    }
+
+    /* Active state: sama sekali tidak ada transition */
+    .nav-item.active {
       transition: none !important;
     }
   </style>
 
+  <!-- ✅ Script anti-blink tetap di head, tapi SETELAH style -->
   <script>
     (function () {
       const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
       if (isCollapsed) {
         document.documentElement.classList.add('sidebar-collapsed');
       }
-      // Tambahkan class loading untuk disable transisi sementara
-      document.body.classList.add('loading');
-      // Hapus setelah halaman selesai load
-      window.addEventListener('load', function () {
-        setTimeout(() => document.body.classList.remove('loading'), 10);
+      document.documentElement.classList.add('no-transition');
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          document.documentElement.classList.remove('no-transition');
+        }, 100);
       });
     })();
   </script>
+</head>
+
+<body class="font-sans antialiased bg-gray-50" x-data="{ 
+    sidebarOpen: false, 
+    sidebarCollapsed: localStorage.getItem('sidebarCollapsed') === 'true' 
+  }" x-init="
+    $watch('sidebarCollapsed', value => {
+      localStorage.setItem('sidebarCollapsed', value);
+      if (value) {
+        document.documentElement.classList.add('sidebar-collapsed');
+      } else {
+        document.documentElement.classList.remove('sidebar-collapsed');
+      }
+    })
+  ">
 
   <div class="flex min-h-screen overflow-hidden">
 
     @include('layouts.navigation')
 
     <div class="main-content flex-1 flex flex-col min-h-screen transition-all duration-300 bg-gray-50"
-      :class="sidebarCollapsed ? 'md:ml-20' : 'md:ml-64'">
+      :class="sidebarCollapsed ? 'md:ml-20' : 'md:ml-72'">
 
-      <header class="md:hidden bg-white border-b px-4 py-3 flex items-center justify-between sticky top-0 z-20">
-        <span class="font-bold text-emerald-600">GRC Admin</span>
-        <button @click="sidebarOpen = true" class="p-2 rounded-lg bg-gray-100 text-gray-600">
+      <!-- Mobile Header -->
+      <header
+        class="md:hidden bg-white/80 backdrop-blur-md border-b border-slate-100 px-4 py-3 flex items-center justify-between sticky top-0 z-20">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <span class="font-bold text-slate-800">GRC Rental</span>
+        </div>
+        <button @click="sidebarOpen = true"
+          class="p-2 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
       </header>
 
+      <!-- Desktop Header -->
       @if (isset($header))
-        <header class="bg-white border-b border-gray-100 sticky top-0 z-10 hidden md:block">
-          <div class="px-8 py-5 flex items-center gap-4">
-            <button @click="sidebarCollapsed = !sidebarCollapsed"
-              class="p-2 rounded-lg bg-gray-50 hover:bg-gray-100 text-gray-600 transition-colors">
-              {{-- Panel Left Close --}}
-              <svg x-show="!sidebarCollapsed" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-8 h-8"
-                fill="none" stroke="currentColor">
-                <g fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
-                  <path d="M9 3.5v17m7-5.5l-3-3l3-3" />
-                  <path
-                    d="M3 12c0-4.243 0-6.364 1.318-7.682C5.636 3 7.758 3 12 3c4.243 0 6.364 0 7.682 1.318C21 5.636 21 7.758 21 12c0 4.243 0 6.364-1.318 7.682C18.364 21 16.242 21 12 21c-4.243 0-6.364 0-7.682-1.318C3 18.364 3 16.242 3 12" />
-                </g>
+        <header class="bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-10 hidden md:block">
+          <div class="px-8 py-4 flex items-center gap-4">
+
+            <!-- Tombol Toggle Sidebar -->
+            <button @click="sidebarCollapsed = !sidebarCollapsed" class="group p-2 rounded-xl bg-slate-50 hover:bg-emerald-50 text-slate-400 
+                         hover:text-emerald-600 transition-all duration-300 flex-shrink-0"
+              :title="sidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'">
+
+              <!-- Satu icon yang berputar sesuai state -->
+              <svg class="w-5 h-5 transition-transform duration-300" :class="sidebarCollapsed ? 'rotate-180' : 'rotate-0'"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
               </svg>
-              {{-- Panel Right Close --}}
-              <svg x-show="sidebarCollapsed" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-8 h-8"
-                fill="none" stroke="currentColor">
-                <g fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
-                  <path d="M15 3.5v17M8 9l3 3l-3 3" />
-                  <path
-                    d="M3 12c0-4.243 0-6.364 1.318-7.682C5.636 3 7.758 3 12 3c4.243 0 6.364 0 7.682 1.318C21 5.636 21 7.758 21 12c0 4.243 0 6.364-1.318 7.682C18.364 21 16.242 21 12 21c-4.243 0-6.364 0-7.682-1.318C3 18.364 3 16.242 3 12" />
-                </g>
-              </svg>
+
             </button>
+
+            <!-- Breadcrumb / Title -->
             <div class="flex-1">
               {{ $header }}
             </div>
+
           </div>
         </header>
       @endif
 
+      <!-- Main Content -->
       <main class="flex-1 p-4 sm:p-6 lg:p-8">
         {{ $slot }}
       </main>
+
     </div>
   </div>
 
-  @if(session('success'))
+  <!-- ✅ Flash Message - SweetAlert2 -->
+  @if (session('success'))
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         Swal.fire({
@@ -118,14 +173,14 @@
           timer: 3000,
           timerProgressBar: true,
           customClass: {
-            popup: 'rounded-xl shadow-lg border border-emerald-100 bg-white/90 backdrop-blur-md',
+            popup: 'rounded-xl shadow-lg',
           }
         });
       });
     </script>
   @endif
 
-  @if(session('error'))
+  @if (session('error'))
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         Swal.fire({
@@ -133,10 +188,14 @@
           title: 'Oops...',
           text: @json(session('error')),
           confirmButtonColor: '#ef4444',
+          customClass: {
+            popup: 'rounded-xl',
+          }
         });
       });
     </script>
   @endif
+
 </body>
 
 </html>
