@@ -202,7 +202,7 @@
 
           <!-- Pagination -->
           @if(isset($cars) && $cars->hasPages())
-            <div class="mt-6 flex justify-center">
+            <div class="mt-6 flex">
               {{ $cars->links() }}
             </div>
           @endif

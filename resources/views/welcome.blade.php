@@ -4,26 +4,20 @@
     HERO SECTION — Deep navy gradient with animated elements
     ═══════════════════════════════════════════════════════════ --}}
     <section
-        class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 min-h-[92vh] flex items-center"
+        class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 min-h-[92vh] flex items-center border-none"
         id="home">
 
-        {{-- Background decorative blobs --}}
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            {{-- Large glow top-right --}}
             <div class="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-blue-600/20 blur-3xl"></div>
-            {{-- Medium glow bottom-left --}}
             <div class="absolute -bottom-32 -left-32 w-[500px] h-[500px] rounded-full bg-blue-800/25 blur-3xl"></div>
-            {{-- Small accent center --}}
             <div
                 class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-full bg-blue-700/10 blur-3xl">
             </div>
 
-            {{-- Subtle grid pattern overlay --}}
             <div class="absolute inset-0 opacity-[0.03]"
                 style="background-image: linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px); background-size: 60px 60px;">
             </div>
 
-            {{-- Decorative circles --}}
             <div class="absolute top-20 left-10 w-2 h-2 rounded-full bg-blue-400/40"></div>
             <div class="absolute top-40 left-32 w-1 h-1 rounded-full bg-blue-300/50"></div>
             <div class="absolute top-60 right-20 w-3 h-3 rounded-full bg-blue-500/30"></div>
@@ -34,9 +28,7 @@
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 w-full">
             <div class="grid lg:grid-cols-2 gap-16 items-center">
 
-                {{-- Left: Text Content --}}
                 <div class="text-center lg:text-left">
-                    {{-- Badge --}}
                     <div
                         class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-8">
                         <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
@@ -44,7 +36,6 @@
                             2015</span>
                     </div>
 
-                    {{-- Headline --}}
                     <h1
                         class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.05] tracking-tight mb-6">
                         Rental Mobil
@@ -53,13 +44,11 @@
                         </span>
                     </h1>
 
-                    {{-- Subheadline --}}
                     <p class="text-lg md:text-xl text-slate-300 leading-relaxed mb-10 max-w-xl mx-auto lg:mx-0">
                         Nikmati kenyamanan berkendara dengan unit kendaraan pilihan kami yang modern, terawat, dan siap
                         menemani perjalanan Anda.
                     </p>
 
-                    {{-- CTA Buttons --}}
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                         <button onclick="document.querySelector('.search-section').scrollIntoView({behavior: 'smooth'})"
                             class="group inline-flex items-center justify-center gap-2.5 bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-2xl font-bold text-base shadow-lg shadow-blue-600/30 hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-0.5">
@@ -81,7 +70,6 @@
                         </a>
                     </div>
 
-                    {{-- Stats Row --}}
                     <div
                         class="flex flex-wrap gap-8 justify-center lg:justify-start mt-14 pt-10 border-t border-slate-700/50">
                         <div class="text-center lg:text-left">
@@ -104,11 +92,8 @@
                     </div>
                 </div>
 
-                {{-- Right: Visual Card Stack --}}
                 <div class="hidden lg:flex items-center justify-center relative">
-                    {{-- Main card --}}
                     <div class="relative w-full max-w-sm">
-                        {{-- Background card (offset) --}}
                         <div
                             class="absolute -top-4 -right-4 w-full h-full rounded-3xl bg-blue-600/20 border border-blue-500/20">
                         </div>
@@ -116,10 +101,8 @@
                             class="absolute -top-2 -right-2 w-full h-full rounded-3xl bg-blue-600/10 border border-blue-500/10">
                         </div>
 
-                        {{-- Main visual card --}}
                         <div
                             class="relative bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 shadow-2xl">
-                            {{-- Car icon large --}}
                             <div
                                 class="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center mb-6 shadow-lg shadow-blue-600/30">
                                 <svg class="w-10 h-10 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -133,7 +116,6 @@
                             <h3 class="text-white font-bold text-xl mb-1">Pusat Rentcar Purwakarta</h3>
                             <p class="text-slate-400 text-sm mb-6">Sewa mobil terpercaya di Purwakarta</p>
 
-                            {{-- Mini stats --}}
                             <div class="grid grid-cols-2 gap-3">
                                 <div class="bg-slate-700/50 rounded-xl p-3">
                                     <div class="text-blue-400 font-bold text-lg">SUV</div>
@@ -153,7 +135,6 @@
                                 </div>
                             </div>
 
-                            {{-- Rating badge --}}
                             <div
                                 class="mt-5 flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-xl px-4 py-2.5">
                                 <div class="flex gap-0.5">
@@ -170,7 +151,6 @@
                         </div>
                     </div>
 
-                    {{-- Floating badge --}}
                     <div
                         class="absolute -bottom-6 -left-6 bg-white rounded-2xl px-4 py-3 shadow-xl flex items-center gap-3">
                         <div class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
@@ -185,14 +165,13 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
         {{-- Bottom wave divider --}}
         <div class="absolute bottom-0 left-0 right-0">
-            <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
-                <path d="M0 60L1440 60L1440 20C1200 60 960 0 720 20C480 40 240 0 0 20L0 60Z" fill="rgb(249 250 251)" />
+            <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" >
+                <path d="M0 60L1440 60L1440 20C1200 60 960 0 720 20C480 40 240 0 0 20L0 60Z" fill="rgb(249 250 251)"/>
             </svg>
         </div>
     </section>
@@ -206,9 +185,6 @@
 
             {{-- Section Header --}}
             <div class="text-center mb-14">
-                <div
-                    class="inline-flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-full px-4 py-1.5 mb-4">
-                </div>
                 <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
                     Daftar Mobil <span class="text-blue-600">Tersedia</span>
                 </h2>
