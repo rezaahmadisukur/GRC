@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BookingDashboardController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CarController;
@@ -47,6 +48,9 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/bookings', [BookingDashboardController::class, 'index'])->name('bookings.index');
             Route::patch('/bookings/{booking}/status', [BookingDashboardController::class, 'updateStatus'])->name('bookings.update-status');
+
+            Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+            Route::get('/reports/download', [ReportController::class, 'downloadPDF'])->name('reports.download');
 
             Route::get('/cars', [CarController::class, 'indexAdmin'])->name('cars.index');
             Route::get('/cars/create', [CarController::class, 'create'])->name('cars.create');
