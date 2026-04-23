@@ -24,7 +24,7 @@ class StoreStaffRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'username' => 'required|string|unique:users,username',
-            'password' => 'required|min:6|confirmed'
+            // 'password' => 'required|min:6|confirmed'
         ];
     }
 

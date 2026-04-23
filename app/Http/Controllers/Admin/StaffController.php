@@ -19,15 +19,18 @@ class StaffController extends Controller
 
     public function store(StoreStaffRequest $request)
     {
+        $defaultPassword = 'grcrental123';
+
         User::create([
             'name' => $request->name,
             'username' => $request->username,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make($defaultPassword),
             'role' => 'admin',
-            'is_active' => true
+            'is_active' => true,
+            'must_change_password' => true
         ]);
 
-        return back()->with('success', 'Admin baru berhasil didaftarkan!');
+        return back()->with('success', 'Admin baru berhasil dibuat. Password default: ' . $defaultPassword);
     }
 
     public function toggleStatus(User $user)
