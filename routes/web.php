@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
  * Public Access (Customer)
  */
 
-Route::get('/', fn() => view('welcome', ['cars' => Car::latest()->take(6)->get()]));
+Route::get('/', [CarController::class, 'welcome'])->name('home');
 
 // Route sementara buat ngetes tampilan error
 // Route::get('/test-error', function () {
