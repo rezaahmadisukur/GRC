@@ -355,9 +355,9 @@
                 @endfor
             </div>
 
-            <!-- Pagination (if needed) -->
-            <div class="mt-12 flex justify-center">
-                <!-- Add your pagination here -->
+            <!-- Pagination -->
+            <div class="mt-12 flex justify-center animate-fadeIn">
+                {{ $cars->appends(request()->query())->links() }}
             </div>
         </div>
     </div>
