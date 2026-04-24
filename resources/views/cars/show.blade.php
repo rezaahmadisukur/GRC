@@ -91,16 +91,36 @@
 
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
               @php
-                $specs = [
-                  ['label' => 'Warna', 'value' => $car->color, 'bg' => '#eff6ff', 'iconColor' => '#2563eb',
-                    'icon' => 'M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01'],
-                  ['label' => 'Transmisi', 'value' => $car->transmission, 'bg' => '#f5f3ff', 'iconColor' => '#7c3aed',
-                    'icon' => 'M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4'],
-                  ['label' => 'Kapasitas', 'value' => ($car->seats ?? '-') . ' Kursi', 'bg' => '#ecfdf5', 'iconColor' => '#059669',
-                    'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z'],
-                  ['label' => 'BBM', 'value' => $car->fuel_type ?? 'Bensin', 'bg' => '#fff7ed', 'iconColor' => '#ea580c',
-                    'icon' => 'M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z'],
-                ];
+$specs = [
+  [
+    'label' => 'Warna',
+    'value' => $car->color,
+    'bg' => '#eff6ff',
+    'iconColor' => '#2563eb',
+    'icon' => 'M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01'
+  ],
+  [
+    'label' => 'Transmisi',
+    'value' => $car->transmission,
+    'bg' => '#f5f3ff',
+    'iconColor' => '#7c3aed',
+    'icon' => 'M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4'
+  ],
+  [
+    'label' => 'Kapasitas',
+    'value' => ($car->seats ?? '-') . ' Kursi',
+    'bg' => '#ecfdf5',
+    'iconColor' => '#059669',
+    'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z'
+  ],
+  [
+    'label' => 'BBM',
+    'value' => $car->fuel_type ?? 'Bensin',
+    'bg' => '#fff7ed',
+    'iconColor' => '#ea580c',
+    'icon' => 'M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z'
+  ],
+];
               @endphp
 
               @foreach($specs as $spec)
@@ -260,22 +280,41 @@
               </div>
 
               {{-- Start Date --}}
-              <div>
-                <label for="start_date" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">
+              <div x-data="{ 
+                              init() { 
+                                  window.flatpickr($refs.startDate, {
+                                      enableTime: true,
+                                      minDate: 'today',
+                                      time_24hr: true,
+                                      locale: 'id',
+                                      altInput: true,
+                                      altFormat: 'j F Y \\p\\u\\k\\u\\l H.i',
+                                      dateFormat: 'Y-m-d H:i',
+                                      onChange: (selectedDates, dateStr) => {
+                                          if (typeof updateForm === 'function') {
+                                              updateForm();
+                                          }
+                                      }
+                                  });
+                              } 
+                          }">
+                <label for="start_date"
+                  class="block text-xs font-bold text-[hsl(var(--muted-foreground))] uppercase tracking-widest mb-2">
                   Tanggal & Waktu Mulai <span class="text-red-400">*</span>
                 </label>
-                <input type="datetime-local" id="start_date" name="start_date"
-                  value="{{ old('start_date') }}"
-                  class="w-full px-4 py-3 rounded-xl text-sm font-medium text-slate-800 transition-all duration-200 outline-none"
-                  style="background: #f8fafc; border: 1.5px solid #e2e8f0;"
-                  onfocus="this.style.borderColor='#2563eb'; this.style.background='#fff';"
-                  onblur="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
-                @error('start_date')
-                  <p class="mt-1.5 text-xs text-red-500 font-medium flex items-center gap-1">
-                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-                    {{ $message }}
-                  </p>
-                @enderror
+              
+                <div class="relative">
+                  {{-- Gunakan x-ref='startDate' agar Alpine bisa menemukan input ini --}}
+                  <input x-ref="startDate" type="text" id="start_date" name="start_date" value="{{ old('start_date') }}"
+                    placeholder="Pilih tanggal & waktu..." readonly
+                    class="w-full pl-4 pr-10 py-3 rounded-xl text-sm font-medium bg-[hsl(var(--background))] border border-[hsl(var(--border))] text-[hsl(var(--foreground))] outline-none focus:ring-2 focus:ring-[hsl(var(--primary))/20] focus:border-[hsl(var(--primary))] transition-all duration-200">
+                  <div class="absolute right-4 top-1/2 -translate-y-1/2 text-[hsl(var(--muted-foreground))] pointer-events-none">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                  </div>
+                </div>
               </div>
 
               {{-- Extra Hours --}}
@@ -293,14 +332,22 @@
                 <p class="mt-1.5 text-xs text-slate-400 font-medium">Tambah jam ekstra di luar paket yang dipilih</p>
               </div>
 
-              {{-- End Date (readonly) --}}
+              {{-- End Date (readonly & styled) --}}
               <div>
-                <label for="end_date" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">
+                <label for="end_date"
+                  class="block text-xs font-bold text-[hsl(var(--muted-foreground))] uppercase tracking-widest mb-2">
                   Estimasi Selesai
                 </label>
-                <input type="datetime-local" id="end_date" name="end_date" readonly
-                  class="w-full px-4 py-3 rounded-xl text-sm font-medium text-slate-400 cursor-not-allowed"
-                  style="background: #f1f5f9; border: 1.5px solid #e2e8f0;">
+                <div class="relative">
+                  <input type="text" {{-- Ubah dari datetime-local ke text agar formatnya rapi --}} id="end_date" name="end_date"
+                    readonly placeholder="Otomatis terisi..."
+                    class="w-full px-4 py-3 rounded-xl text-sm font-bold bg-[hsl(var(--muted))] border border-[hsl(var(--border))] text-[hsl(var(--foreground))] opacity-80 cursor-not-allowed outline-none">
+                  <div class="absolute right-4 top-1/2 -translate-y-1/2 text-[hsl(var(--muted-foreground))] opacity-50">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </div>
+                </div>
               </div>
 
               {{-- Total Price --}}
@@ -402,12 +449,11 @@
   </div>
 
   <script>
-    const startDateInput = document.getElementById('start_date');
-    const endDateInput   = document.getElementById('end_date');
+    const endDateInput = document.getElementById('end_date');
     const extraHoursInput = document.getElementById('extra_hours');
-    const totalPriceSpan  = document.getElementById('total_price');
-    const priceBreakdown  = document.getElementById('price_breakdown');
-    const durationInputs  = document.querySelectorAll('input[name="duration_type"]');
+    const totalPriceSpan = document.getElementById('total_price');
+    const priceBreakdown = document.getElementById('price_breakdown');
+    const durationInputs = document.querySelectorAll('input[name="duration_type"]');
 
     const price12h = {{ $car->price_12h }};
     const price24h = {{ $car->price_24h }};
@@ -417,58 +463,52 @@
     }
 
     function updateForm() {
-      const startDate   = new Date(startDateInput.value);
-      const durationType = document.querySelector('input[name="duration_type"]:checked')?.value;
-      const extraHours  = parseInt(extraHoursInput.value) || 0;
+      // Flatpickr bikin input hidden dengan name="start_date"
+      const hiddenInput = document.querySelector('input[name="start_date"]');
+      const startDateVal = hiddenInput ? hiddenInput.value : null;
 
-      if (!startDateInput.value || !durationType) {
-        totalPriceSpan.textContent = '0';
-        priceBreakdown.textContent = 'Pilih paket durasi untuk menghitung';
-        return;
-      }
+      if (!startDateVal) return;
 
-      const baseDuration = parseInt(durationType);
-      const totalHours   = baseDuration + extraHours;
-      const basePrice    = durationType === '12' ? price12h : price24h;
-      const pricePerHour = basePrice / baseDuration;
-      const extraCost    = extraHours * pricePerHour;
-      const totalPrice   = basePrice + extraCost;
+      // Ganti strip jadi slash biar dibaca Date object dengan bener di semua OS
+      const startDate = new Date(startDateVal.replace(/-/g, '/'));
+      const durationRadio = document.querySelector('input[name="duration_type"]:checked');
+      const durationType = durationRadio ? durationRadio.value : null;
+      const extraHours = parseInt(extraHoursInput.value) || 0;
 
-      // Update end date
-      const endDate = new Date(startDate.getTime() + totalHours * 3600000);
-      endDateInput.value = endDate.toISOString().slice(0, 16);
+      if (durationType) {
+        const totalHours = parseInt(durationType) + extraHours;
+        const endDate = new Date(startDate.getTime() + (totalHours * 60 * 60 * 1000));
 
-      // Update price display
-      totalPriceSpan.textContent = formatRupiah(totalPrice);
+        // Format rapi: 25 April 2026 pukul 12.00
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        const datePart = endDate.toLocaleDateString('id-ID', options);
+        const h = endDate.getHours().toString().padStart(2, '0');
+        const m = endDate.getMinutes().toString().padStart(2, '0');
 
-      if (extraHours > 0) {
-        priceBreakdown.textContent =
-          `Paket ${durationType}j (Rp ${formatRupiah(basePrice)}) + ${extraHours}j tambahan (Rp ${formatRupiah(extraCost)})`;
-      } else {
-        priceBreakdown.textContent = `Paket ${durationType} jam`;
+        endDateInput.value = `${datePart} pukul ${h}.${m}`;
+
+        // --- HITUNG HARGA ---
+        const basePrice = durationType === '12' ? price12h : price24h;
+        const pricePerHour = basePrice / parseInt(durationType);
+        const extraCost = extraHours * pricePerHour;
+        const totalAmount = basePrice + extraCost;
+
+        totalPriceSpan.textContent = formatRupiah(totalAmount);
+        priceBreakdown.textContent = extraHours > 0
+          ? `Paket ${durationType}j + ${extraHours}j tambahan`
+          : `Paket ${durationType} jam`;
       }
     }
 
-    // Style radio labels dynamically (for price text color)
+    // Listener untuk Radio Button
     durationInputs.forEach(input => {
       input.addEventListener('change', () => {
-        durationInputs.forEach(i => {
-          const priceEl = i.parentElement.querySelector('p:last-child');
-          if (i.checked) {
-            priceEl.style.color = 'rgba(219,234,254,0.9)';
-          } else {
-            priceEl.style.color = '';
-          }
-        });
         updateForm();
       });
     });
 
-    startDateInput.addEventListener('change', updateForm);
+    // Listener untuk Jam Tambahan
     extraHoursInput.addEventListener('input', updateForm);
-
-    // Set min date
-    startDateInput.min = new Date().toISOString().slice(0, 16);
   </script>
 
 </x-app-layout>

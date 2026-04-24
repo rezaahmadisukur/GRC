@@ -66,3 +66,27 @@
         color: hsl(var(--foreground) / 1);
     }
 }
+
+/* Custom Styling Flatpickr ala Tweak-cn */
+.flatpickr-calendar {
+    @apply rounded-2xl border-[hsl(var(--border))] shadow-2xl bg-[hsl(var(--background))] !important;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange,
+.flatpickr-day.selected:hover {
+    background: hsl(var(--primary)) !important;
+    border-color: hsl(var(--primary)) !important;
+    color: hsl(var(--primary-foreground)) !important;
+}
+
+.flatpickr-months .flatpickr-month,
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+    fill: hsl(var(--foreground)) !important;
+    color: hsl(var(--foreground)) !important;
+}
+
+.flatpickr-time input:focus {
+    background: hsl(var(--primary) / 0.1) !important;
+}
