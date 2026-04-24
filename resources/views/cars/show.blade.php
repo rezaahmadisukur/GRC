@@ -377,8 +377,8 @@ $specs = [
               </div>
 
               {{-- Terms --}}
-              <div class="flex items-start gap-3">
-                <div class="relative mt-0.5 flex-shrink-0">
+              <div class="flex items-center gap-3">
+                <div class="relative flex-shrink-0">
                   <input type="checkbox" name="terms" id="terms"
                     class="w-4.5 h-4.5 rounded-md border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                     style="width: 18px; height: 18px;">
@@ -463,42 +463,47 @@ $specs = [
     }
 
     function updateForm() {
-      // Flatpickr bikin input hidden dengan name="start_date"
-      const hiddenInput = document.querySelector('input[name="start_date"]');
-      const startDateVal = hiddenInput ? hiddenInput.value : null;
+    // 1. Ambil input-inputnya
+    const hiddenInput = document.querySelector('input[name="start_date"]');
+    const startDateVal = hiddenInput ? hiddenInput.value : null;
+    const durationRadio = document.querySelector('input[name="duration_type"]:checked');
+    const extraHours = parseInt(extraHoursInput.value) || 0;
 
-      if (!startDateVal) return;
-
-      // Ganti strip jadi slash biar dibaca Date object dengan bener di semua OS
-      const startDate = new Date(startDateVal.replace(/-/g, '/'));
-      const durationRadio = document.querySelector('input[name="duration_type"]:checked');
-      const durationType = durationRadio ? durationRadio.value : null;
-      const extraHours = parseInt(extraHoursInput.value) || 0;
-
-      if (durationType) {
-        const totalHours = parseInt(durationType) + extraHours;
-        const endDate = new Date(startDate.getTime() + (totalHours * 60 * 60 * 1000));
-
-        // Format rapi: 25 April 2026 pukul 12.00
-        const options = { day: 'numeric', month: 'long', year: 'numeric' };
-        const datePart = endDate.toLocaleDateString('id-ID', options);
-        const h = endDate.getHours().toString().padStart(2, '0');
-        const m = endDate.getMinutes().toString().padStart(2, '0');
-
-        endDateInput.value = `${datePart} pukul ${h}.${m}`;
-
-        // --- HITUNG HARGA ---
-        const basePrice = durationType === '12' ? price12h : price24h;
-        const pricePerHour = basePrice / parseInt(durationType);
-        const extraCost = extraHours * pricePerHour;
-        const totalAmount = basePrice + extraCost;
-
-        totalPriceSpan.textContent = formatRupiah(totalAmount);
-        priceBreakdown.textContent = extraHours > 0
-          ? `Paket ${durationType}j + ${extraHours}j tambahan`
-          : `Paket ${durationType} jam`;
-      }
+    if (!startDateVal || !durationRadio) {
+        totalPriceSpan.textContent = '0';
+        priceBreakdown.textContent = 'Pilih paket durasi untuk menghitung';
+        return;
     }
+
+    // 2. Kalkulasi Waktu
+    const startDate = new Date(startDateVal.replace(/-/g, '/')); 
+    const baseDuration = parseInt(durationRadio.value); // 12 atau 24
+    
+    // Total Jam = Paket (12/24) + Jam Tambahan
+    const totalHours = baseDuration + extraHours;
+    
+    // Hitung tanggal selesai
+    const endDate = new Date(startDate.getTime() + (totalHours * 60 * 60 * 1000));
+
+    // 3. Update Tampilan Estimasi Selesai
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    const datePart = endDate.toLocaleDateString('id-ID', options);
+    const h = endDate.getHours().toString().padStart(2, '0');
+    const m = endDate.getMinutes().toString().padStart(2, '0');
+    
+    endDateInput.value = `${datePart} pukul ${h}.${m}`;
+
+    // 4. Update Harga (Opsional tapi penting)
+    const basePrice = baseDuration === 12 ? price12h : price24h;
+    const pricePerHour = basePrice / baseDuration;
+    const extraCost = extraHours * pricePerHour;
+    const totalAmount = basePrice + extraCost;
+
+    totalPriceSpan.textContent = formatRupiah(totalAmount);
+    priceBreakdown.textContent = extraHours > 0
+        ? `Paket ${baseDuration}j (Rp ${formatRupiah(basePrice)}) + ${extraHours}j tambahan (Rp ${formatRupiah(extraCost)})`
+        : `Paket ${baseDuration} jam`;
+}
 
     // Listener untuk Radio Button
     durationInputs.forEach(input => {
