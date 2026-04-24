@@ -1,307 +1,474 @@
 <x-app-layout>
 
-  <div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+  <div class="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
     <div class="max-w-6xl mx-auto">
-      <!-- Back Button -->
+
+      {{-- ═══ BACK BUTTON ═══ --}}
       <div class="mb-8">
-        <a href="{{ route('cars.index') }}"
-          class="inline-flex items-center gap-2 text-var(--accent) hover:text-var(--accent-dark) transition-colors duration-200">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-          </svg>
-          <span class="text-sm font-medium">Kembali ke Mobil</span>
+        <a href="{{ route('home') }}"
+          class="inline-flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-all duration-200 group">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 group-hover:-translate-x-0.5"
+            style="background: white; border: 1px solid #e2e8f0;">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </div>
+          <span class="text-sm font-semibold">Kembali</span>
         </a>
       </div>
 
-      <!-- Main Grid Layout -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      {{-- ═══ MAIN GRID ═══ --}}
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-        <!-- Left Column: Car Images & Details -->
-        <div class="lg:col-span-1">
+        {{-- ─────────────────────────────────
+             LEFT COLUMN — Car Info
+        ───────────────────────────────── --}}
+        <div class="lg:col-span-7 flex flex-col gap-6">
 
-          <!-- Hero Image Section -->
-          <div class="relative mb-8 group overflow-hidden rounded-2xl shadow-xl">
+          {{-- Hero Image --}}
+          <div class="relative rounded-3xl overflow-hidden shadow-xl group"
+            style="background: #f1f5f9;">
             @if($car->image)
               <img src="{{ asset('storage/' . $car->image) }}" alt="{{ $car->name }}"
-                class="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-105">
+                class="w-full h-80 sm:h-96 object-cover transition-transform duration-700 group-hover:scale-105">
             @else
-              <div class="w-full h-96 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
-                <svg class="w-24 h-24 text-slate-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M18.364 5.636l-3.536 3.536m9.172-9.172a9 9 0 11-12.728 12.728m3.536-6.364l3.536-3.536m0 9.172a4 4 0 11-5.656-5.656m5.656 5.656L9.172 9.172">
-                  </path>
+              <div class="w-full h-80 sm:h-96 flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
+                <svg class="w-24 h-24 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M5 17H3a2 2 0 01-2-2v-4a2 2 0 012-2h1l3-5h10l3 5h1a2 2 0 012 2v4a2 2 0 01-2 2h-2"/>
+                  <circle cx="7.5" cy="17.5" r="2.5"/>
+                  <circle cx="16.5" cy="17.5" r="2.5"/>
                 </svg>
               </div>
             @endif
 
-            <!-- Availability Badge -->
-            <div class="absolute top-4 right-4">
-              <span
-                class="inline-flex items-center gap-2 px-4 py-2 rounded-full {{ $car->is_available ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }} font-medium text-sm backdrop-blur-sm">
-                <span
-                  class="w-2 h-2 rounded-full {{ $car->is_available ? 'bg-green-600' : 'bg-red-600' }} animate-pulse"></span>
-                {{ $car->is_available ? 'Tersedia' : 'Tidak Tersedia' }}
+            {{-- Overlay gradient --}}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+
+            {{-- Availability Badge --}}
+            <div class="absolute top-5 left-5">
+              @if($car->is_available)
+                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-white"
+                  style="background: rgba(22,163,74,0.85); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.2);">
+                  <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                  </span>
+                  Tersedia
+                </span>
+              @else
+                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-white"
+                  style="background: rgba(220,38,38,0.85); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.2);">
+                  <span class="w-2 h-2 rounded-full bg-white"></span>
+                  Tidak Tersedia
+                </span>
+              @endif
+            </div>
+
+            {{-- Plate Code --}}
+            <div class="absolute top-5 right-5">
+              <span class="px-3.5 py-1.5 rounded-full text-xs font-black text-slate-800"
+                style="background: rgba(255,255,255,0.92); backdrop-filter: blur(8px);">
+                {{ $car->plate_code }}
               </span>
+            </div>
+
+            {{-- Car Name overlay on image bottom --}}
+            <div class="absolute bottom-0 left-0 right-0 p-6">
+              <h1 class="text-3xl sm:text-4xl font-black text-white leading-tight drop-shadow-lg">
+                {{ $car->name }}
+              </h1>
+              <p class="text-white/70 text-sm font-semibold mt-1">{{ $car->category }}</p>
             </div>
           </div>
 
-          <!-- Car Details Card -->
-          <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 border border-var(--border-light)">
+          {{-- Specs Card --}}
+          <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+            <h2 class="text-base font-bold text-slate-800 mb-5 flex items-center gap-2">
+              <span class="w-1 h-4 rounded-full bg-blue-600 inline-block"></span>
+              Spesifikasi Kendaraan
+            </h2>
 
-            <!-- Header -->
-            <div class="mb-8 pb-8 border-b border-var(--border-light)">
-              <h1 class="heading-display text-4xl sm:text-5xl text-var(--primary) mb-3">{{ $car->name }}</h1>
-              <p class="text-lg text-var(--accent) font-semibold">{{ $car->plate_code }}</p>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              @php
+                $specs = [
+                  ['label' => 'Warna', 'value' => $car->color, 'bg' => '#eff6ff', 'iconColor' => '#2563eb',
+                    'icon' => 'M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01'],
+                  ['label' => 'Transmisi', 'value' => $car->transmission, 'bg' => '#f5f3ff', 'iconColor' => '#7c3aed',
+                    'icon' => 'M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4'],
+                  ['label' => 'Kapasitas', 'value' => ($car->seats ?? '-') . ' Kursi', 'bg' => '#ecfdf5', 'iconColor' => '#059669',
+                    'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z'],
+                  ['label' => 'BBM', 'value' => $car->fuel_type ?? 'Bensin', 'bg' => '#fff7ed', 'iconColor' => '#ea580c',
+                    'icon' => 'M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z'],
+                ];
+              @endphp
+
+              @foreach($specs as $spec)
+                <div class="flex flex-col gap-3 p-4 rounded-2xl" style="background: {{ $spec['bg'] }};">
+                  <div class="w-9 h-9 rounded-xl flex items-center justify-center bg-white shadow-sm">
+                    <svg class="w-4.5 h-4.5" style="color: {{ $spec['iconColor'] }}; width:18px; height:18px;"
+                      fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="{{ $spec['icon'] }}" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="text-xs font-semibold uppercase tracking-widest" style="color: #94a3b8;">{{ $spec['label'] }}</p>
+                    <p class="text-sm font-bold text-slate-800 mt-0.5 capitalize">{{ $spec['value'] }}</p>
+                  </div>
+                </div>
+              @endforeach
             </div>
+          </div>
 
-            <!-- Specifications Grid -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 mb-8">
+          {{-- Pricing Card --}}
+          <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+            <h2 class="text-base font-bold text-slate-800 mb-5 flex items-center gap-2">
+              <span class="w-1 h-4 rounded-full bg-blue-600 inline-block"></span>
+              Tarif Sewa
+            </h2>
 
-              <!-- Color Spec -->
-              <div class="flex flex-col items-start">
-                <div class="flex items-center gap-3 mb-2">
-                  <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                      <path
-                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z">
-                      </path>
-                    </svg>
-                  </div>
-                  <span class="text-sm font-medium text-var(--text-muted)">Warna</span>
+            <div class="grid grid-cols-2 gap-4">
+              {{-- 12 Jam --}}
+              <div class="relative overflow-hidden rounded-2xl p-5"
+                style="background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1.5px solid #bfdbfe;">
+                <div class="absolute top-3 right-3">
+                  <svg class="w-5 h-5 text-blue-300" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                  </svg>
                 </div>
-                <p class="text-lg font-semibold text-var(--primary) capitalize">{{ $car->color }}</p>
-              </div>
-
-              <!-- Transmission Spec -->
-              <div class="flex flex-col items-start">
-                <div class="flex items-center gap-3 mb-2">
-                  <div class="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
-                      <path
-                        d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 9.5c0 .83-.67 1.5-1.5 1.5S11 13.33 11 12.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5zm6 0c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5.67-1.5 1.5-1.5 1.5.67 1.5 1.5z">
-                      </path>
-                    </svg>
-                  </div>
-                  <span class="text-sm font-medium text-var(--text-muted)">Transmisi</span>
-                </div>
-                <p class="text-lg font-semibold text-var(--primary)">{{ $car->transmission }}</p>
-              </div>
-
-              <!-- Availability Spec -->
-              <div class="flex flex-col items-start">
-                <div class="flex items-center gap-3 mb-2">
-                  <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 24 24">
-                      <path
-                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z">
-                      </path>
-                    </svg>
-                  </div>
-                  <span class="text-sm font-medium text-var(--text-muted)">Status</span>
-                </div>
-                <p class="text-lg font-semibold {{ $car->is_available ? 'text-green-600' : 'text-red-600' }}">
-                  {{ $car->is_available ? 'Tersedia' : 'Tidak Tersedia' }}
+                <p class="text-xs font-bold uppercase tracking-widest text-blue-500 mb-2">12 Jam</p>
+                <p class="text-2xl font-black text-blue-700">
+                  Rp {{ number_format($car->price_12h, 0, ',', '.') }}
+                </p>
+                <p class="text-xs text-blue-400 mt-1 font-medium">
+                  ≈ Rp {{ number_format($car->price_12h / 12, 0, ',', '.') }}/jam
                 </p>
               </div>
-            </div>
 
-            <!-- Pricing Section -->
-            <div class="grid grid-cols-2 gap-6 pt-8 border-t border-var(--border-light)">
-              <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-6 border border-blue-100">
-                <p class="text-sm font-medium text-var(--text-muted) mb-2">Tarif 12 Jam</p>
-                <p class="heading-display text-3xl text-var(--accent)">Rp
-                  {{ number_format($car->price_12h, 0, ',', '.') }}
+              {{-- 24 Jam --}}
+              <div class="relative overflow-hidden rounded-2xl p-5"
+                style="background: linear-gradient(135deg, #f5f3ff, #ede9fe); border: 1.5px solid #c4b5fd;">
+                <div class="absolute top-3 right-3">
+                  <svg class="w-5 h-5 text-purple-300" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                  </svg>
+                </div>
+                <p class="text-xs font-bold uppercase tracking-widest text-purple-500 mb-2">24 Jam</p>
+                <p class="text-2xl font-black text-purple-700">
+                  Rp {{ number_format($car->price_24h, 0, ',', '.') }}
                 </p>
-              </div>
-              <div class="bg-gradient-to-br from-cyan-50 to-teal-50 rounded-xl p-6 border border-cyan-100">
-                <p class="text-sm font-medium text-var(--text-muted) mb-2">Tarif 24 Jam</p>
-                <p class="heading-display text-3xl text-var(--accent-light)">Rp
-                  {{ number_format($car->price_24h, 0, ',', '.') }}
+                <p class="text-xs text-purple-400 mt-1 font-medium">
+                  ≈ Rp {{ number_format($car->price_24h / 24, 0, ',', '.') }}/jam
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Right Column: Booking Form -->
-        <div class="lg:col-span-1">
-          <div class="sticky top-8 bg-white rounded-2xl shadow-xl p-8 border border-var(--border-light)">
-            <h2 class="heading-display text-2xl mb-6 text-var(--primary)">Pesan Mobil Ini</h2>
+        {{-- ─────────────────────────────────
+             RIGHT COLUMN — Booking Form
+        ───────────────────────────────── --}}
+        <div class="lg:col-span-5">
+          <div class="sticky top-8 bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
 
-            <form action="{{ route('bookings.store') }}" method="POST" class="space-y-5">
+            {{-- Form Header --}}
+            <div class="px-7 pt-7 pb-6 border-b border-slate-100">
+              <h2 class="text-xl font-black text-slate-900">Pesan Mobil Ini</h2>
+              <p class="text-sm text-slate-400 mt-1 font-medium">Isi data di bawah untuk melanjutkan pemesanan</p>
+            </div>
+
+            <form action="{{ route('bookings.store') }}" method="POST" class="px-7 py-6 space-y-5">
               @csrf
               <input type="hidden" name="car_id" value="{{ $car->id }}">
 
-              <!-- Customer Name -->
+              {{-- Customer Name --}}
               <div>
-                <label for="customer_name" class="block text-sm font-semibold text-var(--primary) mb-2">
-                  Nama Lengkap <span class="text-red-500">*</span>
+                <label for="customer_name" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">
+                  Nama Lengkap <span class="text-red-400">*</span>
                 </label>
-                <input type="text" id="customer_name" name="customer_name" placeholder="Nama lengkap Anda"
-                  class="w-full px-4 py-3 rounded-lg border border-var(--border-light) focus:outline-none focus:ring-2 focus:ring-var(--accent) focus:border-transparent transition-all duration-200 placeholder:text-slate-400">
+                <input type="text" id="customer_name" name="customer_name"
+                  value="{{ old('customer_name') }}"
+                  placeholder="Contoh: Budi Santoso"
+                  class="w-full px-4 py-3 rounded-xl text-sm font-medium text-slate-800 placeholder:text-slate-300 transition-all duration-200 outline-none"
+                  style="background: #f8fafc; border: 1.5px solid #e2e8f0;"
+                  onfocus="this.style.borderColor='#2563eb'; this.style.background='#fff';"
+                  onblur="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
                 @error('customer_name')
-                  <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                  <p class="mt-1.5 text-xs text-red-500 font-medium flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                    {{ $message }}
+                  </p>
                 @enderror
               </div>
 
-              <!-- WhatsApp Number -->
+              {{-- WhatsApp --}}
               <div>
-                <label for="whatsapp_number" class="block text-sm font-semibold text-var(--primary) mb-2">
-                  Nomor WhatsApp <span class="text-red-500">*</span>
+                <label for="whatsapp_number" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">
+                  Nomor WhatsApp <span class="text-red-400">*</span>
                 </label>
-                <input type="tel" id="whatsapp_number" name="whatsapp_number" placeholder="+62 812 3456 7890"
-                  class="w-full px-4 py-3 rounded-lg border border-var(--border-light) focus:outline-none focus:ring-2 focus:ring-var(--accent) focus:border-transparent transition-all duration-200 placeholder:text-slate-400">
+                <div class="relative">
+                  <div class="absolute left-3.5 top-1/2 -translate-y-1/2">
+                    <svg class="w-4 h-4" style="color: #22c55e;" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                  </div>
+                  <input type="tel" id="whatsapp_number" name="whatsapp_number"
+                    value="{{ old('whatsapp_number') }}"
+                    placeholder="+62 812 3456 7890"
+                    class="w-full pl-10 pr-4 py-3 rounded-xl text-sm font-medium text-slate-800 placeholder:text-slate-300 transition-all duration-200 outline-none"
+                    style="background: #f8fafc; border: 1.5px solid #e2e8f0;"
+                    onfocus="this.style.borderColor='#2563eb'; this.style.background='#fff';"
+                    onblur="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
+                </div>
                 @error('whatsapp_number')
-                  <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                  <p class="mt-1.5 text-xs text-red-500 font-medium flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                    {{ $message }}
+                  </p>
                 @enderror
               </div>
 
-              <!-- Duration Type Selector -->
+              {{-- Duration Type --}}
               <div>
-                <label class="block text-sm font-semibold text-var(--primary) mb-3">Jenis Durasi <span
-                    class="text-red-500">*</span></label>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">
+                  Paket Durasi <span class="text-red-400">*</span>
+                </label>
                 <div class="grid grid-cols-2 gap-3">
-                  <label class="relative">
-                    <input type="radio" name="duration_type" value="12" class="hidden peer">
-                    <div
-                      class="w-full py-3 px-4 border-2 border-var(--border-light) rounded-lg cursor-pointer peer-checked:border-var(--accent) peer-checked:bg-gray-400 transition-all duration-200 text-center">
-                      <p class="text-sm font-semibold peer-checked:text-var(--accent) peer-checked:text-white">12 Jam</p>
+                  <label class="relative cursor-pointer">
+                    <input type="radio" name="duration_type" value="12" class="hidden peer"
+                      {{ old('duration_type') == '12' ? 'checked' : '' }}>
+                    <div class="peer-checked:border-blue-600 peer-checked:bg-blue-600 border-2 border-slate-200 rounded-xl p-4 transition-all duration-200 text-center"
+                      style="background: #f8fafc;">
+                      <p class="text-sm font-black peer-checked:text-white text-slate-700 transition-colors">12 Jam</p>
+                      <p class="text-xs font-semibold text-slate-400 mt-0.5 peer-checked:text-blue-100">
+                        Rp {{ number_format($car->price_12h, 0, ',', '.') }}
+                      </p>
                     </div>
                   </label>
-                  <label class="relative">
-                    <input type="radio" name="duration_type" value="24" class="hidden peer">
-                    <div
-                      class="w-full py-3 px-4 border-2 border-var(--border-light) rounded-lg cursor-pointer peer-checked:border-var(--accent) peer-checked:bg-gray-400 transition-all duration-200 text-center">
-                      <p class="text-sm font-semibold peer-checked:text-var(--accent) peer-checked:text-white">24 Jam</p>
+                  <label class="relative cursor-pointer">
+                    <input type="radio" name="duration_type" value="24" class="hidden peer"
+                      {{ old('duration_type') == '24' ? 'checked' : '' }}>
+                    <div class="peer-checked:border-blue-600 peer-checked:bg-blue-600 border-2 border-slate-200 rounded-xl p-4 transition-all duration-200 text-center"
+                      style="background: #f8fafc;">
+                      <p class="text-sm font-black text-slate-700 transition-colors">24 Jam</p>
+                      <p class="text-xs font-semibold text-slate-400 mt-0.5">
+                        Rp {{ number_format($car->price_24h, 0, ',', '.') }}
+                      </p>
                     </div>
                   </label>
                 </div>
               </div>
 
-              <!-- Start Date -->
+              {{-- Start Date --}}
               <div>
-                <label for="start_date" class="block text-sm font-semibold text-var(--primary) mb-2">
-                  Tanggal & Waktu Mulai <span class="text-red-500">*</span>
+                <label for="start_date" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">
+                  Tanggal & Waktu Mulai <span class="text-red-400">*</span>
                 </label>
                 <input type="datetime-local" id="start_date" name="start_date"
-                  class="w-full px-4 py-3 rounded-lg border border-var(--border-light) focus:outline-none focus:ring-2 focus:ring-var(--accent) focus:border-transparent transition-all duration-200">
+                  value="{{ old('start_date') }}"
+                  class="w-full px-4 py-3 rounded-xl text-sm font-medium text-slate-800 transition-all duration-200 outline-none"
+                  style="background: #f8fafc; border: 1.5px solid #e2e8f0;"
+                  onfocus="this.style.borderColor='#2563eb'; this.style.background='#fff';"
+                  onblur="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
                 @error('start_date')
-                  <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                  <p class="mt-1.5 text-xs text-red-500 font-medium flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                    {{ $message }}
+                  </p>
                 @enderror
               </div>
 
-              <!-- Duration Hours (Dynamic) -->
+              {{-- Extra Hours --}}
               <div>
-                <label for="extra_hours" class="block text-sm font-semibold text-var(--primary) mb-2">
-                  Jam Tambahan (Opsional)
+                <label for="extra_hours" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">
+                  Jam Tambahan
+                  <span class="normal-case font-medium text-slate-300 tracking-normal ml-1">(Opsional)</span>
                 </label>
-                <input type="number" id="extra_hours" name="extra_hours" min="0" value="0" placeholder="0"
-                  class="w-full px-4 py-3 rounded-lg border border-var(--border-light) focus:outline-none focus:ring-2 focus:ring-var(--accent) focus:border-transparent transition-all duration-200">
-                <p class="mt-1 text-xs text-var(--text-muted)">Tambahkan jam ekstra di luar durasi yang dipilih</p>
+                <input type="number" id="extra_hours" name="extra_hours"
+                  min="0" value="{{ old('extra_hours', 0) }}"
+                  class="w-full px-4 py-3 rounded-xl text-sm font-medium text-slate-800 transition-all duration-200 outline-none"
+                  style="background: #f8fafc; border: 1.5px solid #e2e8f0;"
+                  onfocus="this.style.borderColor='#2563eb'; this.style.background='#fff';"
+                  onblur="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
+                <p class="mt-1.5 text-xs text-slate-400 font-medium">Tambah jam ekstra di luar paket yang dipilih</p>
               </div>
 
-              <!-- End Date (Read-only) -->
+              {{-- End Date (readonly) --}}
               <div>
-                <label for="end_date" class="block text-sm font-semibold text-var(--primary) mb-2">
-                  Tanggal & Waktu Akhir
+                <label for="end_date" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">
+                  Estimasi Selesai
                 </label>
-                <input type="datetime-local" id="end_date" name="end_date"
-                  class="w-full px-4 py-3 rounded-lg border border-var(--border-light) bg-slate-50 focus:outline-none focus:ring-2 focus:ring-var(--accent) focus:border-transparent transition-all duration-200"
-                  readonly>
+                <input type="datetime-local" id="end_date" name="end_date" readonly
+                  class="w-full px-4 py-3 rounded-xl text-sm font-medium text-slate-400 cursor-not-allowed"
+                  style="background: #f1f5f9; border: 1.5px solid #e2e8f0;">
               </div>
 
-              <!-- Price Display -->
-              <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-4 border border-blue-100">
-                <p class="text-sm font-medium text-var(--text-muted) mb-1">Harga Total</p>
-                <p class="heading-display text-2xl text-var(--accent)">Rp <span id="total_price">0</span></p>
+              {{-- Total Price --}}
+              <div class="rounded-2xl p-5 relative overflow-hidden"
+                style="background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1.5px solid #bfdbfe;">
+                <div class="absolute -right-4 -bottom-4 w-24 h-24 rounded-full opacity-20"
+                  style="background: #2563eb;"></div>
+                <p class="text-xs font-bold uppercase tracking-widest text-blue-500 mb-1">Total Pembayaran</p>
+                <p class="text-3xl font-black text-blue-700">
+                  Rp <span id="total_price">0</span>
+                </p>
+                <p class="text-xs text-blue-400 font-medium mt-1" id="price_breakdown">Pilih paket durasi untuk menghitung</p>
               </div>
 
-              <!-- Notes -->
+              {{-- Notes --}}
               <div>
-                <label for="notes" class="block text-sm font-semibold text-var(--primary) mb-2">
-                  Permintaan Khusus (Opsional)
+                <label for="notes" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">
+                  Catatan
+                  <span class="normal-case font-medium text-slate-300 tracking-normal ml-1">(Opsional)</span>
                 </label>
-                <textarea id="notes" name="notes" rows="3" placeholder="Ada permintaan atau catatan khusus?"
-                  class="w-full px-4 py-3 rounded-lg border border-var(--border-light) focus:outline-none focus:ring-2 focus:ring-var(--accent) focus:border-transparent transition-all duration-200 placeholder:text-slate-400 resize-none"></textarea>
+                <textarea id="notes" name="notes" rows="2"
+                  placeholder="Permintaan atau catatan khusus..."
+                  class="w-full px-4 py-3 rounded-xl text-sm font-medium text-slate-800 placeholder:text-slate-300 transition-all duration-200 outline-none resize-none"
+                  style="background: #f8fafc; border: 1.5px solid #e2e8f0;"
+                  onfocus="this.style.borderColor='#2563eb'; this.style.background='#fff';"
+                  onblur="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">{{ old('notes') }}</textarea>
               </div>
 
-              <!-- Terms & Conditions Checkbox -->
-              <div>
-                <label class="flex items-start gap-3 cursor-pointer">
+              {{-- Terms --}}
+              <div class="flex items-start gap-3">
+                <div class="relative mt-0.5 flex-shrink-0">
                   <input type="checkbox" name="terms" id="terms"
-                    class="mt-1 w-5 h-5 rounded border-var(--border-light) text-var(--accent) focus:ring-var(--accent) cursor-pointer">
-                  <span class="text-sm text-var(--primary)">
-                    Saya menyetujui <span class="text-var(--accent) font-medium">Syarat & Ketentuan</span> yang berlaku
-                    untuk pemesanan ini <span class="text-red-500">*</span>
-                  </span>
+                    class="w-4.5 h-4.5 rounded-md border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                    style="width: 18px; height: 18px;">
+                </div>
+                <label for="terms" class="text-sm text-slate-500 leading-relaxed cursor-pointer">
+                  Saya menyetujui
+                  <a href="#" class="text-blue-600 font-semibold hover:underline">Syarat & Ketentuan</a>
+                  yang berlaku <span class="text-red-400">*</span>
                 </label>
-                @error('terms')
-                  <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
+              </div>
+              @error('terms')
+                <p class="text-xs text-red-500 font-medium flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                  {{ $message }}
+                </p>
+              @enderror
+
+              {{-- Submit Button --}}
+              <div class="pt-1">
+                @if($car->is_available)
+                  <button type="submit" id="submit-btn"
+                    class="relative w-full flex items-center justify-center gap-3 py-4 px-6 rounded-2xl font-black text-base text-white overflow-hidden transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] group"
+                    style="background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 6px 24px rgba(22,163,74,0.40);"
+                    onmouseover="this.style.boxShadow='0 10px 32px rgba(22,163,74,0.55)';"
+                    onmouseout="this.style.boxShadow='0 6px 24px rgba(22,163,74,0.40)';">
+
+                    {{-- Shine effect --}}
+                    <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                      style="background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent 60%);"></div>
+
+                    {{-- WhatsApp Icon --}}
+                    <svg class="relative w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+
+                    <span class="relative">Pesan via WhatsApp</span>
+
+                    {{-- Arrow --}}
+                    <svg class="relative w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                      fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                    </svg>
+                  </button>
+                @else
+                  <div class="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-2xl font-black text-base text-white cursor-not-allowed"
+                    style="background: #94a3b8;">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+                    </svg>
+                    Mobil Tidak Tersedia
+                  </div>
+                @endif
+
+                <p class="text-xs text-center text-slate-400 font-medium mt-3 flex items-center justify-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                  </svg>
+                  Pemesanan dikonfirmasi via WhatsApp
+                </p>
               </div>
 
-              <!-- Submit Button -->
-              <button type="submit"
-                class="w-full bg-gradient-to-r from-var(--accent) to-var(--accent-light) text-white font-semibold py-4 rounded-lg hover:shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed bg-green-600"
-                {{ !$car->is_available ? 'disabled' : '' }}>
-                {{ $car->is_available ? 'Pesan via WhatsApp' : 'Mobil Tidak Tersedia' }}
-              </button>
-
-              <p class="text-xs text-center text-var(--text-muted)">
-                Kami akan mengonfirmasi pemesanan Anda melalui WhatsApp
-              </p>
             </form>
           </div>
         </div>
+
       </div>
     </div>
   </div>
 
   <script>
     const startDateInput = document.getElementById('start_date');
-    const endDateInput = document.getElementById('end_date');
-    const durationTypeInputs = document.querySelectorAll('input[name="duration_type"]');
-    const durationHoursInput = document.getElementById('extra_hours');
-    const totalPriceSpan = document.getElementById('total_price');
+    const endDateInput   = document.getElementById('end_date');
+    const extraHoursInput = document.getElementById('extra_hours');
+    const totalPriceSpan  = document.getElementById('total_price');
+    const priceBreakdown  = document.getElementById('price_breakdown');
+    const durationInputs  = document.querySelectorAll('input[name="duration_type"]');
 
     const price12h = {{ $car->price_12h }};
     const price24h = {{ $car->price_24h }};
 
-    function calculatePricePerHour(durationType) {
-      if (durationType === '12') return price12h / 12;
-      if (durationType === '24') return price24h / 24;
-      return 0;
+    function formatRupiah(number) {
+      return number.toLocaleString('id-ID');
     }
 
-    function updateEndDateAndPrice() {
-      const startDate = new Date(startDateInput.value);
+    function updateForm() {
+      const startDate   = new Date(startDateInput.value);
       const durationType = document.querySelector('input[name="duration_type"]:checked')?.value;
-      const additionalHours = parseInt(durationHoursInput.value) || 0;
+      const extraHours  = parseInt(extraHoursInput.value) || 0;
 
-      if (!startDate || !durationType) return;
-
-      let totalHours = parseInt(durationType) + additionalHours;
-      const endDate = new Date(startDate.getTime() + totalHours * 60 * 60 * 1000);
-      endDateInput.value = endDate.toISOString().slice(0, 16);
-
-      let totalPrice = 0;
-      if (durationType === '12') {
-        totalPrice = price12h + (calculatePricePerHour('12') * additionalHours);
-      } else if (durationType === '24') {
-        totalPrice = price24h + (calculatePricePerHour('24') * additionalHours);
+      if (!startDateInput.value || !durationType) {
+        totalPriceSpan.textContent = '0';
+        priceBreakdown.textContent = 'Pilih paket durasi untuk menghitung';
+        return;
       }
 
-      totalPriceSpan.textContent = totalPrice.toLocaleString('id-ID');
+      const baseDuration = parseInt(durationType);
+      const totalHours   = baseDuration + extraHours;
+      const basePrice    = durationType === '12' ? price12h : price24h;
+      const pricePerHour = basePrice / baseDuration;
+      const extraCost    = extraHours * pricePerHour;
+      const totalPrice   = basePrice + extraCost;
+
+      // Update end date
+      const endDate = new Date(startDate.getTime() + totalHours * 3600000);
+      endDateInput.value = endDate.toISOString().slice(0, 16);
+
+      // Update price display
+      totalPriceSpan.textContent = formatRupiah(totalPrice);
+
+      if (extraHours > 0) {
+        priceBreakdown.textContent =
+          `Paket ${durationType}j (Rp ${formatRupiah(basePrice)}) + ${extraHours}j tambahan (Rp ${formatRupiah(extraCost)})`;
+      } else {
+        priceBreakdown.textContent = `Paket ${durationType} jam`;
+      }
     }
 
-    startDateInput.addEventListener('change', updateEndDateAndPrice);
-    durationHoursInput.addEventListener('input', updateEndDateAndPrice);
-    durationTypeInputs.forEach(input => {
-      input.addEventListener('change', updateEndDateAndPrice);
+    // Style radio labels dynamically (for price text color)
+    durationInputs.forEach(input => {
+      input.addEventListener('change', () => {
+        durationInputs.forEach(i => {
+          const priceEl = i.parentElement.querySelector('p:last-child');
+          if (i.checked) {
+            priceEl.style.color = 'rgba(219,234,254,0.9)';
+          } else {
+            priceEl.style.color = '';
+          }
+        });
+        updateForm();
+      });
     });
 
-    // Set minimum date to today
-    const today = new Date().toISOString().slice(0, 16);
-    startDateInput.min = today;
+    startDateInput.addEventListener('change', updateForm);
+    extraHoursInput.addEventListener('input', updateForm);
+
+    // Set min date
+    startDateInput.min = new Date().toISOString().slice(0, 16);
   </script>
+
 </x-app-layout>
