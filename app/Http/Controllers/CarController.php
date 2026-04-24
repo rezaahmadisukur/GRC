@@ -67,9 +67,9 @@ class CarController extends Controller
         return redirect()->route('admin.cars.index')->with('success', 'Mobil berhasi dihapus');
     }
 
-    public function indexAdmin()
+    public function indexAdmin(Request $request)
     {
-        $cars = Car::latest()->paginate(10);
+        $cars = $this->carService->getAllCars($request);
 
         return view('admin.cars.index', compact('cars'));
     }

@@ -17,9 +17,6 @@
           </a>
         </div>
         <div class="flex space-x-2">
-          <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition">
-            Export Excel
-          </button>
           <button class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
             Refresh
           </button>
@@ -27,30 +24,41 @@
       </div>
 
       <!-- Search and Filter -->
-      <div class="mb-6 bg-white p-4 rounded-lg shadow-sm">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <form method="GET" action="{{ route('admin.cars.index') }}" class="mb-6 bg-white p-4 rounded-lg shadow-sm">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
-            <input type="text" placeholder="Cari mobil..."
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari mobil..."
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
           </div>
           <div>
-            <select
+            <select name="transmission"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
               <option value="">Semua transmisi</option>
-              <option value="AT">Automatic (AT)</option>
-              <option value="MT">Manual (MT)</option>
+              <option value="AT" {{ request('transmission') == 'AT' ? 'selected' : '' }}>Automatic (AT)</option>
+              <option value="MT" {{ request('transmission') == 'MT' ? 'selected' : '' }}>Manual (MT)</option>
             </select>
           </div>
           <div>
-            <select
+            <select name="status"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
               <option value="">Semua status</option>
-              <option value="1">Tersedia</option>
-              <option value="0">Tidak tersedia</option>
+              <option value="available" {{ request('status') == 'available' ? 'selected' : '' }}>Tersedia</option>
+              <option value="unavailable" {{ request('status') == 'unavailable' ? 'selected' : '' }}>Tidak tersedia
+              </option>
             </select>
           </div>
+          <div class="flex space-x-2">
+            <button type="submit"
+              class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+              Filter
+            </button>
+            <a href="{{ route('admin.cars.index') }}"
+              class="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition text-center">
+              Reset
+            </a>
+          </div>
         </div>
-      </div>
+      </form>
 
       <!-- Data Table -->
       <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -61,7 +69,7 @@
                 <tr>
                   <th scope="col"
                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    ID
+                    No
                   </th>
                   <th scope="col"
                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -104,7 +112,7 @@
                 @forelse($cars as $car)
                   <tr>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {{ $car->id }}
+                      {{ ($cars->currentPage() - 1) * $cars->perPage() + $loop->iteration }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {{ $car->name }}
@@ -203,7 +211,7 @@
           <!-- Pagination -->
           @if(isset($cars) && $cars->hasPages())
             <div class="mt-6 flex">
-              {{ $cars->links() }}
+              {{ $cars->appends(request()->query())->links() }}
             </div>
           @endif
         </div>

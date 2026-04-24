@@ -44,6 +44,30 @@
       }
     }
 
+    /* ✅ User Section pre-render saat collapsed */
+    html.sidebar-collapsed .sidebar-user-info {
+      display: none !important;
+    }
+
+    html.sidebar-collapsed .sidebar-actions {
+      flex-direction: column !important;
+    }
+
+    /* ✅ Semua label sidebar */
+    html.sidebar-collapsed .sidebar-label {
+      display: none !important;
+    }
+
+    html.sidebar-collapsed .sidebar-logo-text {
+      display: none !important;
+    }
+
+    html.sidebar-collapsed .sidebar-user-wrapper {
+      justify-content: center !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+
     .no-transition * {
       transition: none !important;
     }
@@ -130,7 +154,7 @@
 
             <!-- Tombol Toggle Sidebar -->
             <button @click="sidebarCollapsed = !sidebarCollapsed" class="group p-2 rounded-xl bg-slate-50 hover:bg-emerald-50 text-slate-400 
-                         hover:text-emerald-600 transition-all duration-300 flex-shrink-0"
+                                 hover:text-emerald-600 transition-all duration-300 flex-shrink-0"
               :title="sidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'">
 
               <!-- Satu icon yang berputar sesuai state -->

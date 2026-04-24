@@ -21,11 +21,11 @@ class ReportController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
 
-        $bookings = Booking::whereBetween('tanggal_ambil', [$startDate, $endDate])
+        $bookings = Booking::whereBetween('start_date', [$startDate, $endDate])
             ->with('car')
             ->get();
 
-        $totalOmzet = $bookings->sum('fina_total_price');
+        $totalOmzet = $bookings->sum('final_total_price');
 
         $pdf = Pdf::loadView('admin.reports.pdf_template', [
             'bookings' => $bookings,

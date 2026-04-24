@@ -47,6 +47,12 @@ class Car extends Model
             $q->where('transmission', $transmission);
         })->when($filters['fuel_type'] ?? null, function ($q, $fuel) {
             $q->where('fuel_type', $fuel);
+        })->when(array_key_exists('status', $filters) && $filters['status'] !== '', function ($q) use ($filters) {
+            if ($filters['status'] === 'available') {
+                $q->where('is_available', 1);
+            } elseif ($filters['status'] === 'unavailable') {
+                $q->where('is_available', 0);
+            }
         });
     }
 }
