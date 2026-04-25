@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateBookingStatusRequest;
 use App\Models\Booking;
 use App\Models\Car;
 use App\Services\BookingService;
@@ -26,17 +27,10 @@ class BookingDashboardController extends Controller
         return view('admin.bookings.index', compact('bookings', 'pendingCount', 'activeCount', 'completedCount'));
     }
 
-    public function updateStatus(Request $request, Booking $booking)
+    public function updateStatus(UpdateBookingStatusRequest $request, Booking $booking)
     {
-        $request->validate([
-            'status' => 'required|in:pending,confirmed,completed,cancelled',
-            'dp_amount' => 'nullable|numeric|min:0',
-            'penalty_amount' => 'nullable|numeric|min:0',
-            'return_notes' => 'nullable|string'
-        ]);
-
         try {
-            $this->bookingService->updateBookingStatus($booking, $request->status, $request->all());
+            $this->bookingService->updateBookingStatus($booking, $request->status, $request->validated());
 
             return back()->with('success', 'Status booking berhasil diperbarui!');
         } catch (InvalidArgumentException $e) {
