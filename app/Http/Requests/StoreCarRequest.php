@@ -1,5 +1,7 @@
 <?php
 
+
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -17,13 +19,9 @@ class StoreCarRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
-        $carId = $this->route('car') ? $this->route('car')->id : null;
-
         return [
             'name' => 'required|string',
             'plate_code' => [
@@ -35,14 +33,14 @@ class StoreCarRequest extends FormRequest
             'transmission' => 'required',
             'price_12h' => 'required|numeric',
             'price_24h' => 'required|numeric',
-            'image' => 'nullable|image|mimes:jpg,png|max:2048',
+            // Tambahkan jpeg di sini supaya lebih aman
+            // Ganti baris image di rules() menjadi ini:
+            'image' => 'nullable|image|max:10240',
         ];
     }
 
     /**
      * Custom validation error messages in Indonesian language
-     *
-     * @return array<string, string>
      */
     public function messages(): array
     {
@@ -57,8 +55,8 @@ class StoreCarRequest extends FormRequest
             'price_24h.required' => 'Harga sewa 24 jam wajib diisi',
             'price_24h.numeric' => 'Harga sewa 24 jam harus berupa angka',
             'image.image' => 'File yang diupload harus berupa gambar',
-            'image.mimes' => 'Format gambar hanya boleh JPG atau PNG',
-            'image.max' => 'Ukuran gambar maksimal 2 MB',
+            'image.mimes' => 'Format gambar hanya boleh JPG, JPEG, atau PNG',
+            'image.max' => 'Ukuran gambar maksimal 10 MB',
         ];
     }
 }
