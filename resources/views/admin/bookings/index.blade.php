@@ -19,197 +19,10 @@
     </div>
   </x-slot>
 
-  {{-- =================== KEYFRAME ANIMATIONS (kept minimal) =================== --}}
-  <style>
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
 
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes modalIn {
-      from {
-        opacity: 0;
-        transform: scale(.94) translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-      }
-    }
-
-    @keyframes overlayIn {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes pulseRing {
-
-      0%,
-      100% {
-        box-shadow: 0 0 0 0 currentColor;
-      }
-
-      50% {
-        box-shadow: 0 0 0 4px transparent;
-      }
-    }
-
-    @keyframes shake {
-
-      0%,
-      100% {
-        transform: translateX(0);
-      }
-
-      20%,
-      60% {
-        transform: translateX(-5px);
-      }
-
-      40%,
-      80% {
-        transform: translateX(5px);
-      }
-    }
-
-    /* Staggered fade-up rows */
-    .fade-up {
-      opacity: 0;
-      animation: fadeInUp .4s ease forwards;
-    }
-
-    .fade-up:nth-child(1) {
-      animation-delay: .05s;
-    }
-
-    .fade-up:nth-child(2) {
-      animation-delay: .10s;
-    }
-
-    .fade-up:nth-child(3) {
-      animation-delay: .15s;
-    }
-
-    .fade-up:nth-child(4) {
-      animation-delay: .20s;
-    }
-
-    /* Modal animations */
-    .modal-overlay {
-      animation: overlayIn .2s ease forwards;
-    }
-
-    .modal-box {
-      animation: modalIn .28s cubic-bezier(.34, 1.56, .64, 1) forwards;
-    }
-
-    /* Live dot pulse */
-    .live-dot {
-      display: inline-block;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      animation: pulseRing 1.8s ease infinite;
-    }
-
-    /* Glass morphism */
-    .glass {
-      background: rgba(255, 255, 255, .88);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(255, 255, 255, .72);
-    }
-
-    /* Table row hover */
-    .tbl-row {
-      transition: background .15s ease, transform .15s ease;
-    }
-
-    .tbl-row:hover {
-      background: #f0fdf9;
-    }
-
-    .tbl-row.hidden-row {
-      display: none;
-    }
-
-    /* Action button base */
-    .btn-action {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 6px 14px;
-      border-radius: 10px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
-    }
-
-    .btn-action:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, .14);
-    }
-
-    .btn-action:active {
-      transform: scale(.95);
-    }
-
-    /* Badge dot */
-    .bdot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-
-    /* Cancel modal danger zone shake */
-    .shake {
-      animation: shake .35s ease;
-    }
-
-    /* Stat card hover */
-    .stat-card {
-      transition: transform .25s ease, box-shadow .25s ease;
-    }
-
-    .stat-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 32px rgba(0, 0, 0, .09);
-    }
-
-    /* Pagination */
-    nav[aria-label="Pagination"] span,
-    nav[aria-label="Pagination"] a {
-      border-radius: 8px !important;
-      font-size: 13px !important;
-    }
-
-    /* Input glow */
-    .input-glow:focus {
-      box-shadow: 0 0 0 3px rgba(16, 185, 129, .18);
-    }
-  </style>
-
-  {{-- =================== PAGE WRAPPER =================== --}}
-  <div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8"
-    style="background: linear-gradient(135deg,#f0fdf8 0%,#f8faff 55%,#fdf4ff 100%);">
+  <div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-emerald-50 via-blue-50 to-purple-50">
     <div class="max-w-7xl mx-auto space-y-6">
 
-      {{-- =================== STAT CARDS =================== --}}
       @php
         $statCards = [
           [
@@ -255,7 +68,9 @@
 
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         @foreach($statCards as $sc)
-          <div class="stat-card fade-up glass rounded-2xl p-5 overflow-hidden relative">
+          <div
+            class="transition-all duration-250 ease hover:-translate-y-1 hover:shadow-2xl animate-fadeInUp bg-white/88 backdrop-blur-md border border-white/70 rounded-2xl p-5 overflow-hidden relative"
+            style="animation-delay: {{ $loop->index * 0.05 }}s">
             {{-- Top gradient bar --}}
             <div class="absolute top-0 left-0 right-0 h-1 rounded-t-2xl bg-gradient-to-r {{ $sc['bg'] }}"></div>
 
@@ -269,7 +84,8 @@
                 </p>
                 @if(!empty($sc['live']))
                   <div class="flex items-center gap-1.5 mt-1.5">
-                    <span class="live-dot {{ $sc['text'] }}"
+                    <span
+                      class="inline-block w-1.75 h-1.75 rounded-full animate-[pulseRing_1.8s_ease_infinite] {{ $sc['text'] }}"
                       style="color:{{ ['amber' => '#f59e0b', 'emerald' => '#10b981'][$sc['color']] ?? '#6b7280' }}"></span>
                     <span class="text-[11px] text-gray-400">Live</span>
                   </div>
@@ -286,9 +102,9 @@
       </div>
 
       {{-- =================== TABLE CARD =================== --}}
-      <div class="glass rounded-2xl overflow-hidden fade-up" style="animation-delay:.25s">
+      <div class="bg-white/88 backdrop-blur-md border border-white/70 rounded-2xl overflow-hidden animate-fadeInUp"
+        style="animation-delay:.25s">
 
-        {{-- Table header bar --}}
         <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
           <div class="flex items-center gap-2">
             <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
@@ -298,12 +114,10 @@
             </span>
           </div>
 
-          {{-- Filter pills --}}
           <div class="hidden sm:flex items-center gap-1.5" id="filter-pills">
             @foreach(['all' => 'Semua', 'pending' => 'Menunggu', 'active' => 'Aktif', 'completed' => 'Selesai', 'cancelled' => 'Batal'] as $val => $lbl)
               <button data-filter="{{ $val }}"
-                class="filter-pill px-3 py-1 rounded-lg text-xs font-medium transition-all duration-150
-                               {{ $val === 'all' ? 'bg-emerald-500 text-white shadow-sm' : 'bg-gray-100 text-gray-500 hover:bg-gray-200' }}">
+                class="filter-pill px-3 py-1 rounded-lg text-xs font-medium transition-all duration-150 {{ $val === 'all' ? 'bg-emerald-500 text-white shadow-sm' : 'bg-gray-100 text-gray-500 hover:bg-gray-200' }}">
                 {{ $lbl }}
               </button>
             @endforeach
@@ -315,8 +129,8 @@
             <thead>
               <tr class="bg-gray-50/70">
                 @foreach(['Pelanggan', 'Kendaraan', 'Tanggal & Durasi', 'Total', 'Status', 'Aksi'] as $th)
-                  <th class="px-5 py-3.5 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider
-                                       {{ $loop->last ? 'text-right' : '' }}">
+                  <th
+                    class="px-5 py-3.5 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider {{ $loop->last ? 'text-right' : '' }}">
                     {{ $th }}
                   </th>
                 @endforeach
@@ -342,14 +156,15 @@
                       : floor($h / 24) . ' Hari ' . $r . ' Jam');
                 @endphp
 
-                <tr class="tbl-row" data-status="{{ $booking->status }}"
+                <tr class="transition-[background,transform] duration-150 ease hover:bg-emerald-50"
+                  data-status="{{ $booking->status }}"
                   data-search="{{ strtolower($booking->customer_name . ' ' . $booking->booking_code . ' ' . ($booking->car->name ?? '')) }}">
 
                   {{-- Customer --}}
                   <td class="px-5 py-4">
                     <div class="flex items-center gap-3">
-                      <div class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500
-                                                flex items-center justify-center text-white text-xs font-bold shrink-0">
+                      <div
+                        class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-xs font-bold shrink-0">
                         {{ $initials }}
                       </div>
                       <div class="min-w-0">
@@ -375,8 +190,8 @@
                     <p class="text-sm font-medium text-gray-800">
                       {{ $booking->start_date->format('d M Y') }}
                     </p>
-                    <span class="inline-flex items-center mt-1 gap-1 px-2 py-0.5 bg-purple-50
-                                             text-purple-600 text-[11px] font-semibold rounded-full">
+                    <span
+                      class="inline-flex items-center mt-1 gap-1 px-2 py-0.5 bg-purple-50text-purple-600 text-[11px] font-semibold rounded-full">
                       <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -397,10 +212,10 @@
 
                   {{-- Status --}}
                   <td class="px-5 py-4">
-                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full
-                                             text-[11px] font-semibold {{ $badge['cls'] }}">
-                      <span class="bdot {{ $badge['dot'] }}
-                                                 {{ $badge['pulse'] ? 'animate-pulse' : '' }}"></span>
+                    <span
+                      class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold {{ $badge['cls'] }}">
+                      <span
+                        class="w-1.5 h-1.5 rounded-full inline-block {{ $badge['dot'] }} {{ $badge['pulse'] ? 'animate-pulse' : '' }}"></span>
                       {{ $badge['label'] }}
                     </span>
                   </td>
@@ -412,7 +227,7 @@
                       @if($booking->status === 'pending')
                         {{-- Approve --}}
                         <button type="button"
-                          class="btn-action bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm shadow-emerald-200 open-dp-modal"
+                          class="inline-flex items-center gap-1.25 px-3.5 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all duration-150 ease hover:-translate-y-0.5 hover:shadow-lg active:scale-95 bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm shadow-emerald-200 open-dp-modal"
                           data-booking-id="{{ $booking->id }}" data-booking-code="{{ $booking->booking_code }}"
                           data-customer-name="{{ $booking->customer_name }}" data-total-price="{{ $booking->total_price }}"
                           data-current-dp="{{ $booking->dp_amount }}">
@@ -431,7 +246,7 @@
 
                         {{-- Reject → triggers custom cancel modal --}}
                         <button type="button"
-                          class="btn-action bg-red-50 hover:bg-red-100 text-red-600 border border-red-100 open-cancel-modal"
+                          class="inline-flex items-center gap-1.25 px-3.5 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all duration-150 ease hover:-translate-y-0.5 hover:shadow-lg active:scale-95 bg-red-50 hover:bg-red-100 text-red-600 border border-red-100 open-cancel-modal"
                           data-booking-id="{{ $booking->id }}" data-booking-code="{{ $booking->booking_code }}"
                           data-customer-name="{{ $booking->customer_name }}"
                           data-action="{{ route('admin.bookings.update-status', $booking) }}" data-mode="reject">
@@ -453,7 +268,7 @@
                       @elseif($booking->status === 'active')
                         {{-- Complete --}}
                         <button type="button"
-                          class="btn-action bg-blue-500 hover:bg-blue-600 text-white shadow-sm shadow-blue-200 open-complete-modal"
+                          class="inline-flex items-center gap-1.25 px-3.5 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all duration-150 ease hover:-translate-y-0.5 hover:shadow-lg active:scale-95 bg-blue-500 hover:bg-blue-600 text-white shadow-sm shadow-blue-200 open-complete-modal"
                           data-booking-id="{{ $booking->id }}" data-booking-code="{{ $booking->booking_code }}"
                           data-customer-name="{{ $booking->customer_name }}" data-total-price="{{ $booking->total_price }}"
                           data-end-date="{{ $booking->end_date->format('d M Y H:i') }}">
@@ -474,7 +289,7 @@
 
                         {{-- Cancel active booking --}}
                         <button type="button"
-                          class="btn-action bg-red-50 hover:bg-red-100 text-red-500 border border-red-100 open-cancel-modal"
+                          class="inline-flex items-center gap-1.25 px-3.5 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all duration-150 ease hover:-translate-y-0.5 hover:shadow-lg active:scale-95 bg-red-50 hover:bg-red-100 text-red-500 border border-red-100 open-cancel-modal"
                           data-booking-id="{{ $booking->id }}" data-booking-code="{{ $booking->booking_code }}"
                           data-customer-name="{{ $booking->customer_name }}"
                           data-action="{{ route('admin.bookings.update-status', $booking) }}" data-mode="cancel">
@@ -519,7 +334,6 @@
           </table>
         </div>
 
-        {{-- No result --}}
         <div id="no-result" class="hidden py-12 text-center text-sm text-gray-400">
           <div class="flex flex-col items-center gap-2">
             <svg class="w-10 h-10 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -530,10 +344,9 @@
           </div>
         </div>
 
-        {{-- Pagination --}}
         @if($bookings->total() > 0)
           <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/60
-                        flex flex-col sm:flex-row items-center justify-between gap-3">
+                                                        flex flex-col sm:flex-row items-center justify-between gap-3">
             <p class="text-xs text-gray-400">
               Menampilkan
               <span class="font-semibold text-gray-700">{{ $bookings->firstItem() }}</span>–<span
@@ -543,18 +356,15 @@
             {{ $bookings->links() }}
           </div>
         @endif
-      </div>{{-- end table card --}}
+      </div>
 
     </div>
   </div>
 
-  {{-- =====================================================================
-  MODAL: APPROVE / DP
-  ===================================================================== --}}
   <div id="dp-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden" role="dialog"
     aria-modal="true">
-    <div class="modal-overlay absolute inset-0 bg-black/40 backdrop-blur-sm" id="dp-modal-backdrop"></div>
-    <div class="modal-box relative glass rounded-2xl shadow-2xl max-w-md w-full" id="dp-modal-content">
+    <div class="animate-overlayIn absolute inset-0 bg-black/40 backdrop-blur-sm" id="dp-modal-backdrop"></div>
+    <div class="animate-modalIn relative bg-white rounded-2xl shadow-2xl max-w-md w-full" id="dp-modal-content">
 
       {{-- Header --}}
       <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
@@ -566,8 +376,8 @@
           </div>
           <h3 class="font-bold text-gray-900">Konfirmasi Pemesanan</h3>
         </div>
-        <button id="close-modal-btn" class="w-8 h-8 flex items-center justify-center rounded-lg
-                             text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all">
+        <button id="close-modal-btn"
+          class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
@@ -597,7 +407,7 @@
             </label>
             <div class="relative">
               <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-semibold text-gray-400">Rp</span>
-              <input type="number" id="modal-dp-input" min="0" placeholder="0" class="input-glow w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl
+              <input type="number" id="modal-dp-input" min="0" placeholder="0" class="focus:ring-[3px] focus:ring-emerald-500/18 w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl
                                         text-lg font-bold text-gray-900 bg-white
                                         focus:ring-2 focus:ring-emerald-400 focus:border-transparent
                                         transition-all duration-200">
@@ -612,26 +422,22 @@
 
       {{-- Footer --}}
       <div class="px-6 pb-6 flex gap-3">
-        <button id="modal-cancel-btn" class="flex-1 py-3 rounded-xl bg-gray-100 text-gray-600 text-sm font-semibold
-                             hover:bg-gray-200 transition-all active:scale-95">
+        <button id="modal-cancel-btn"
+          class="flex-1 py-3 rounded-xl bg-gray-100 text-gray-600 text-sm font-semibold hover:bg-gray-200 transition-all active:scale-95">
           Batal
         </button>
-        <button id="modal-confirm-btn" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600
-                             text-white text-sm font-semibold shadow-lg shadow-emerald-200
-                             hover:shadow-emerald-300 hover:-translate-y-0.5 transition-all active:scale-95">
+        <button id="modal-confirm-btn"
+          class="flex-1 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-semibold shadow-lg shadow-emerald-200 hover:shadow-emerald-300 hover:-translate-y-0.5 transition-all active:scale-95">
           Konfirmasi
         </button>
       </div>
     </div>
   </div>
 
-  {{-- =====================================================================
-  MODAL: COMPLETE / PENALTY
-  ===================================================================== --}}
   <div id="complete-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden" role="dialog"
     aria-modal="true">
-    <div class="modal-overlay absolute inset-0 bg-black/40 backdrop-blur-sm" id="complete-modal-backdrop"></div>
-    <div class="modal-box relative glass rounded-2xl shadow-2xl max-w-md w-full" id="complete-modal-content">
+    <div class="animate-overlayIn absolute inset-0 bg-black/40 backdrop-blur-sm" id="complete-modal-backdrop"></div>
+    <div class="animate-modalIn relative bg-white rounded-2xl shadow-2xl max-w-md w-full" id="complete-modal-content">
 
       {{-- Header --}}
       <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
@@ -644,8 +450,8 @@
           </div>
           <h3 class="font-bold text-gray-900">Selesaikan Pemesanan</h3>
         </div>
-        <button id="close-complete-modal-btn" class="w-8 h-8 flex items-center justify-center rounded-lg
-                             text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all">
+        <button id="close-complete-modal-btn"
+          class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
@@ -675,7 +481,7 @@
             </label>
             <div class="relative">
               <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-semibold text-gray-400">Rp</span>
-              <input type="number" id="complete-modal-penalty-input" min="0" value="0" class="input-glow w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl
+              <input type="number" id="complete-modal-penalty-input" min="0" value="0" class="focus:ring-[3px] focus:ring-emerald-500/18 w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl
                                         text-lg font-bold text-gray-900 bg-white
                                         focus:ring-2 focus:ring-blue-400 focus:border-transparent
                                         transition-all duration-200">
@@ -686,10 +492,8 @@
               Catatan Pengembalian
               <span class="normal-case font-normal text-gray-400 ml-1">(opsional)</span>
             </label>
-            <textarea id="complete-modal-notes-input" rows="2" class="input-glow w-full px-4 py-3 border border-gray-200 rounded-xl text-sm
-                                       bg-white text-gray-700 resize-none
-                                       focus:ring-2 focus:ring-blue-400 focus:border-transparent
-                                       transition-all duration-200"
+            <textarea id="complete-modal-notes-input" rows="2"
+              class="focus:ring-[3px] focus:ring-emerald-500/18 w-full px-4 py-3 border border-gray-200 rounded-xl text-sm bg-white text-gray-700 resize-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
               placeholder="Kondisi mobil saat dikembalikan..."></textarea>
           </div>
           <div class="flex justify-between items-center pt-3 border-t border-gray-200">
@@ -701,27 +505,23 @@
 
       {{-- Footer --}}
       <div class="px-6 pb-6 flex gap-3">
-        <button id="complete-modal-cancel-btn" class="flex-1 py-3 rounded-xl bg-gray-100 text-gray-600 text-sm font-semibold
-                             hover:bg-gray-200 transition-all active:scale-95">
+        <button id="complete-modal-cancel-btn"
+          class="flex-1 py-3 rounded-xl bg-gray-100 text-gray-600 text-sm font-semibold hover:bg-gray-200 transition-all active:scale-95">
           Batal
         </button>
-        <button id="complete-modal-confirm-btn" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600
-                             text-white text-sm font-semibold shadow-lg shadow-blue-200
-                             hover:shadow-blue-300 hover:-translate-y-0.5 transition-all active:scale-95">
+        <button id="complete-modal-confirm-btn"
+          class="flex-1 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold shadow-lg shadow-blue-200 hover:shadow-blue-300 hover:-translate-y-0.5 transition-all active:scale-95">
           Selesaikan Booking
         </button>
       </div>
     </div>
   </div>
 
-  {{-- =====================================================================
-  MODAL: CANCEL / REJECT ← NEW ✨
-  ===================================================================== --}}
   <div id="cancel-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden" role="dialog"
     aria-modal="true" aria-labelledby="cancel-modal-title">
-    <div class="modal-overlay absolute inset-0 bg-black/50 backdrop-blur-sm" id="cancel-modal-backdrop"></div>
+    <div class="animate-overlayIn absolute inset-0 bg-black/50 backdrop-blur-sm" id="cancel-modal-backdrop"></div>
 
-    <div class="modal-box relative glass rounded-2xl shadow-2xl max-w-sm w-full" id="cancel-modal-content">
+    <div class="animate-modalIn relative bg-white rounded-2xl shadow-2xl max-w-sm w-full" id="cancel-modal-content">
 
       {{-- Danger Icon --}}
       <div class="flex flex-col items-center pt-8 pb-2 px-6">
@@ -762,22 +562,19 @@
           Alasan Pembatalan
           <span class="normal-case font-normal text-gray-400 ml-1">(opsional)</span>
         </label>
-        <textarea id="cancel-modal-reason" rows="2" class="input-glow w-full px-4 py-3 border border-gray-200 rounded-xl text-sm
-                               bg-white text-gray-700 resize-none
-                               focus:ring-2 focus:ring-red-400 focus:border-transparent
-                               transition-all duration-200" placeholder="Masukkan alasan pembatalan..."></textarea>
+        <textarea id="cancel-modal-reason" rows="2"
+          class="focus:ring-[3px] focus:ring-emerald-500/18 w-full px-4 py-3 border border-gray-200 rounded-xl text-sm bg-white text-gray-700 resize-none focus:ring-2 focus:ring-red-400 focus:border-transparent transition-all duration-200"
+          placeholder="Masukkan alasan pembatalan..."></textarea>
       </div>
 
       {{-- Footer --}}
       <div class="p-6 flex gap-3">
-        <button id="cancel-modal-dismiss" class="flex-1 py-3 rounded-xl bg-gray-100 text-gray-600 text-sm font-semibold
-                             hover:bg-gray-200 transition-all active:scale-95">
+        <button id="cancel-modal-dismiss"
+          class="flex-1 py-3 rounded-xl bg-gray-100 text-gray-600 text-sm font-semibold hover:bg-gray-200 transition-all active:scale-95">
           Kembali
         </button>
-        <button id="cancel-modal-confirm" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-red-500 to-rose-600
-                             text-white text-sm font-semibold shadow-lg shadow-red-200
-                             hover:shadow-red-300 hover:-translate-y-0.5 transition-all active:scale-95
-                             flex items-center justify-center gap-2">
+        <button id="cancel-modal-confirm"
+          class="flex-1 py-3 rounded-xl bg-gradient-to-r from-red-500 to-rose-600 text-white text-sm font-semibold shadow-lg shadow-red-200 hover:shadow-red-300 hover:-translate-y-0.5 transition-all active:scale-95 flex items-center justify-center gap-2">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -788,19 +585,14 @@
     </div>
   </div>
 
-  {{-- =====================================================================
-  SCRIPTS
-  ===================================================================== --}}
   <script>
     (() => {
       'use strict';
 
-      /* -------- Helpers -------- */
       const $ = id => document.getElementById(id);
       const idr = n => 'Rp ' + new Intl.NumberFormat('id-ID').format(n);
       const initials = name => name.trim().substring(0, 2).toUpperCase();
 
-      /* ---- Generic modal factory ---- */
       function makeModal(modalId, backdropId) {
         const el = $(modalId);
         const bd = $(backdropId);
@@ -824,9 +616,6 @@
         };
       }
 
-      /* ======================================================
-         DP / APPROVE MODAL
-         ====================================================== */
       const dpModal = makeModal('dp-modal', 'dp-modal-backdrop');
       let dpBookingId = null, dpTotal = 0;
       const dpInput = $('modal-dp-input');
@@ -864,9 +653,6 @@
       );
       dpModal.bd.addEventListener('click', () => dpModal.close());
 
-      /* ======================================================
-         COMPLETE / PENALTY MODAL
-         ====================================================== */
       const cModal = makeModal('complete-modal', 'complete-modal-backdrop');
       let cBookingId = null, cTotal = 0;
       const penaltyInput = $('complete-modal-penalty-input');
@@ -906,9 +692,6 @@
       );
       cModal.bd.addEventListener('click', () => cModal.close());
 
-      /* ======================================================
-         CANCEL / REJECT MODAL  ← NEW ✨
-         ====================================================== */
       const cancelModal = makeModal('cancel-modal', 'cancel-modal-backdrop');
       let cancelBookingId = null;
       let cancelMode = 'reject'; // 'reject' | 'cancel'
@@ -976,9 +759,6 @@
       );
       cancelModal.bd.addEventListener('click', () => cancelModal.close());
 
-      /* ======================================================
-         ESC KEY — closes all modals
-         ====================================================== */
       document.addEventListener('keydown', e => {
         if (e.key === 'Escape') {
           dpModal.close();
@@ -987,9 +767,6 @@
         }
       });
 
-      /* ======================================================
-         CLIENT-SIDE SEARCH
-         ====================================================== */
       const searchInput = $('search-input');
       const tbody = $('bookings-tbody');
       const noResult = $('no-result');
@@ -1003,7 +780,7 @@
           const matchSearch = !q || row.dataset.search.includes(q);
           const matchFilter = fil === 'all' || row.dataset.status === fil;
           const show = matchSearch && matchFilter;
-          row.classList.toggle('hidden-row', !show);
+          row.classList.toggle('hidden', !show);
           if (show) visible++;
         });
         noResult.classList.toggle('hidden', visible > 0);
@@ -1011,9 +788,6 @@
 
       searchInput.addEventListener('input', applyFilters);
 
-      /* ======================================================
-         FILTER PILLS
-         ====================================================== */
       document.querySelectorAll('.filter-pill').forEach(pill => {
         pill.addEventListener('click', () => {
           document.querySelectorAll('.filter-pill').forEach(p => {
@@ -1029,4 +803,4 @@
     })();
   </script>
 
-  </x-admin-layout>
+</x-admin-layout>
