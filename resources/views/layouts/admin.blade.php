@@ -158,7 +158,8 @@
     </div>
   </div>
 
-  <x-toast-system />
+  {{-- TOAST NOTIFICATION SYSTEM --}}
+  <x-toast-container />
 
 </body>
 

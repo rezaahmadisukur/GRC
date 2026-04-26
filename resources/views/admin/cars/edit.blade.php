@@ -181,7 +181,8 @@
                 @endif
                 <input type="file" id="image" name="image" accept="image/*"
                   class="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                <p class="mt-2 text-xs text-slate-400">PNG, JPG up to 5MB</p>
+                <p class="mt-2 text-xs text-slate-400">Format gambar hanya boleh JPG, JPEG, atau PNG. Ukuran maksimal 10
+                  MB</p>
               </div>
               @error('image')
                 <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
