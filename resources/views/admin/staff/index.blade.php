@@ -230,7 +230,7 @@
                                         </svg>
                                     </div>
                                     <span class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-indigo-200 animate-bounce"></span>
-                                    <span class="absolute -bottom-1 -left-1 w-2 h-2 rounded-full bg-violet-200 animate-bounce" style="animation-delay:.2s"></span>
+                                    <span class="absolute -bottom-1 -left-1 w-2 h-2 rounded-full bg-violet-200 animate-bounce delay-[200ms]"></span>
                                 </div>
                                 <h3 class="text-base font-bold text-gray-700 mb-1">Belum ada staff terdaftar</h3>
                                 <p class="text-sm text-gray-400 max-w-xs mb-5">Mulai dengan menambahkan admin baru untuk mengelola sistem.</p>
@@ -261,8 +261,7 @@
 {{-- MODAL: Tambah Admin Baru   --}}
 {{-- ════════════════════════════ --}}
 <div id="addModal"
-     class="fixed inset-0 z-50 flex items-center justify-center p-4"
-     style="display:none"
+     class="fixed inset-0 z-50 hidden items-center justify-center p-4"
      role="dialog" aria-modal="true" aria-labelledby="addModalTitle">
 
     <div id="addOverlay"
@@ -408,8 +407,7 @@
 {{-- MODAL: Konfirmasi Toggle Status    --}}
 {{-- ════════════════════════════════════ --}}
 <div id="toggleModal"
-     class="fixed inset-0 z-[60] flex items-center justify-center p-4"
-     style="display:none"
+     class="fixed inset-0 z-[60] hidden items-center justify-center p-4"
      role="dialog" aria-modal="true">
 
     <div id="toggleOverlay"
@@ -460,8 +458,7 @@
 {{-- MODAL: Konfirmasi Reset Password   --}}
 {{-- ════════════════════════════════════ --}}
 <div id="resetModal"
-     class="fixed inset-0 z-[60] flex items-center justify-center p-4"
-     style="display:none"
+     class="fixed inset-0 z-[60] hidden items-center justify-center p-4"
      role="dialog" aria-modal="true">
 
     <div id="resetOverlay"
@@ -739,11 +736,13 @@
 
     /* ── AUTO-OPEN PADA VALIDATION ERRORS ───────── */
     @if($errors->any())
+    document.addEventListener('DOMContentLoaded', () => {
         openModal();
         @foreach($errors->all() as $error)
             GRCToast.show({ type: 'error', message: @json($error), duration: 5000 });
         @endforeach
-    @endif
+});
+@endif
 
 })();
 </script>
