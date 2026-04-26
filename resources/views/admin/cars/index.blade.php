@@ -17,443 +17,6 @@
         </div>
     </x-slot>
 
-    {{-- Inline styles untuk animasi & custom styling --}}
-    <style>
-        /* ── Animasi & Transisi ── */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(16px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes shimmer {
-            0% {
-                background-position: -200% 0;
-            }
-
-            100% {
-                background-position: 200% 0;
-            }
-        }
-
-        @keyframes pulse-ring {
-            0% {
-                transform: scale(0.95);
-                box-shadow: 0 0 0 0 rgba(59, 130, 246, .4);
-            }
-
-            70% {
-                transform: scale(1);
-                box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
-            }
-
-            100% {
-                transform: scale(0.95);
-                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
-            }
-        }
-
-        @keyframes rowSlideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-8px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .fade-in-up {
-            animation: fadeInUp .45s ease both;
-        }
-
-        .delay-1 {
-            animation-delay: .05s;
-        }
-
-        .delay-2 {
-            animation-delay: .10s;
-        }
-
-        .delay-3 {
-            animation-delay: .15s;
-        }
-
-        /* ── Kartu & Panel ── */
-        .glass-card {
-            background: rgba(255, 255, 255, .85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, .6);
-        }
-
-        /* ── Tombol Utama ── */
-        .btn-primary {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            gap: .5rem;
-            padding: .6rem 1.25rem;
-            background: linear-gradient(135deg, #3b82f6, #4f46e5);
-            color: #fff;
-            border-radius: .75rem;
-            font-weight: 600;
-            font-size: .875rem;
-            transition: transform .2s, box-shadow .2s;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(79, 70, 229, .35);
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            opacity: 0;
-            transition: opacity .25s;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(79, 70, 229, .45);
-        }
-
-        .btn-primary:hover::before {
-            opacity: 1;
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .btn-primary span {
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn-primary svg {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* ── Tombol Sekunder ── */
-        .btn-secondary {
-            display: inline-flex;
-            align-items: center;
-            gap: .5rem;
-            padding: .6rem 1.1rem;
-            background: #fff;
-            color: #374151;
-            border: 1.5px solid #e5e7eb;
-            border-radius: .75rem;
-            font-weight: 500;
-            font-size: .875rem;
-            transition: all .2s;
-        }
-
-        .btn-secondary:hover {
-            background: #f9fafb;
-            border-color: #d1d5db;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
-        }
-
-        /* ── Input / Select ── */
-        .form-input {
-            width: 100%;
-            padding: .6rem 1rem;
-            background: #fff;
-            border: 1.5px solid #e5e7eb;
-            border-radius: .75rem;
-            font-size: .875rem;
-            color: #374151;
-            transition: border-color .2s, box-shadow .2s;
-            outline: none;
-        }
-
-        .form-input:focus {
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, .15);
-        }
-
-        .form-input::placeholder {
-            color: #9ca3af;
-        }
-
-        /* ── Baris Tabel ── */
-        .table-row {
-            transition: background .2s, transform .15s;
-            animation: rowSlideIn .35s ease both;
-        }
-
-        .table-row:hover {
-            background: linear-gradient(90deg, #f0f4ff, #fafafa);
-        }
-
-        /* ── Badge Status ── */
-        .badge-available {
-            display: inline-flex;
-            align-items: center;
-            gap: .35rem;
-            padding: .25rem .75rem;
-            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
-            color: #15803d;
-            border-radius: 9999px;
-            font-size: .7rem;
-            font-weight: 700;
-            letter-spacing: .04em;
-            border: 1px solid #86efac;
-        }
-
-        .badge-unavailable {
-            display: inline-flex;
-            align-items: center;
-            gap: .35rem;
-            padding: .25rem .75rem;
-            background: linear-gradient(135deg, #fee2e2, #fecaca);
-            color: #dc2626;
-            border-radius: 9999px;
-            font-size: .7rem;
-            font-weight: 700;
-            letter-spacing: .04em;
-            border: 1px solid #fca5a5;
-        }
-
-        .badge-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            animation: pulse-ring 2s infinite;
-        }
-
-        .badge-available .badge-dot {
-            background: #16a34a;
-        }
-
-        .badge-unavailable .badge-dot {
-            background: #dc2626;
-            animation: none;
-        }
-
-        /* ── Gambar Mobil ── */
-        .car-thumb {
-            width: 2.75rem;
-            height: 2.75rem;
-            border-radius: .625rem;
-            object-fit: cover;
-            border: 2px solid #e5e7eb;
-            transition: transform .2s, box-shadow .2s;
-            cursor: pointer;
-        }
-
-        .car-thumb:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
-        }
-
-        /* ── Aksi Tombol Edit/Hapus ── */
-        .action-btn {
-            padding: .35rem .75rem;
-            border-radius: .5rem;
-            font-size: .78rem;
-            font-weight: 600;
-            transition: all .2s;
-        }
-
-        .action-edit {
-            color: #4f46e5;
-            background: #ede9fe;
-        }
-
-        .action-edit:hover {
-            background: #4f46e5;
-            color: #fff;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, .3);
-        }
-
-        .action-delete {
-            color: #dc2626;
-            background: #fee2e2;
-        }
-
-        .action-delete:hover {
-            background: #dc2626;
-            color: #fff;
-            box-shadow: 0 4px 12px rgba(220, 38, 38, .3);
-        }
-
-        /* ── Header Tabel ── */
-        .th-cell {
-            padding: .875rem 1.25rem;
-            font-size: .7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: .07em;
-            color: #6b7280;
-            white-space: nowrap;
-        }
-
-        /* ── Nomor Baris ── */
-        .row-number {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 1.75rem;
-            height: 1.75rem;
-            background: linear-gradient(135deg, #ede9fe, #dbeafe);
-            color: #4f46e5;
-            border-radius: .5rem;
-            font-size: .75rem;
-            font-weight: 700;
-        }
-
-        /* ── Skeleton Loading ── */
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.4s infinite;
-            border-radius: .5rem;
-        }
-
-        /* ── Plat Nomor ── */
-        .plate-badge {
-            display: inline-block;
-            padding: .2rem .6rem;
-            background: #1e293b;
-            color: #fbbf24;
-            border-radius: .4rem;
-            font-size: .75rem;
-            font-weight: 700;
-            letter-spacing: .06em;
-        }
-
-        /* ── Transmisi Badge ── */
-        .trans-at {
-            display: inline-block;
-            padding: .2rem .55rem;
-            background: #dbeafe;
-            color: #1d4ed8;
-            border-radius: .4rem;
-            font-size: .72rem;
-            font-weight: 700;
-        }
-
-        .trans-mt {
-            display: inline-block;
-            padding: .2rem .55rem;
-            background: #fef9c3;
-            color: #854d0e;
-            border-radius: .4rem;
-            font-size: .72rem;
-            font-weight: 700;
-        }
-
-        /* ── Harga ── */
-        .price-cell {
-            font-weight: 600;
-            color: #065f46;
-            font-size: .82rem;
-        }
-
-        /* ── Stats Card ── */
-        .stat-card {
-            background: #fff;
-            border: 1.5px solid #f1f5f9;
-            border-radius: 1rem;
-            padding: 1rem 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: .875rem;
-            transition: transform .2s, box-shadow .2s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
-        }
-
-        /* ── Warna Dot ── */
-        .color-dot {
-            display: inline-block;
-            width: .75rem;
-            height: .75rem;
-            border-radius: 50%;
-            border: 1.5px solid rgba(0, 0, 0, .1);
-            vertical-align: middle;
-            margin-right: .35rem;
-        }
-
-        /* ── Scrollbar ── */
-        .custom-scroll::-webkit-scrollbar {
-            height: 5px;
-        }
-
-        .custom-scroll::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 9999px;
-        }
-
-        .custom-scroll::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 9999px;
-        }
-
-        .custom-scroll::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        /* ── Search icon wrapper ── */
-        .search-wrapper {
-            position: relative;
-        }
-
-        .search-wrapper .search-icon {
-            position: absolute;
-            left: .75rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #9ca3af;
-            pointer-events: none;
-        }
-
-        .search-wrapper .form-input {
-            padding-left: 2.5rem;
-        }
-
-        /* ── Tooltip ── */
-        .tooltip-wrap {
-            position: relative;
-        }
-
-        .tooltip-wrap .tooltip-label {
-            position: absolute;
-            bottom: 110%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1e293b;
-            color: #fff;
-            font-size: .7rem;
-            font-weight: 500;
-            padding: .25rem .6rem;
-            border-radius: .4rem;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity .2s;
-        }
-
-        .tooltip-wrap:hover .tooltip-label {
-            opacity: 1;
-        }
-    </style>
 
     <div class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
@@ -461,10 +24,11 @@
             {{-- ════════════════════════════════════════ --}}
             {{-- STAT CARDS --}}
             {{-- ════════════════════════════════════════ --}}
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 fade-in-up">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 animate-fade-in-up">
 
                 {{-- Total --}}
-                <div class="stat-card">
+                <div
+                    class="bg-white border border-slate-100 rounded-2xl p-4 flex items-center gap-3.5 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
                     <div class="p-2.5 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shrink-0">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -478,7 +42,8 @@
                 </div>
 
                 {{-- Tersedia --}}
-                <div class="stat-card">
+                <div
+                    class="bg-white border border-slate-100 rounded-2xl p-4 flex items-center gap-3.5 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
                     <div class="p-2.5 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 shrink-0">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -493,7 +58,8 @@
                 </div>
 
                 {{-- Tidak Tersedia --}}
-                <div class="stat-card">
+                <div
+                    class="bg-white border border-slate-100 rounded-2xl p-4 flex items-center gap-3.5 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
                     <div class="p-2.5 rounded-xl bg-gradient-to-br from-rose-400 to-red-500 shrink-0">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -509,7 +75,8 @@
                 </div>
 
                 {{-- Halaman --}}
-                <div class="stat-card">
+                <div
+                    class="bg-white border border-slate-100 rounded-2xl p-4 flex items-center gap-3.5 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
                     <div class="p-2.5 rounded-xl bg-gradient-to-br from-violet-400 to-purple-600 shrink-0">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -528,24 +95,29 @@
             {{-- ════════════════════════════════════════ --}}
             {{-- TOOLBAR: Tambah + Refresh --}}
             {{-- ════════════════════════════════════════ --}}
-            <div class="flex flex-wrap justify-between items-center gap-3 fade-in-up delay-1">
+            <div class="flex flex-wrap justify-between items-center gap-3 animate-fade-in-up"
+                style="animation-delay: .05s">
                 <div class="flex items-center gap-2">
-                    <a href="{{ route('admin.cars.create') }}" class="btn-primary">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <a href="{{ route('admin.cars.create') }}"
+                        class="relative inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl font-semibold text-sm shadow-lg shadow-indigo-300 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-400 active:translate-y-0 overflow-hidden">
+                        <span
+                            class="absolute inset-0 bg-gradient-to-r from-indigo-600 to-violet-600 opacity-0 transition-opacity duration-250 hover:opacity-100"></span>
+                        <svg class="w-4 h-4 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                 d="M12 4v16m8-8H4" />
                         </svg>
-                        <span>Tambah Mobil Baru</span>
+                        <span class="relative z-10">Tambah Mobil Baru</span>
                     </a>
 
-                    <button onclick="window.location.reload()" class="btn-secondary tooltip-wrap" id="refreshBtn">
+                    <button onclick="window.location.reload()"
+                        class="relative inline-flex items-center gap-2 px-4 py-2.5 bg-white text-gray-700 border-2 border-gray-200 rounded-xl font-medium text-sm transition-all duration-200 hover:bg-gray-50 hover:border-gray-300 hover:-translate-y-0.5 hover:shadow-md relative"
+                        id="refreshBtn">
                         <span class="tooltip-label">Muat Ulang</span>
                         <svg id="refreshIcon" class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                         </svg>
-                        <span class="text-gray-600">Refresh</span>
                     </button>
                 </div>
 
@@ -572,7 +144,8 @@
             {{-- SEARCH & FILTER --}}
             {{-- ════════════════════════════════════════ --}}
             <form method="GET" action="{{ route('admin.cars.index') }}"
-                class="glass-card rounded-2xl shadow-sm p-5 fade-in-up delay-2">
+                class="bg-white/85 backdrop-blur-xl border border-white/60 rounded-2xl shadow-sm p-5 animate-fade-in-up"
+                style="animation-delay: .10s">
 
                 <div class="flex items-center gap-2 mb-4">
                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -585,18 +158,22 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
 
                     {{-- Search --}}
-                    <div class="search-wrapper lg:col-span-1">
-                        <svg class="search-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="relative lg:col-span-1">
+                        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0" />
                         </svg>
                         <input type="text" name="search" value="{{ request('search') }}"
-                            placeholder="Cari nama, plat, warna..." class="form-input" autocomplete="off">
+                            placeholder="Cari nama, plat, warna..."
+                            class="w-full pl-10 pr-4 py-2.5 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 placeholder:text-gray-400"
+                            autocomplete="off">
                     </div>
 
                     {{-- Transmisi --}}
                     <div>
-                        <select name="transmission" class="form-input">
+                        <select name="transmission"
+                            class="w-full px-4 py-2.5 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
                             <option value="">🔧 Semua Transmisi</option>
                             <option value="AT" {{ request('transmission') == 'AT' ? 'selected' : '' }}>⚡ Automatic (AT)
                             </option>
@@ -607,7 +184,8 @@
 
                     {{-- Status --}}
                     <div>
-                        <select name="status" class="form-input">
+                        <select name="status"
+                            class="w-full px-4 py-2.5 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
                             <option value="">📋 Semua Status</option>
                             <option value="available" {{ request('status') == 'available' ? 'selected' : '' }}>✅ Tersedia
                             </option>
@@ -646,7 +224,8 @@
             {{-- ════════════════════════════════════════ --}}
             {{-- DATA TABLE --}}
             {{-- ════════════════════════════════════════ --}}
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden fade-in-up delay-3">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-fade-in-up"
+                style="animation-delay: .15s">
 
                 {{-- Table Header Bar --}}
                 <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
@@ -660,29 +239,52 @@
                     </span>
                 </div>
 
-                <div class="overflow-x-auto custom-scroll">
+                <div
+                    class="overflow-x-auto [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:bg-slate-100 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-gray-400">
                     <table class="min-w-full">
                         <thead>
                             <tr class="bg-gradient-to-r from-slate-50 to-gray-50 border-b border-gray-100">
-                                <th class="th-cell text-left w-12">#</th>
-                                <th class="th-cell text-left">Nama Mobil</th>
-                                <th class="th-cell text-left">Plat</th>
-                                <th class="th-cell text-left">Warna</th>
-                                <th class="th-cell text-left">Transmisi</th>
-                                <th class="th-cell text-right">Harga 12 Jam</th>
-                                <th class="th-cell text-right">Harga 24 Jam</th>
-                                <th class="th-cell text-center">Foto</th>
-                                <th class="th-cell text-center">Status</th>
-                                <th class="th-cell text-center">Aksi</th>
+                                <th
+                                    class="px-5 py-3.5 text-left w-12 text-xs font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap">
+                                    #</th>
+                                <th
+                                    class="px-5 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap">
+                                    Nama Mobil</th>
+                                <th
+                                    class="px-5 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap">
+                                    Plat</th>
+                                <th
+                                    class="px-5 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap">
+                                    Warna</th>
+                                <th
+                                    class="px-5 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap">
+                                    Transmisi</th>
+                                <th
+                                    class="px-5 py-3.5 text-right text-xs font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap">
+                                    Harga 12 Jam</th>
+                                <th
+                                    class="px-5 py-3.5 text-right text-xs font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap">
+                                    Harga 24 Jam</th>
+                                <th
+                                    class="px-5 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap">
+                                    Foto</th>
+                                <th
+                                    class="px-5 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap">
+                                    Status</th>
+                                <th
+                                    class="px-5 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap">
+                                    Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
                             @forelse($cars as $car)
-                                <tr class="table-row" style="animation-delay: {{ $loop->index * 0.04 }}s">
+                                <tr class="transition-all duration-200 animate-row-slide-in hover:bg-gradient-to-r from-blue-50 to-transparent"
+                                    style="animation-delay: {{ $loop->index * 0.04 }}s">
 
                                     {{-- No --}}
                                     <td class="px-5 py-3.5">
-                                        <span class="row-number">
+                                        <span
+                                            class="inline-flex items-center justify-center w-7 h-7 bg-gradient-to-br from-purple-50 to-blue-50 text-indigo-600 rounded-lg text-xs font-bold">
                                             {{ ($cars->currentPage() - 1) * $cars->perPage() + $loop->iteration }}
                                         </span>
                                     </td>
@@ -696,12 +298,14 @@
 
                                     {{-- Plat --}}
                                     <td class="px-5 py-3.5">
-                                        <span class="plate-badge p">{{ $car->plate_code }}</span>
+                                        <span
+                                            class="inline-block px-2.5 py-1 bg-slate-800 text-yellow-400 rounded-lg text-xs font-bold tracking-wider">{{ $car->plate_code }}</span>
                                     </td>
 
                                     {{-- Warna --}}
                                     <td class="px-5 py-3.5 text-sm text-gray-600">
-                                        <span class="color-dot"
+                                        <span
+                                            class="inline-block w-3 h-3 rounded-full border border-gray-200 align-middle mr-1.5"
                                             style="background-color: {{ strtolower($car->color) }};"></span>
                                         {{ $car->color }}
                                     </td>
@@ -709,15 +313,17 @@
                                     {{-- Transmisi --}}
                                     <td class="px-5 py-3.5">
                                         @if($car->transmission === 'AT')
-                                            <span class="trans-at">AT</span>
+                                            <span
+                                                class="inline-block px-2.5 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-bold">AT</span>
                                         @else
-                                            <span class="trans-mt">MT</span>
+                                            <span
+                                                class="inline-block px-2.5 py-1 bg-yellow-100 text-yellow-700 rounded-lg text-xs font-bold">MT</span>
                                         @endif
                                     </td>
 
                                     {{-- Harga 12 Jam --}}
                                     <td class="px-5 py-3.5 text-right">
-                                        <span class="price-cell">
+                                        <span class="font-semibold text-emerald-700 text-sm">
                                             Rp {{ number_format($car->price_12h, 0, ',', '.') }}
                                         </span>
                                     </td>
@@ -733,8 +339,8 @@
                                     <td class="px-5 py-3.5 text-center">
                                         @if($car->image)
                                             <img src="{{ asset('storage/' . $car->image) }}" alt="{{ $car->name }}"
-                                                class="car-thumb mx-auto" loading="lazy"
-                                                onclick="openImageModal(this.src, '{{ $car->name }}')"
+                                                class="w-11 h-11 rounded-xl object-cover border-2 border-gray-200 transition-all duration-200 cursor-pointer hover:scale-110 hover:shadow-lg mx-auto"
+                                                loading="lazy" onclick="openImageModal(this.src, '{{ $car->name }}')"
                                                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                                             <div style="display:none"
                                                 class="w-11 h-11 rounded-xl bg-gray-100 mx-auto items-center justify-center">
@@ -759,13 +365,15 @@
                                     {{-- Status --}}
                                     <td class="px-5 py-3.5 text-center">
                                         @if($car->is_available)
-                                            <span class="badge-available">
-                                                <span class="badge-dot"></span>
+                                            <span
+                                                class="inline-flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 rounded-full text-xs font-bold tracking-wide border border-green-200">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse-ring"></span>
                                                 Tersedia
                                             </span>
                                         @else
-                                            <span class="badge-unavailable">
-                                                <span class="badge-dot"></span>
+                                            <span
+                                                class="inline-flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-red-100 to-rose-100 text-red-700 rounded-full text-xs font-bold tracking-wide border border-red-200">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
                                                 Tidak Tersedia
                                             </span>
                                         @endif
@@ -775,8 +383,9 @@
                                     <td class="px-5 py-3.5">
                                         <div class="flex items-center justify-center gap-1.5">
                                             <a href="{{ route('admin.cars.edit', $car) }}"
-                                                class="action-btn action-edit tooltip-wrap">
-                                                <span class="tooltip-label">Edit</span>
+                                                class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 text-indigo-600 bg-purple-50 hover:bg-indigo-600 hover:text-white hover:shadow-lg relative">
+                                                <span
+                                                    class="absolute bottom-full left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs font-medium px-2 py-1 rounded-lg whitespace-nowrap opacity-0 pointer-events-none transition-opacity duration-200 hover:opacity-100 mb-1">Edit</span>
                                                 <svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -789,8 +398,10 @@
                                                 class="delete-form" data-car-name="{{ $car->name }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="action-btn action-delete tooltip-wrap">
-                                                    <span class="tooltip-label">Hapus</span>
+                                                <button type="submit"
+                                                    class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 text-red-600 bg-red-50 hover:bg-red-600 hover:text-white hover:shadow-lg relative">
+                                                    <span
+                                                        class="absolute bottom-full left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs font-medium px-2 py-1 rounded-lg whitespace-nowrap opacity-0 pointer-events-none transition-opacity duration-200 hover:opacity-100 mb-1">Hapus</span>
                                                     <svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -811,7 +422,7 @@
                                         <div class="py-20 flex flex-col items-center justify-center text-center px-6">
                                             <div class="relative mb-6">
                                                 <div class="w-28 h-28 rounded-3xl bg-gradient-to-br from-slate-100 to-blue-50
-                                                          flex items-center justify-center shadow-inner">
+                                                                      flex items-center justify-center shadow-inner">
                                                     <svg class="w-14 h-14 text-gray-300" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -846,7 +457,8 @@
 
                                             <div class="flex flex-wrap gap-3 justify-center">
                                                 @if(request()->hasAny(['search', 'transmission', 'status']))
-                                                    <a href="{{ route('admin.cars.index') }}" class="btn-secondary text-sm">
+                                                    <a href="{{ route('admin.cars.index') }}"
+                                                        class="relative inline-flex items-center gap-2 px-4 py-2.5 bg-white text-gray-700 border-2 border-gray-200 rounded-xl font-medium text-sm transition-all duration-200 hover:bg-gray-50 hover:border-gray-300 hover:-translate-y-0.5 hover:shadow-md">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                             viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -856,7 +468,10 @@
                                                         Reset Filter
                                                     </a>
                                                 @endif
-                                                <a href="{{ route('admin.cars.create') }}" class="btn-primary">
+                                                <a href="{{ route('admin.cars.create') }}"
+                                                    class="relative inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl font-semibold text-sm shadow-lg shadow-indigo-300 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-400 active:translate-y-0 overflow-hidden">
+                                                    <span
+                                                        class="absolute inset-0 bg-gradient-to-r from-indigo-600 to-violet-600 opacity-0 transition-opacity duration-250 hover:opacity-100"></span>
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -876,7 +491,7 @@
                 {{-- Pagination --}}
                 @if(isset($cars) && $cars->hasPages())
                     <div class="px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row
-                              items-center justify-between gap-3">
+                                          items-center justify-between gap-3">
                         <p class="text-xs text-gray-400">
                             Halaman {{ $cars->currentPage() }} dari {{ $cars->lastPage() }}
                         </p>

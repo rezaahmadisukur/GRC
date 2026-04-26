@@ -55,6 +55,9 @@ export default {
                 fadeIn: "fadeIn 0.6s ease-out",
                 slideUp: "slideUp 0.8s ease-out",
                 fadeInUp: "fadeInUp 0.6s ease-out backwards",
+                "fade-in-up": "fadeInUp .45s ease both",
+                "row-slide-in": "rowSlideIn .35s ease both",
+                shimmer: "shimmer 1.4s infinite",
                 "pulse-ring": "pulse-ring 2s ease infinite",
                 modalIn:
                     "modalIn .28s cubic-bezier(.34, 1.56, .64, 1) forwards",
@@ -92,6 +95,14 @@ export default {
                 overlayIn: {
                     "0%": { opacity: "0" },
                     "100%": { opacity: "1" },
+                },
+                shimmer: {
+                    "0%": { backgroundPosition: "-200% 0" },
+                    "100%": { backgroundPosition: "200% 0" },
+                },
+                rowSlideIn: {
+                    "0%": { opacity: "0", transform: "translateX(-8px)" },
+                    "100%": { opacity: "1", transform: "translateX(0)" },
                 },
                 shake: {
                     "0%, 100%": { transform: "translateX(0)" },
