@@ -23,8 +23,7 @@
 {{-- ═══════════════════════════════════════════════
      PAGE WRAPPER
 ═══════════════════════════════════════════════ --}}
-<div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8"
-     style="background: linear-gradient(135deg,#f0f4ff 0%,#f8faff 50%,#f0fdf8 100%);">
+<div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8 bg-report-gradient">
 <div class="max-w-7xl mx-auto space-y-8">
 
     {{-- ─────────────────────────────────────────

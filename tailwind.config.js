@@ -17,6 +17,8 @@ export default {
                     "radial-gradient(circle 600px at 100% 200px, #bfdbfe, transparent)",
                 "select-arrow":
                     "url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e\")",
+                "report-gradient":
+                    "linear-gradient(135deg,#f0f4ff 0%,#f8faff 50%,#f0fdf8 100%)",
             },
             fontFamily: {
                 sans: ["Figtree", ...defaultTheme.fontFamily.sans],
