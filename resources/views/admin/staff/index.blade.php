@@ -16,8 +16,6 @@
     </div>
 </x-slot>
 
-{{-- TOAST CONTAINER --}}
-<div id="toastContainer" class="fixed top-5 right-5 z-[200] flex flex-col gap-3 pointer-events-none"></div>
 
 <div class="py-8">
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
@@ -572,65 +570,6 @@
 (function () {
     'use strict';
 
-    /* ── TOAST ─────────────────────────────────── */
-    const toastContainer = document.getElementById('toastContainer');
-
-    const TOAST_CONFIG = {
-        success: {
-            icon: `<svg class="w-5 h-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
-            bar:  'border-l-4 border-emerald-400',
-        },
-        error: {
-            icon: `<svg class="w-5 h-5 text-rose-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
-            bar:  'border-l-4 border-rose-400',
-        },
-        info: {
-            icon: `<svg class="w-5 h-5 text-indigo-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
-            bar:  'border-l-4 border-indigo-400',
-        },
-        warning: {
-            icon: `<svg class="w-5 h-5 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`,
-            bar:  'border-l-4 border-amber-400',
-        },
-    };
-
-    window.showToast = function (message, type = 'info', duration = 3800) {
-        const cfg   = TOAST_CONFIG[type] ?? TOAST_CONFIG.info;
-        const toast = document.createElement('div');
-
-        toast.className = [
-            'pointer-events-auto flex items-start gap-3 px-4 py-3.5 bg-white rounded-xl shadow-xl',
-            cfg.bar,
-            'min-w-[280px] max-w-sm',
-            'transform transition-all duration-300 opacity-0 translate-x-8',
-        ].join(' ');
-
-        toast.innerHTML = `
-            ${cfg.icon}
-            <p class="text-sm font-medium text-gray-700 flex-1 leading-snug pt-0.5">${message}</p>
-            <button class="text-gray-300 hover:text-gray-500 transition-colors shrink-0 pt-0.5"
-                    onclick="this.closest('[data-toast]')._dismiss()">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-            </button>`;
-
-        toast.setAttribute('data-toast', '');
-
-        let timer;
-        toast._dismiss = () => {
-            clearTimeout(timer);
-            toast.classList.add('opacity-0', 'translate-x-8');
-            setTimeout(() => toast.remove(), 300);
-        };
-
-        toastContainer.appendChild(toast);
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-            toast.classList.remove('opacity-0', 'translate-x-8');
-        }));
-
-        timer = setTimeout(() => toast._dismiss(), duration);
-    };
 
     /* ── DOM REFS ───────────────────────────────── */
     const addModal         = document.getElementById('addModal');
@@ -798,25 +737,11 @@
         if (resetModal.style.display  !== 'none') closeResetModal();
     });
 
-    /* ── FLASH → TOAST ──────────────────────────── */
-    @if(session('success'))
-        showToast('{{ addslashes(session('success')) }}', 'success');
-    @endif
-    @if(session('error'))
-        showToast('{{ addslashes(session('error')) }}', 'error');
-    @endif
-    @if(session('info'))
-        showToast('{{ addslashes(session('info')) }}', 'info');
-    @endif
-    @if(session('warning'))
-        showToast('{{ addslashes(session('warning')) }}', 'warning');
-    @endif
-
     /* ── AUTO-OPEN PADA VALIDATION ERRORS ───────── */
     @if($errors->any())
         openModal();
         @foreach($errors->all() as $error)
-            showToast('{{ addslashes($error) }}', 'error', 5000);
+            GRCToast.show({ type: 'error', message: @json($error), duration: 5000 });
         @endforeach
     @endif
 
