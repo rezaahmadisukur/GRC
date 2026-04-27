@@ -13,7 +13,8 @@ class StaffController extends Controller
     public function index()
     {
         // Get all user where have the role is admin
-        $staffs = User::where('role', 'admin')->get();
+        // $staffs = User::where('role', 'admin')->get();
+        $staffs = User::getAdminRole();
         return view('admin.staff.index', compact('staffs'));
     }
 

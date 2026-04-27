@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Booking::class);
     }
+
+    public static function getAdminRole()
+    {
+        return static::where('role', 'admin')->get();
+    }
 }
