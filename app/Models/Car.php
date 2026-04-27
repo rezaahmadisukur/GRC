@@ -56,4 +56,8 @@ class Car extends Model
         });
     }
 
+    public static function getCarWelcome()
+    {
+        return static::latest()->take(3)->get();
+    }
 }
