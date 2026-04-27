@@ -23,7 +23,7 @@ GALLERY SECTION — Responsive Slider on Mobile, Grid on Desktop
                 <div
                     class="min-w-[85%] sm:min-w-full snap-center group relative overflow-hidden rounded-3xl bg-white shadow-md hover:shadow-2xl transition-all duration-500 cursor-pointer">
 
-                    <img src="{{ asset('image/gallery/car-' . $i . '.jpeg') }}" alt="Rental Mobil Purwakarta"
+                    <img src="{{ asset('images/gallery/car-' . $i . '.jpeg') }}" alt="Rental Mobil Purwakarta"
                         class="w-full h-64 sm:h-auto object-cover transform transition-transform duration-700 group-hover:scale-110"
                         loading="lazy"
                         onerror="this.src='https://placehold.co/600x800/e2e8f0/64748b?text=Unit+Rental+'+{{$i}}">
