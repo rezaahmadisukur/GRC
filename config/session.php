@@ -168,7 +168,7 @@ return [
     |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE', $request->isSecure()),
+    'secure' => env('SESSION_SECURE_COOKIE', fn() => request()->isSecure()),
 
     /*
     |--------------------------------------------------------------------------
