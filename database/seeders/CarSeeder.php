@@ -32,7 +32,7 @@ class CarSeeder extends Seeder
         $colors = ['Hitam', 'Putih', 'Silver', 'Abu-abu', 'Merah', 'Biru'];
         $typeKeys = array_keys($carTypes);
 
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             $brand = $brands[array_rand($brands)];
             $typeKey = $typeKeys[array_rand($typeKeys)];
             $carData = $carTypes[$typeKey];

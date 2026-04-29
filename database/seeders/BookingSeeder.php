@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Booking;
 use App\Models\Car;
 use Carbon\Carbon;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -19,45 +18,58 @@ class BookingSeeder extends Seeder
         $cars = Car::all();
 
         if ($cars->isEmpty()) {
+            $this->command->error('Tidak ada data mobil, jalankan CarSeeder terlebih dahulu!');
             return;
         }
 
-        $customers = [
-            ['name' => 'Budi Santoso', 'whatsapp' => '081234567890'],
-            ['name' => 'Siti Aminah', 'whatsapp' => '089988776655'],
-            ['name' => 'Andi Pratama', 'whatsapp' => '081355778899'],
-            ['name' => 'Dewi Lestari', 'whatsapp' => '082133445566'],
-            ['name' => 'Rizky Firmansyah', 'whatsapp' => '087811223344'],
-            ['name' => 'Putri Aulia', 'whatsapp' => '085677889900'],
-            ['name' => 'Hendra Wijaya', 'whatsapp' => '081922334455'],
-            ['name' => 'Rina Sari', 'whatsapp' => '083866778899'],
-        ];
-        foreach ($customers as $index => $customer) {
+        $firstNames = ['Budi', 'Siti', 'Andi', 'Dewi', 'Rizky', 'Putri', 'Hendra', 'Rina', 'Agus', 'Sri', 'Ahmad', 'Yuli', 'Dedi', 'Lina', 'Fajar', 'Maya', 'Eko', 'Wati', 'Rudi', 'Dian'];
+        $lastNames = ['Santoso', 'Aminah', 'Pratama', 'Lestari', 'Firmansyah', 'Aulia', 'Wijaya', 'Sari', 'Setiawan', 'Suharto', 'Permana', 'Hartati', 'Kusuma', 'Ningsih', 'Ramadhan', 'Putri', 'Saputra', 'Widodo'];
+        $statuses = ['pending', 'active', 'completed', 'cancelled'];
+
+        $this->command->info('Generating 100 booking data...');
+
+        for ($i = 0; $i < 100; $i++) {
             $car = $cars->random();
-            $duration = rand(12, 72);
-            $startDate = Carbon::now()->addDays(rand(-7, 30));
+            $duration = rand(12, 120);
+            $startDate = Carbon::now()->addDays(rand(-15, 60));
             $endDate = $startDate->copy()->addHours($duration);
 
             $price = $duration >= 24 ? $car->price_24h * ceil($duration / 24) : $car->price_12h;
+            $dpPercent = rand(0, 100) > 50 ? rand(20, 50) : 0;
+            $dpAmount = (int) ($price * $dpPercent / 100);
+            $remainsPayment = $price - $dpAmount;
+
+            $status = $statuses[array_rand($statuses)];
+            if ($status == 'completed' || $status == 'active') {
+                $dpAmount = $price;
+                $remainsPayment = 0;
+            }
 
             try {
                 Booking::create([
                     'car_id' => $car->id,
                     'booking_code' => 'RENT-' . date('ymd') . '-' . strtoupper(Str::random(4)),
-                    'customer_name' => $customer['name'],
-                    'whatsapp_number' => $customer['whatsapp'],
+                    'customer_name' => $firstNames[array_rand($firstNames)] . ' ' . $lastNames[array_rand($lastNames)],
+                    'whatsapp_number' => '08' . rand(1, 9) . rand(100000000, 999999999),
                     'start_date' => $startDate,
                     'duration_hours' => $duration,
                     'end_date' => $endDate,
                     'total_price' => $price,
-                    'dp_amount' => 0,
-                    'remains_payment' => $price,
-                    'status' => 'pending',
-                    'notes' => 'Pemesanan otomatis dari seeder',
+                    'dp_amount' => $dpAmount,
+                    'remains_payment' => $remainsPayment,
+                    'status' => $status,
+                    'notes' => 'Data dummy seeder #' . ($i + 1),
                 ]);
             } catch (\Exception $e) {
-                $this->command->error("Gagal insert booking: " . $e->getMessage());
+                $this->command->warn("Booking ke " . ($i + 1) . " gagal: " . $e->getMessage());
+                continue;
+            }
+
+            if (($i + 1) % 20 == 0) {
+                $this->command->line(($i + 1) . " data booking berhasil dibuat");
             }
         }
+
+        $this->command->info('✅ Selesai! Total 100 data booking berhasil dibuat.');
     }
 }
