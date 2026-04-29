@@ -3,12 +3,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
@@ -25,36 +22,29 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update the user's profile information.
+     * Update the user's password.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function updatePassword(Request $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
-    }
-
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
-    {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
+        $validated = $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => [
+                'required',
+                'confirmed',
+                Password::defaults(),
+                function ($attribute, $value, $fail) use ($request) {
+                    if (Hash::check($value, $request->user()->password)) {
+                        $fail('Jangan pake password lama, gunakan password baru');
+                    }
+                }
+            ],
         ]);
 
-        $user = $request->user();
+        $request->user()->update([
+            'password' => Hash::make($validated['password']),
+        ]);
 
-        Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        return redirect()->route('profile.edit')->with('success', 'Password berhasil diperbarui!');
     }
 
     public function showForceChangePassword()
