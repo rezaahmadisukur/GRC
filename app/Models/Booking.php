@@ -61,4 +61,27 @@ class Booking extends Model
     {
         return static::forPeriod($startDate, $endDate)->sum('final_total_price');
     }
+
+    /**
+     * Query scope for filtering bookings by search term and status
+     * Used on admin bookings index page
+     */
+    public function scopeFilter($query, $request)
+    {
+        return $query->when($request->filled('search'), function ($q) use ($request) {
+            $searchTerm = '%' . $request->search . '%';
+            $q->where(function ($subQuery) use ($searchTerm) {
+                $subQuery->where('customer_name', 'like', $searchTerm)
+                    ->orWhere('booking_code', 'like', $searchTerm)
+                    ->orWhere('whatsapp_number', 'like', $searchTerm)
+                    ->orWhereHas('car', function ($carQuery) use ($searchTerm) {
+                        $carQuery->where('name', 'like', $searchTerm)
+                            ->orWhere('plate_code', 'like', $searchTerm);
+                    });
+            });
+        })
+            ->when($request->filled('status') && $request->status !== 'all', function ($q) use ($request) {
+                $q->where('status', $request->status);
+            });
+    }
 }
