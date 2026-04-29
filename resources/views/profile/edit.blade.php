@@ -1,11 +1,4 @@
-{{-- resources/views/profile/edit.blade.php --}}
-
 <x-admin-layout>
-
-    @php
-        var_dump(session('status'));
-    @endphp
-
     <x-slot name="header">
         {{-- ── Page Header ── --}}
         <div class="flex items-center gap-3">
