@@ -44,7 +44,9 @@ class ProfileController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        return redirect()->route('profile.edit')->with('success', 'Password berhasil diperbarui!');
+        return redirect()->route('profile.edit')
+            ->withoutMiddleware(\Illuminate\Auth\Middleware\RequirePassword::class)
+            ->with('success', 'Password berhasil diperbarui!');
     }
 
     public function showForceChangePassword()
