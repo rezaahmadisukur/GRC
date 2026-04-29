@@ -11,10 +11,16 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
-        <input type="text" id="search-input" placeholder="Cari nama customer, kode booking, nama kendaraan..." class="pl-9 pr-4 py-2.5 w-full  bg-white border border-gray-200 rounded-xl
+        <input type="text" id="search-input" placeholder="Cari nama customer, kode booking, nama kendaraan..." class="pl-9 pr-9 py-2.5 w-full  bg-white border border-gray-200 rounded-xl
                          text-sm text-gray-700 placeholder-gray-400
                          focus:ring-2 focus:ring-emerald-400 focus:border-transparent
                          transition-all duration-200 shadow-sm">
+        <button id="clear-search"
+          class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 hover:text-gray-600 transition-colors hidden">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
       </div>
     </div>
   </x-slot>
@@ -347,13 +353,7 @@
         @if($bookings->total() > 0)
           <div
             class="px-6 py-4 border-t border-gray-100 bg-gray-50/60
-                                                                      flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p class="text-xs text-gray-400">
-              Menampilkan
-              <span class="font-semibold text-gray-700">{{ $bookings->firstItem() }}</span>–<span
-                class="font-semibold text-gray-700">{{ $bookings->lastItem() }}</span>
-              dari <span class="font-semibold text-gray-700">{{ $bookings->total() }}</span> data
-            </p>
+                                                                                    flex flex-col sm:flex-row items-center justify-between gap-3">
             {{ $bookings->links() }}
           </div>
         @endif
@@ -772,32 +772,93 @@
       const tbody = $('bookings-tbody');
       const noResult = $('no-result');
 
-      function applyFilters() {
-        const q = searchInput.value.toLowerCase().trim();
-        const fil = document.querySelector('.filter-pill.bg-emerald-500')?.dataset.filter || 'all';
-        let visible = 0;
+      let searchTimeout = null;
 
-        tbody.querySelectorAll('tr[data-status]').forEach(row => {
-          const matchSearch = !q || row.dataset.search.includes(q);
-          const matchFilter = fil === 'all' || row.dataset.status === fil;
-          const show = matchSearch && matchFilter;
-          row.classList.toggle('hidden', !show);
-          if (show) visible++;
-        });
-        noResult.classList.toggle('hidden', visible > 0);
+      function applyServerFilters() {
+        const params = new URLSearchParams(window.location.search);
+
+        const search = searchInput.value.trim();
+        const status = document.querySelector('.filter-pill.bg-emerald-500')?.dataset.filter || 'all';
+
+        // Reset ke halaman 1 setiap kali filter diubah
+        params.delete('page');
+
+        if (search) params.set('search', search);
+        else params.delete('search');
+
+        if (status !== 'all') params.set('status', status);
+        else params.delete('status');
+
+        const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
+        window.location.href = newUrl;
       }
 
-      searchInput.addEventListener('input', applyFilters);
+      // Auto search setelah user berhenti mengetik selama 10000ms
+      searchInput.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(applyServerFilters, 1000);
+      });
 
       document.querySelectorAll('.filter-pill').forEach(pill => {
-        pill.addEventListener('click', () => {
-          document.querySelectorAll('.filter-pill').forEach(p => {
+        pill.addEventListener('click', (e) => {
+          // Reset SEMUA button terlebih dahulu
+          const allPills = document.querySelectorAll('.filter-pill');
+          allPills.forEach(p => {
             p.classList.remove('bg-emerald-500', 'text-white', 'shadow-sm');
             p.classList.add('bg-gray-100', 'text-gray-500');
           });
-          pill.classList.add('bg-emerald-500', 'text-white', 'shadow-sm');
-          pill.classList.remove('bg-gray-100', 'text-gray-500');
-          applyFilters();
+
+          // Set yang diklik saja jadi aktif
+          e.currentTarget.classList.add('bg-emerald-500', 'text-white', 'shadow-sm');
+          e.currentTarget.classList.remove('bg-gray-100', 'text-gray-500');
+
+          applyServerFilters();
+        });
+      });
+
+      // Clear search button handler
+      const clearBtn = $('clear-search');
+
+      function toggleClearButton() {
+        if (searchInput.value.trim().length > 0) {
+          clearBtn.classList.remove('hidden');
+        } else {
+          clearBtn.classList.add('hidden');
+        }
+      }
+
+      toggleClearButton();
+
+      searchInput.addEventListener('input', toggleClearButton);
+
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        toggleClearButton();
+        applyServerFilters();
+      });
+
+      // Set active filter pill berdasarkan query parameter di URL
+      document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const activeStatus = urlParams.get('status') || 'all';
+        const searchQuery = urlParams.get('search') || '';
+
+        searchInput.value = searchQuery;
+        toggleClearButton();
+
+        // Reset SEMUA status terlebih dahulu
+        const allPills = document.querySelectorAll('.filter-pill');
+        allPills.forEach(p => {
+          p.classList.remove('bg-emerald-500', 'text-white', 'shadow-sm');
+          p.classList.add('bg-gray-100', 'text-gray-500');
+        });
+
+        // Baru set yang aktif
+        allPills.forEach(p => {
+          if (p.dataset.filter === activeStatus) {
+            p.classList.add('bg-emerald-500', 'text-white', 'shadow-sm');
+            p.classList.remove('bg-gray-100', 'text-gray-500');
+          }
         });
       });
 

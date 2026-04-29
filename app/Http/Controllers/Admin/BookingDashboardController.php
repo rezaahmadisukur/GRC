@@ -22,7 +22,8 @@ class BookingDashboardController extends Controller
         $bookings = Booking::filter($request)
             ->with('car')
             ->latest()
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
         $pendingCount = Booking::where('status', 'pending')->count();
         $activeCount = Booking::where('status', 'active')->count();
         $completedCount = Booking::where('status', 'completed')->count();
