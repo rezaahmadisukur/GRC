@@ -50,7 +50,7 @@ class BookingService
       $totalHours = (int) $data['duration_type'] + $extra;
 
       $calc = $this->calculateBooking(
-        $data['car_id'],
+        (int) $data['car_id'],
         $data['start_date'],
         $totalHours
       );

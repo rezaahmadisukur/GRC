@@ -95,7 +95,7 @@
                     </a>
 
                     <button onclick="window.location.reload()"
-                        class="relative inline-flex items-center gap-2 px-4 py-2.5 bg-white text-gray-700 border-2 border-gray-200 rounded-xl font-medium text-sm transition-all duration-200 hover:bg-gray-50 hover:border-gray-300 hover:-translate-y-0.5 hover:shadow-md relative"
+                        class="relative inline-flex items-center gap-2 px-4 py-2.5 bg-white text-gray-700 border-2 border-gray-200 rounded-xl font-medium text-sm transition-all duration-200 hover:bg-gray-50 hover:border-gray-300 hover:-translate-y-0.5 hover:shadow-md"
                         id="refreshBtn">
                         <span class="tooltip-label">Muat Ulang</span>
                         <svg id="refreshIcon" class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor"
@@ -408,7 +408,7 @@
                                             <div class="relative mb-6">
                                                 <div
                                                     class="w-28 h-28 rounded-3xl bg-gradient-to-br from-slate-100 to-blue-50
-                                                                                              flex items-center justify-center shadow-inner">
+                                                                                                  flex items-center justify-center shadow-inner">
                                                     <svg class="w-14 h-14 text-gray-300" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"

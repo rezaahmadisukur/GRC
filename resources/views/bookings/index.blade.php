@@ -7,9 +7,9 @@
       </div>
       @if(!$bookings->isEmpty())
         <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50
-                         text-emerald-600 text-sm font-semibold rounded-full border border-emerald-100">
+                             text-emerald-600 text-sm font-semibold rounded-full border border-emerald-100">
           <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
-          {{ $bookings->count() }} Pesanan
+          {{ $totalAllBookings }} Pesanan
         </span>
       @endif
     </div>
@@ -34,11 +34,11 @@
             </div>
 
             <div class="relative w-28 h-28 bg-white rounded-full shadow-xl flex items-center
-                          justify-center border border-gray-100">
+                              justify-center border border-gray-100">
               <svg class="w-14 h-14 text-gray-300 animate-[float_3s_ease-in-out_infinite]" fill="none"
                 stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0
-                           00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                               00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
             </div>
           </div>
@@ -50,14 +50,14 @@
 
           <a href="{{ route('cars.index') }}"
             class="relative overflow-hidden inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl
-                      text-white font-semibold text-sm shadow-lg shadow-emerald-200 bg-gradient-to-br from-emerald-500 to-emerald-600
-                      hover:-translate-y-0.5 active:scale-[.97] transition-all duration-200
-                      after:absolute after:inset-0 after:bg-white/15 after:opacity-0 after:transition-opacity hover:after:opacity-100">
+                          text-white font-semibold text-sm shadow-lg shadow-emerald-200 bg-gradient-to-br from-emerald-500 to-emerald-600
+                          hover:-translate-y-0.5 active:scale-[.97] transition-all duration-200
+                          after:absolute after:inset-0 after:bg-white/15 after:opacity-0 after:transition-opacity hover:after:opacity-100">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z
-                         M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1
-                         1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414A1 1 0 0121
-                         11.414V16a1 1 0 01-1 1h-1" />
+                             M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1
+                             1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414A1 1 0 0121
+                             11.414V16a1 1 0 01-1 1h-1" />
             </svg>
             Lihat Daftar Mobil
           </a>
@@ -98,13 +98,14 @@
               };
             @endphp
 
-            <div class="opacity-0 animate-[fadeInUp_.45s_ease_forwards] [animation-delay:{{ $delay }}]
-                            bg-white/80 backdrop-blur-sm rounded-2xl border border-white shadow-sm overflow-hidden flex flex-col
-                            transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)]">
+            <div
+              class="opacity-0 animate-[fadeInUp_.45s_ease_forwards] [animation-delay:{{ $delay }}]
+                                    bg-white/80 backdrop-blur-sm rounded-2xl border border-white shadow-sm overflow-hidden flex flex-col
+                                    transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)]">
 
               {{-- ---- Image ---- --}}
               <div class="relative h-44 bg-gradient-to-br from-gray-100 to-gray-200
-                              overflow-hidden shrink-0">
+                                      overflow-hidden shrink-0">
 
                 @if($booking->car && $booking->car->image)
                   <img src="{{ asset('storage/' . $booking->car->image) }}" alt="{{ $booking->car->name }}" loading="lazy"
@@ -113,22 +114,22 @@
                   <div class="w-full h-full flex items-center justify-center">
                     <svg class="w-14 h-14 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17a2 2 0 11-4 0 2 2 0
-                                       014 0zM19 17a2 2 0 11-4 0 2 2 0
-                                       014 0zM13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001
-                                       1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0
-                                       01.707.293l3.414 3.414A1 1 0 0121 11.414V16a1 1 0 01-1 1h-1" />
+                                                   014 0zM19 17a2 2 0 11-4 0 2 2 0
+                                                   014 0zM13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001
+                                                   1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0
+                                                   01.707.293l3.414 3.414A1 1 0 0121 11.414V16a1 1 0 01-1 1h-1" />
                     </svg>
                   </div>
                 @endif
 
                 {{-- gradient overlay --}}
                 <div class="absolute inset-0
-                                bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+                                        bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
 
                 {{-- Status Badge (bottom-left on image) --}}
                 <div class="absolute bottom-3 left-3">
                   <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px]
-                                   font-semibold border {{ $cfg['badge'] }} backdrop-blur-sm bg-opacity-90">
+                                           font-semibold border {{ $cfg['badge'] }} backdrop-blur-sm bg-opacity-90">
                     @if($cfg['dot'])
                       <span class="w-1.5 h-1.5 rounded-full mr-1.5 {{ $cfg['dotColor'] }}"></span>
                     @endif
@@ -146,10 +147,10 @@
                     {{ $booking->car->name ?? 'Mobil tidak tersedia' }}
                   </h3>
                   <div class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gray-50
-                                  rounded-lg border border-gray-100">
+                                          rounded-lg border border-gray-100">
                     <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4
-                                   a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 0121 9z" />
+                                           a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 0121 9z" />
                     </svg>
                     <span class="font-mono text-xs text-gray-500 tracking-wider">
                       {{ Str::mask($booking->booking_code, '*', 5, 8) }}
@@ -162,10 +163,10 @@
                   {{-- Start date --}}
                   <div class="flex items-center gap-2 text-sm">
                     <div class="w-7 h-7 bg-blue-50 rounded-lg flex items-center
-                                    justify-center shrink-0">
+                                            justify-center shrink-0">
                       <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0
-                                     00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                             00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                     </div>
                     <span class="text-gray-400 text-xs">Mulai</span>
@@ -177,7 +178,7 @@
                   {{-- Duration --}}
                   <div class="flex items-center gap-2 text-sm">
                     <div class="w-7 h-7 bg-purple-50 rounded-lg flex items-center
-                                    justify-center shrink-0">
+                                            justify-center shrink-0">
                       <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -193,11 +194,11 @@
                   @if($booking->car)
                     <div class="flex items-center gap-2 text-sm">
                       <div class="w-7 h-7 bg-emerald-50 rounded-lg flex items-center
-                                        justify-center shrink-0">
+                                                    justify-center shrink-0">
                         <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0
-                                         010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013
-                                         12V7a4 4 0 014-4z" />
+                                                     010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013
+                                                     12V7a4 4 0 014-4z" />
                         </svg>
                       </div>
                       <span class="text-gray-400 text-xs">Tipe</span>
@@ -214,7 +215,7 @@
                 {{-- Security note + CTA --}}
                 <div class="pt-4 border-t border-gray-100 space-y-3">
                   <div class="flex items-start gap-2 p-2.5 bg-amber-50 rounded-xl
-                                  border border-amber-100">
+                                          border border-amber-100">
                     <svg class="w-4 h-4 text-amber-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
                       viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -228,13 +229,13 @@
 
                   <a href="{{ route('bookings.check-form') }}"
                     class="relative overflow-hidden w-full flex items-center justify-center gap-2
-                                py-2.5 rounded-xl text-white text-sm font-semibold
-                                shadow-lg shadow-emerald-100 bg-gradient-to-br from-emerald-500 to-emerald-600
-                                hover:-translate-y-0.5 active:scale-[.97] transition-all duration-200
-                                after:absolute after:inset-0 after:bg-white/15 after:opacity-0 after:transition-opacity hover:after:opacity-100">
+                                        py-2.5 rounded-xl text-white text-sm font-semibold
+                                        shadow-lg shadow-emerald-100 bg-gradient-to-br from-emerald-500 to-emerald-600
+                                        hover:-translate-y-0.5 active:scale-[.97] transition-all duration-200
+                                        after:absolute after:inset-0 after:bg-white/15 after:opacity-0 after:transition-opacity hover:after:opacity-100">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0
-                                   00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                           00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
                     Cek Detail Pesanan
                   </a>

@@ -27,8 +27,9 @@ class BookingDashboardController extends Controller
         $pendingCount = Booking::where('status', 'pending')->count();
         $activeCount = Booking::where('status', 'active')->count();
         $completedCount = Booking::where('status', 'completed')->count();
+        $totalAllBookings = Booking::count();
 
-        return view('admin.bookings.index', compact('bookings', 'pendingCount', 'activeCount', 'completedCount'));
+        return view('admin.bookings.index', compact('bookings', 'pendingCount', 'activeCount', 'completedCount', 'totalAllBookings'));
     }
 
     public function updateStatus(UpdateBookingStatusRequest $request, Booking $booking)
