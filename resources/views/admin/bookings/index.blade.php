@@ -33,7 +33,7 @@
         $statCards = [
           [
             'label' => 'Total Pesanan',
-            'value' => $bookings->total(),
+            'value' => $totalAllBookings,
             'color' => 'gray',
             'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
             'bg' => 'from-gray-400 to-gray-600',
@@ -407,10 +407,8 @@
             </label>
             <div class="relative">
               <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-semibold text-gray-400">Rp</span>
-              <input type="number" id="modal-dp-input" min="0" placeholder="0" class="focus:ring-[3px] focus:ring-emerald-500/18 w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl
-                                        text-lg font-bold text-gray-900 bg-white
-                                        focus:ring-2 focus:ring-emerald-400 focus:border-transparent
-                                        transition-all duration-200">
+              <input type="number" id="modal-dp-input" min="0" placeholder="0"
+                class="focus:ring-emerald-500/18 w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-lg font-bold text-gray-900 bg-white focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all duration-200">
             </div>
           </div>
           <div class="flex justify-between items-center pt-3 border-t border-gray-200">
@@ -481,7 +479,7 @@
             </label>
             <div class="relative">
               <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-semibold text-gray-400">Rp</span>
-              <input type="number" id="complete-modal-penalty-input" min="0" value="0" class="focus:ring-[3px] focus:ring-emerald-500/18 w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl
+              <input type="number" id="complete-modal-penalty-input" min="0" value="0" class=" focus:ring-emerald-500/18 w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl
                                         text-lg font-bold text-gray-900 bg-white
                                         focus:ring-2 focus:ring-blue-400 focus:border-transparent
                                         transition-all duration-200">
@@ -493,7 +491,7 @@
               <span class="normal-case font-normal text-gray-400 ml-1">(opsional)</span>
             </label>
             <textarea id="complete-modal-notes-input" rows="2"
-              class="focus:ring-[3px] focus:ring-emerald-500/18 w-full px-4 py-3 border border-gray-200 rounded-xl text-sm bg-white text-gray-700 resize-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
+              class="focus:ring-emerald-500/18 w-full px-4 py-3 border border-gray-200 rounded-xl text-sm bg-white text-gray-700 resize-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
               placeholder="Kondisi mobil saat dikembalikan..."></textarea>
           </div>
           <div class="flex justify-between items-center pt-3 border-t border-gray-200">
@@ -563,7 +561,7 @@
           <span class="normal-case font-normal text-gray-400 ml-1">(opsional)</span>
         </label>
         <textarea id="cancel-modal-reason" rows="2"
-          class="focus:ring-[3px] focus:ring-emerald-500/18 w-full px-4 py-3 border border-gray-200 rounded-xl text-sm bg-white text-gray-700 resize-none focus:ring-2 focus:ring-red-400 focus:border-transparent transition-all duration-200"
+          class="focus:ring-emerald-500/18 w-full px-4 py-3 border border-gray-200 rounded-xl text-sm bg-white text-gray-700 resize-none focus:ring-2 focus:ring-red-400 focus:border-transparent transition-all duration-200"
           placeholder="Masukkan alasan pembatalan..."></textarea>
       </div>
 
