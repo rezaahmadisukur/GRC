@@ -54,7 +54,7 @@
                     <div>
                         <p class="text-xs text-gray-500 font-medium">Tersedia</p>
                         <p class="text-xl font-bold text-emerald-600">
-                            {{ $cars->getCollection()->where('is_available', true)->count() }}
+                            {{ $stats['available'] }}
                         </p>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                     <div>
                         <p class="text-xs text-gray-500 font-medium">Tidak Tersedia</p>
                         <p class="text-xl font-bold text-rose-600">
-                            {{ $cars->getCollection()->where('is_available', false)->count() }}
+                            {{ $stats['unavailable'] }}
                         </p>
                     </div>
                 </div>
@@ -408,7 +408,7 @@
                                             <div class="relative mb-6">
                                                 <div
                                                     class="w-28 h-28 rounded-3xl bg-gradient-to-br from-slate-100 to-blue-50
-                                                                                          flex items-center justify-center shadow-inner">
+                                                                                              flex items-center justify-center shadow-inner">
                                                     <svg class="w-14 h-14 text-gray-300" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"

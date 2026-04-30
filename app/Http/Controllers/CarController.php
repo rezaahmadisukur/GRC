@@ -66,7 +66,16 @@ class CarController extends Controller
     public function indexAdmin(Request $request)
     {
         $cars = $this->carService->getAllCars($request, 10);
-        return view('admin.cars.index', compact('cars'));
+
+        // Get the same filtered query without pagination for stats
+        $baseQuery = Car::filter($request->only(['search', 'category', 'seats', 'transmission', 'fuel_type', 'status']));
+
+        $stats = [
+            'available' => (clone $baseQuery)->where('is_available', 1)->count(),
+            'unavailable' => (clone $baseQuery)->where('is_available', 0)->count(),
+        ];
+
+        return view('admin.cars.index', compact('cars', 'stats'));
     }
 
     public function welcome()
