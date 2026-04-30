@@ -21,7 +21,8 @@ class BookingDashboardController extends Controller
     {
         $bookings = Booking::filter($request)
             ->with('car')
-            ->latest()
+            ->orderByRaw('DATE(start_date) DESC')
+            ->orderBy('start_date', 'DESC')
             ->paginate(10)
             ->withQueryString();
         $pendingCount = Booking::where('status', 'pending')->count();

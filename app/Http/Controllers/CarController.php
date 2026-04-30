@@ -25,7 +25,21 @@ class CarController extends Controller
 
     public function show(Car $car)
     {
-        return view('cars.show', compact('car'));
+        // Get all bookings dates with status for this car
+        $bookedDates = $car->bookings()
+            ->whereIn('status', ['pending', 'active'])
+            ->select('start_date', 'end_date', 'status')
+            ->get()
+            ->map(function ($booking) {
+                return [
+                    'start' => $booking->start_date->format('Y-m-d'),
+                    'end' => $booking->end_date->format('Y-m-d'),
+                    'status' => $booking->status,
+                    'isToday' => $booking->start_date->isToday()
+                ];
+            });
+
+        return view('cars.show', compact('car', 'bookedDates'));
     }
 
     public function create(): View

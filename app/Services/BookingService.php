@@ -69,8 +69,9 @@ class BookingService
   public function confirmBooking(Booking $booking, float $dpAmount = 0, ?int $adminId = null): Booking
   {
     return DB::transaction(function () use ($booking, $dpAmount, $adminId) {
-      if (!$booking->car->is_available) {
-        throw new InvalidArgumentException('Mobil ini sudah dikonfirmasi untuk pesanan lain.');
+      // Cek ketersediaan mobil berdasarkan tanggal booking saja, bukan global
+      if (!$booking->car->isAvailableForDateRange($booking->start_date, $booking->end_date, $booking->id)) {
+        throw new InvalidArgumentException('Mobil ini sudah ada booking lain yang tumpang tindih pada tanggal yang sama.');
       }
 
       if ($booking->status !== 'pending') {
@@ -84,7 +85,8 @@ class BookingService
         'admin_id' => $adminId ?? auth()->id()
       ]);
 
-      $booking->car->update(['is_available' => false]);
+      // TIDAK LAGI set mobil jadi tidak tersedia secara global!
+      // Sekarang ketersediaan di cek berdasarkan tanggal overlapping saja
 
       return $booking;
     });
@@ -108,7 +110,8 @@ class BookingService
         'remains_payment' => 0
       ]);
 
-      $booking->car->update(['is_available' => true]);
+      // TIDAK LAGI set mobil jadi tersedia secara global disini
+      // Ketersediaan sekarang diatur berdasarkan tanggal saja
 
       return $booking;
     });
@@ -125,9 +128,7 @@ class BookingService
         'status' => 'cancelled'
       ]);
 
-      if ($booking->status === 'active') {
-        $booking->car->update(['is_available' => true]);
-      }
+      // TIDAK LAGI merubah status is_available mobil disini
 
       return $booking;
     });

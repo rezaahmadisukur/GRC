@@ -18,7 +18,20 @@ class BookingController extends Controller
 
     public function store(StoreBookingRequest $request)
     {
-        $booking = $this->bookingService->createBooking($request->validated());
+        $data = $request->validated();
+
+        // Calculate end date first
+        $totalHours = (int) $data['duration_type'] + (int) ($data['extra_hours'] ?? 0);
+        $startDate = \Carbon\Carbon::parse($data['start_date']);
+        $endDate = $startDate->copy()->addHours($totalHours);
+
+        // Check availability before creating booking
+        $car = \App\Models\Car::findOrFail($data['car_id']);
+        if (!$car->isAvailableForDateRange($startDate, $endDate)) {
+            return back()->withInput()->with('error', 'Maaf, mobil sudah ada booking lain pada rentang tanggal yang anda pilih. Silahkan pilih tanggal lain.');
+        }
+
+        $booking = $this->bookingService->createBooking($data);
 
         $waURL = $this->bookingService->generateWhatsAppUrl($booking);
 

@@ -280,24 +280,7 @@ $specs = [
               </div>
 
               {{-- Start Date --}}
-              <div x-data="{ 
-                              init() { 
-                                  window.flatpickr($refs.startDate, {
-                                      enableTime: true,
-                                      minDate: 'today',
-                                      time_24hr: true,
-                                      locale: 'id',
-                                      altInput: true,
-                                      altFormat: 'j F Y \\p\\u\\k\\u\\l H.i',
-                                      dateFormat: 'Y-m-d H:i',
-                                      onChange: (selectedDates, dateStr) => {
-                                          if (typeof updateForm === 'function') {
-                                              updateForm();
-                                          }
-                                      }
-                                  });
-                              } 
-                          }">
+              <div>
                 <label for="start_date"
                   class="block text-xs font-bold text-[hsl(var(--muted-foreground))] uppercase tracking-widest mb-2">
                   Tanggal & Waktu Mulai <span class="text-red-400">*</span>
@@ -514,6 +497,57 @@ $specs = [
 
     // Listener untuk Jam Tambahan
     extraHoursInput.addEventListener('input', updateForm);
+
+    // Flatpickr Calendar with colored dates
+    document.addEventListener('DOMContentLoaded', function() {
+        const bookedDates = @json($bookedDates);
+        
+        flatpickr(document.getElementById('start_date'), {
+            enableTime: true,
+            minDate: 'today',
+            time_24hr: true,
+            locale: 'id',
+            altInput: true,
+            altFormat: 'j F Y \\p\\u\\k\\u\\l H.i',
+            dateFormat: 'Y-m-d H:i',
+            onChange: function(selectedDates, dateStr) {
+                if (typeof updateForm === 'function') {
+                    updateForm();
+                }
+            },
+            onDayCreate: function(dObj, dStr, fp, dayElem) {
+                // Fix timezone issue: use local date not UTC
+                const date = dayElem.dateObj;
+                const currentDate = date.getFullYear() 
+                    + '-' + String(date.getMonth() + 1).padStart(2, '0') 
+                    + '-' + String(date.getDate()).padStart(2, '0');
+                
+                bookedDates.forEach(range => {
+                    if (currentDate >= range.start && currentDate <= range.end) {
+                        const today = new Date();
+                        const todayStr = today.getFullYear() 
+                            + '-' + String(today.getMonth() + 1).padStart(2, '0') 
+                            + '-' + String(today.getDate()).padStart(2, '0');
+                        
+                        if (currentDate === todayStr) {
+                            // Merah untuk hari ini
+                            dayElem.style.backgroundColor = '#fecaca';
+                            dayElem.style.color = '#991b1b';
+                        } else if (range.status === 'active') {
+                            // Hijau untuk booking sudah di approve
+                            dayElem.style.backgroundColor = '#dcfce7';
+                            dayElem.style.color = '#166534';
+                        } else if (range.status === 'pending') {
+                            // Kuning untuk booking menunggu approve
+                            dayElem.style.backgroundColor = '#fef3c7';
+                            dayElem.style.color = '#92400e';
+                        }
+                        dayElem.style.fontWeight = '600';
+                    }
+                });
+            }
+        });
+    });
   </script>
 
 </x-app-layout>
