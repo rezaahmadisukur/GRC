@@ -60,4 +60,36 @@ class Car extends Model
     {
         return static::latest()->take(3)->get();
     }
+
+    /**
+     * Check if car is available for specific date range
+     * 
+     * @param string $startDate Format Y-m-d H:i:s
+     * @param string $endDate Format Y-m-d H:i:s
+     * @param int|null $excludeBookingId Booking id to exclude from check (for edit)
+     * @return bool
+     */
+    public function isAvailableForDateRange($startDate, $endDate, $excludeBookingId = null)
+    {
+        // If car is globally unavailable
+        if (!$this->is_available) {
+            return false;
+        }
+
+        // Check for overlapping approved bookings
+        $overlappingBookings = $this->bookings()
+            ->where('status', 'approved')
+            ->when($excludeBookingId, function ($query) use ($excludeBookingId) {
+                return $query->where('id', '!=', $excludeBookingId);
+            })
+            ->where(function ($query) use ($startDate, $endDate) {
+                // Classic overlapping date check:
+                // (StartA <= EndB) AND (EndA >= StartB)
+                $query->where('start_date', '<=', $endDate)
+                    ->where('end_date', '>=', $startDate);
+            })
+            ->exists();
+
+        return !$overlappingBookings;
+    }
 }
