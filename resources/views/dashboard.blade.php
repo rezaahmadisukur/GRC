@@ -13,7 +13,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0
                    00-2 2v12a2 2 0 002 2z" />
         </svg>
-        {{ now()->translatedFormat('l, d F Y') }}
+        {{ now()->locale('id_ID')->isoFormat('dddd, DD MMMM YYYY') }}
       </div>
     </div>
   </x-slot>
@@ -88,7 +88,7 @@
             class="transition-all duration-[250ms] hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(0,0,0,0.08)] opacity-0 animate-[fadeInUp_.45s_ease_forwards] @even:animate-delay-[100ms] @lg:nth-child(3):animate-delay-[150ms] @lg:nth-child(4):animate-delay-[200ms] bg-white/85 backdrop-blur-xl border border-white/70 rounded-2xl p-5 overflow-hidden relative">
             {{-- subtle gradient top-bar --}}
             <div class="absolute top-0 left-0 right-0 h-1 rounded-t-2xl
-                          bg-gradient-to-r {{ $card['bg'] }}"></div>
+                                  bg-gradient-to-r {{ $card['bg'] }}"></div>
 
             <div class="flex items-start justify-between gap-3">
               <div class="flex-1 min-w-0">
@@ -109,7 +109,7 @@
               </div>
 
               <div class="w-11 h-11 rounded-xl {{ $card['light'] }} flex items-center
-                            justify-center shrink-0">
+                                    justify-center shrink-0">
                 <svg class="w-5 h-5 {{ $card['text'] }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $card['icon'] }}" />
                 </svg>
@@ -132,7 +132,7 @@
                 <p class="text-xs text-gray-400 mt-0.5">7 hari terakhir</p>
               </div>
               <div class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50
-                            border border-emerald-100 rounded-xl text-xs text-emerald-600 font-medium">
+                                    border border-emerald-100 rounded-xl text-xs text-emerald-600 font-medium">
                 <span class="w-2 h-2 rounded-full inline-block animate-[pulse-dot_1.8s_ease_infinite]"
                   style="color:#10b981"></span>
                 Live
@@ -156,7 +156,7 @@
                 <canvas id="donutChart"></canvas>
                 {{-- Center label --}}
                 <div class="absolute inset-0 flex flex-col items-center
-                                    justify-center pointer-events-none">
+                                                    justify-center pointer-events-none">
                   <p class="text-2xl font-extrabold text-gray-900">
                     {{ $popularCars->sum('bookings_count') }}
                   </p>
@@ -171,9 +171,9 @@
               <div class="h-44 flex flex-col items-center justify-center text-gray-300 gap-2">
                 <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0
-                                   002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2
-                                   2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2
-                                   2 0 01-2-2z" />
+                                                   002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2
+                                                   2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2
+                                                   2 0 01-2-2z" />
                 </svg>
                 <p class="text-sm">Belum ada data</p>
               </div>
@@ -204,10 +204,10 @@
         @if($recentBookings->isEmpty())
           <div class="py-16 flex flex-col items-center justify-center text-center px-4">
             <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center
-                            justify-center mb-4">
+                                    justify-center mb-4">
               <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0
-                             01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                     01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
             <p class="font-semibold text-gray-700 mb-1">Belum ada aktivitas</p>
@@ -221,8 +221,8 @@
                 <tr class="bg-gray-50/80">
                   @foreach(['Kode Booking', 'Penyewa', 'Mobil', 'Admin', 'Status', 'Total'] as $th)
                     <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400
-                                       uppercase tracking-wider
-                                       {{ $loop->last ? 'text-right' : '' }}">
+                                                       uppercase tracking-wider
+                                                       {{ $loop->last ? 'text-right' : '' }}">
                       {{ $th }}
                     </th>
                   @endforeach
@@ -242,15 +242,15 @@
                   <tr class="transition-colors duration-150 hover:bg-[#f8fffe]">
                     <td class="px-5 py-3.5 whitespace-nowrap">
                       <span class="font-mono text-xs font-semibold text-gray-800
-                                           bg-gray-100 px-2 py-1 rounded-lg">
+                                                           bg-gray-100 px-2 py-1 rounded-lg">
                         {{ $booking->booking_code }}
                       </span>
                     </td>
                     <td class="px-5 py-3.5 whitespace-nowrap">
                       <div class="flex items-center gap-2">
                         <div class="w-7 h-7 rounded-full bg-gradient-to-br from-emerald-400
-                                            to-blue-500 flex items-center justify-center text-white
-                                            text-[10px] font-bold shrink-0">
+                                                            to-blue-500 flex items-center justify-center text-white
+                                                            text-[10px] font-bold shrink-0">
                           {{ strtoupper(substr($booking->customer_name, 0, 1)) }}
                         </div>
                         <span class="text-sm text-gray-700 font-medium">
@@ -266,7 +266,7 @@
                     </td>
                     <td class="px-5 py-3.5 whitespace-nowrap">
                       <span class="inline-flex items-center rounded-full px-2.5 py-0.5
-                                           text-[11px] font-semibold ring-1 {{ $badge['cls'] }}">
+                                                           text-[11px] font-semibold ring-1 {{ $badge['cls'] }}">
                         {{ $badge['label'] }}
                       </span>
                     </td>
@@ -403,19 +403,19 @@
           cars.forEach((name, i) => {
             const pct = total > 0 ? ((counts[i] / total) * 100).toFixed(0) : 0;
             legend.innerHTML += `
-                <div class="flex items-center gap-2.5">
-                  <span class="w-2.5 h-2.5 rounded-full shrink-0"
-                        style="background:${COLORS[i]}"></span>
-                  <span class="text-xs text-gray-600 flex-1 truncate font-medium">${name}</span>
-                  <div class="flex items-center gap-1.5 ml-auto shrink-0">
-                    <div class="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                      <div class="w-0 h-full rounded-full transition-all duration-[1200ms] ease-[cubic-bezier(.4,0,.2,1)]" style="background:${COLORS[i]}" data-w="${pct}"></div>
-                    </div>
-                    <span class="text-[11px] font-bold text-gray-500 w-7 text-right">
-                      ${counts[i]}
-                    </span>
-                  </div>
-                </div>`;
+                        <div class="flex items-center gap-2.5">
+                          <span class="w-2.5 h-2.5 rounded-full shrink-0"
+                                style="background:${COLORS[i]}"></span>
+                          <span class="text-xs text-gray-600 flex-1 truncate font-medium">${name}</span>
+                          <div class="flex items-center gap-1.5 ml-auto shrink-0">
+                            <div class="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                              <div class="w-0 h-full rounded-full transition-all duration-[1200ms] ease-[cubic-bezier(.4,0,.2,1)]" style="background:${COLORS[i]}" data-w="${pct}"></div>
+                            </div>
+                            <span class="text-[11px] font-bold text-gray-500 w-7 text-right">
+                              ${counts[i]}
+                            </span>
+                          </div>
+                        </div>`;
           });
 
           /* Animate progress bars */
