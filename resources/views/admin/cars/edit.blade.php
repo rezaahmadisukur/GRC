@@ -193,7 +193,6 @@
             <div class="md:col-span-2 group">
               <label class="block text-sm font-medium text-slate-700 mb-3">Status Ketersediaan</label>
               <label class="relative inline-flex items-center cursor-pointer">
-                <input type="hidden" name="is_available" value="0">
                 <input type="checkbox" name="is_available" value="1" class="sr-only peer" {{ old('is_available', $car->is_available) ? 'checked' : '' }}>
                 <div
                   class="w-14 h-7 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-500/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-emerald-500">
