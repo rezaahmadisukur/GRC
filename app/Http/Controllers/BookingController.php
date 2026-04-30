@@ -34,6 +34,7 @@ class BookingController extends Controller
         $search = $request->input('query');
 
         $bookings = $this->bookingService->searchBookings($search);
+        $totalAllBookings = \App\Models\Booking::count();
 
         if ($bookings->isEmpty()) {
             return back()->with('error', 'Data nggak ketemu nih!');
@@ -44,7 +45,7 @@ class BookingController extends Controller
             return view('bookings.status', compact('booking'));
         }
 
-        return view('bookings.index', compact('bookings'));
+        return view('bookings.index', compact('bookings', 'totalAllBookings'));
 
     }
 }
