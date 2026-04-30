@@ -56,14 +56,18 @@
                   </span>
                   Tersedia
                 </span>
-              @else
-                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-white"
-                  style="background: rgba(220,38,38,0.85); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.2);">
-                  <span class="w-2 h-2 rounded-full bg-white"></span>
-                  Tidak Tersedia
-                </span>
               @endif
             </div>
+
+            @if(!$car->is_available)
+              <!-- Non Aktif Overlay Center -->
+              <div class="absolute inset-0 flex items-center justify-center z-20 bg-black/50 backdrop-blur-sm">
+                <div
+                  class="bg-red-600/90 text-white font-black text-2xl md:text-3xl px-10 py-5 rounded-xl transform -rotate-6 shadow-2xl border-2 border-white/20">
+                  NON AKTIF
+                </div>
+              </div>
+            @endif
 
             {{-- Plate Code --}}
             <div class="absolute top-5 right-5">

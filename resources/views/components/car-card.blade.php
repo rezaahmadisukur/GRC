@@ -27,21 +27,23 @@
       class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
     </div>
 
-    @if($car->is_available)
-      <!-- Availability Badge -->
-      <div class="absolute top-4 left-4 z-10">
+    <!-- Availability Badge -->
+    <div class="absolute top-4 left-4 z-10">
+      @if($car->is_available)
         <span
           class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold rounded-full shadow-lg shadow-green-500/30">
           <span class="w-2 h-2 bg-white rounded-full"></span>
           Tersedia
         </span>
-      </div>
-    @else
-      <!-- Sedang Disewa Badge Center -->
-      <div class="absolute inset-0 flex items-center justify-center z-10">
+      @endif
+    </div>
+
+    @if(!$car->is_available)
+      <!-- Non Aktif Overlay Center -->
+      <div class="absolute inset-0 flex items-center justify-center z-20 bg-black/50 backdrop-blur-sm">
         <div
-          class="bg-gradient-to-r from-red-600 to-red-700 backdrop-blur-sm px-8 py-4 rounded-2xl shadow-2xl transform rotate-[-3deg] hover:rotate-0 transition-transform duration-300">
-          <span class="text-white font-black text-base md:text-lg tracking-wider drop-shadow-lg">SEDANG DISEWA</span>
+          class="bg-red-600/90 text-white font-black text-xl md:text-2xl px-8 py-4 rounded-xl transform -rotate-6 shadow-2xl border-2 border-white/20">
+          NON AKTIF
         </div>
       </div>
     @endif
