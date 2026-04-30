@@ -31,9 +31,12 @@ class CarService
       'plate_code' => $carDTO->plate_code,
       'color' => $carDTO->color,
       'category' => $carDTO->category,
+      'seats' => $carDTO->seats,
+      'fuel_type' => $carDTO->fuel_type,
       'transmission' => $carDTO->transmission,
       'price_12h' => $carDTO->price_12h,
-      'price_24h' => $carDTO->price_24h
+      'price_24h' => $carDTO->price_24h,
+      'is_available' => $carDTO->is_available
     ];
 
     if ($carDTO->image) {
@@ -51,9 +54,13 @@ class CarService
       'name' => $carDTO->name,
       'plate_code' => $carDTO->plate_code,
       'color' => $carDTO->color,
+      'category' => $carDTO->category,
+      'seats' => $carDTO->seats,
+      'fuel_type' => $carDTO->fuel_type,
       'transmission' => $carDTO->transmission,
       'price_12h' => $carDTO->price_12h,
-      'price_24h' => $carDTO->price_24h
+      'price_24h' => $carDTO->price_24h,
+      'is_available' => $carDTO->is_available
     ];
 
     if ($carDTO->image) {

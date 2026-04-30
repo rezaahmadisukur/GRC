@@ -30,11 +30,12 @@ class StoreCarRequest extends FormRequest
             ],
             'color' => 'required',
             'category' => 'required',
+            'seats' => 'required|integer|min:1|max:20',
+            'fuel_type' => 'required|string',
             'transmission' => 'required',
+            'is_available' => 'boolean',
             'price_12h' => 'required|numeric',
             'price_24h' => 'required|numeric',
-            // Tambahkan jpeg di sini supaya lebih aman
-            // Ganti baris image di rules() menjadi ini:
             'image' => 'nullable|image|max:10240',
         ];
     }
