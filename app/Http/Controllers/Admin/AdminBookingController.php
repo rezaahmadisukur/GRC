@@ -22,9 +22,21 @@ class AdminBookingController extends Controller
 
     public function create()
     {
-        $cars = Car::where('is_available', true)->orderBy('name')->get();
+        $cars = Car::orderBy('name')->get();
 
-        return view('admin.bookings.quick-create', compact('cars'));
+        $bookedDates = Booking::whereIn('status', ['pending', 'active'])
+            ->select('car_id', 'start_date', 'end_date', 'status')
+            ->get()
+            ->map(function ($booking) {
+                return [
+                    'car_id' => $booking->car_id,
+                    'start' => $booking->start_date->format('Y-m-d'),
+                    'end' => $booking->end_date->format('Y-m-d'),
+                    'status' => $booking->status
+                ];
+            });
+
+        return view('admin.bookings.quick-create', compact('cars', 'bookedDates'));
     }
 
     public function store(Request $request)
@@ -32,7 +44,7 @@ class AdminBookingController extends Controller
         $validated = $request->validate([
             'car_id' => 'required|exists:cars,id',
             'customer_name' => 'required|string|max:255',
-            'customer_phone' => 'required|string|max:20',
+            'whatsapp_number' => 'required|string|max:20',
             'start_date' => 'required|date',
             'duration_type' => 'required|integer|in:12,24',
             'extra_hours' => 'nullable|integer|min:0|max:12',
@@ -63,7 +75,7 @@ class AdminBookingController extends Controller
             $booking = $this->bookingService->createBooking($validated);
 
             if ($validated['dp_amount'] > 0) {
-                $this->bookingService->confirmBooking($booking, $validated['dp_amount']);
+                $this->bookingService->confirmBooking($booking, (float) $validated['dp_amount']);
             }
         }
 

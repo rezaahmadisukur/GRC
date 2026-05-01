@@ -93,8 +93,7 @@ class BookingService
         'cash_paid' => $cashPaid,
         'change_amount' => $changeAmount,
         'dp_amount' => $cashPaid,
-        'admin_id' => auth()->id(),
-        'whatsapp_number' => $data['customer_phone']
+        'admin_id' => auth()->id()
       ]));
 
       return $booking;
