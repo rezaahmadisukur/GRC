@@ -65,6 +65,19 @@
       </span>
     </a>
 
+    <!-- Quick Booking -->
+    <a href="{{ route('admin.quick-booking.create') }}" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl group relative
+          {{ request()->routeIs('admin.quick-booking.*')
+  ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-100 active'
+  : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}" :class="{ 'justify-center': sidebarCollapsed }">
+      <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4v16m8-8H4" />
+      </svg>
+      <span class="sidebar-label text-[14px] font-semibold" x-show="!sidebarCollapsed" x-cloak>
+        Quick Booking
+      </span>
+    </a>
+
     <!-- Kelola Mobil -->
     <a href="{{ route('admin.cars.index') }}" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl group relative
           {{ request()->routeIs('admin.cars.*')
@@ -101,7 +114,7 @@
       </div>
 
       <a href="{{ route('admin.staff.index') }}" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl group relative
-                                                                                                                                  {{ request()->routeIs('admin.staff.*')
+                                                                                                                                    {{ request()->routeIs('admin.staff.*')
       ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-100 active'
       : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}" :class="{ 'justify-center': sidebarCollapsed }">
         <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

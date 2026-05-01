@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BookingDashboardController;
+use App\Http\Controllers\Admin\AdminBookingController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\BookingController;
@@ -44,6 +45,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', [BookingDashboardController::class, 'indexDashboard'])->name('dashboard');
         // Group Operasional (Admin & Owner bisa akses)
         Route::prefix('admin')->name('admin.')->group(function () {
+            Route::get('/quick-booking', [AdminBookingController::class, 'create'])->name('quick-booking.create');
+            Route::post('/quick-booking', [AdminBookingController::class, 'store'])->name('quick-booking.store');
+            Route::get('/quick-booking/{booking}/receipt', [AdminBookingController::class, 'receipt'])->name('quick-booking.receipt');
+
             Route::get('/bookings', [BookingDashboardController::class, 'index'])->name('bookings.index');
             Route::patch('/bookings/{booking}/status', [BookingDashboardController::class, 'updateStatus'])->name('bookings.update-status');
 
