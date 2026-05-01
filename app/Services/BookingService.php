@@ -66,6 +66,41 @@ class BookingService
     });
   }
 
+  public function createWalkinBooking(array $data): Booking
+  {
+    return DB::transaction(function () use ($data) {
+      $bookingCode = $this->generateUniqueBookingCode();
+      $extra = (int) ($data['extra_hours'] ?? 0);
+      $totalHours = (int) $data['duration_type'] + $extra;
+
+      $calc = $this->calculateBooking(
+        (int) $data['car_id'],
+        $data['start_date'],
+        $totalHours
+      );
+
+      $cashPaid = (float) $data['cash_paid'];
+      $changeAmount = max($cashPaid - $calc['total_price'], 0);
+
+      $booking = Booking::create(array_merge($data, [
+        'booking_code' => $bookingCode,
+        'duration_hours' => $totalHours,
+        'end_date' => $calc['end_date'],
+        'total_price' => $calc['total_price'],
+        'remains_payment' => max($calc['total_price'] - $cashPaid, 0),
+        'status' => 'active',
+        'is_walkin' => true,
+        'cash_paid' => $cashPaid,
+        'change_amount' => $changeAmount,
+        'dp_amount' => $cashPaid,
+        'admin_id' => auth()->id(),
+        'whatsapp_number' => $data['customer_phone']
+      ]));
+
+      return $booking;
+    });
+  }
+
   public function confirmBooking(Booking $booking, float $dpAmount = 0, ?int $adminId = null): Booking
   {
     return DB::transaction(function () use ($booking, $dpAmount, $adminId) {
