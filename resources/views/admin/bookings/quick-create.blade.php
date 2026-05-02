@@ -2,7 +2,8 @@
     <x-slot name="header">
         <div class="flex items-center gap-3">
             <div
-                class="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-200">
+                class="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-r
+                from-emerald-500 to-teal-500 shadow-lg shadow-blue-200">
                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -278,8 +279,8 @@
                                                        py-2.5 rounded-xl font-bold text-xs transition-all duration-300
                                                        group/btn
                                                        {{ $car->is_available
-                        ? 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 shadow-md shadow-blue-200 hover:shadow-lg hover:shadow-blue-300 active:scale-95'
-                        : 'bg-gray-200 text-gray-400 cursor-not-allowed' }}"
+        ? 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 shadow-md shadow-blue-200 hover:shadow-lg hover:shadow-blue-300 active:scale-95'
+        : 'bg-gray-200 text-gray-400 cursor-not-allowed' }}"
                                                 data-car-id="{{ $car->id }}" data-car-name="{{ $car->name }}"
                                                 data-price12="{{ $car->price_12h }}" data-price24="{{ $car->price_24h }}"
                                                 @if(!$car->is_available) disabled @endif>
@@ -332,7 +333,8 @@
                 <input type="hidden" name="transaction_mode" value="immediate">
 
                 {{-- ── Modal Header ── --}}
-                <div class="px-6 py-5 bg-gradient-to-r from-blue-600 to-indigo-600 flex-shrink-0">
+                <div class="px-6 py-5 bg-gradient-to-r
+                from-emerald-500 to-teal-500 flex-shrink-0">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center">
@@ -427,7 +429,7 @@
 
 
                     {{-- ── Durasi + Extra Jam ── --}}
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 gap-4">
                         {{-- Durasi Sewa --}}
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
@@ -436,14 +438,14 @@
                             <div class="grid grid-cols-2 gap-2">
                                 <label class="relative cursor-pointer">
                                     <input type="radio" name="duration_type" value="12" class="hidden peer" checked>
-                                    <div class="peer-checked:border-blue-600 peer-checked:bg-blue-600 border-2 border-gray-200 rounded-xl p-3 transition-all duration-200 text-center bg-gray-50">
-                                        <p class="text-sm font-black peer-checked:text-white text-gray-700 transition-colors">12 Jam</p>
+                                    <div class="peer-checked:border-emerald-600 peer-checked:bg-gradient-to-r peer-checked:from-emerald-500 peer-checked:to-teal-500 peer-checked:text-white text-gray-700 border-2 border-gray-200 rounded-xl p-3 transition-all duration-200 text-center bg-gray-50">
+                                        <p class="text-sm font-black transition-colors">12 Jam</p>
                                     </div>
                                 </label>
                                 <label class="relative cursor-pointer">
                                     <input type="radio" name="duration_type" value="24" class="hidden peer">
-                                    <div class="peer-checked:border-blue-600 peer-checked:bg-blue-600 border-2 border-gray-200 rounded-xl p-3 transition-all duration-200 text-center bg-gray-50">
-                                        <p class="text-sm font-black peer-checked:text-white text-gray-700 transition-colors">24 Jam</p>
+                                    <div class="peer-checked:border-emerald-600 peer-checked:bg-gradient-to-r peer-checked:from-emerald-500 peer-checked:to-teal-500 peer-checked:text-white text-gray-700 border-2 border-gray-200 rounded-xl p-3 transition-all duration-200 text-center bg-gray-50">
+                                        <p class="text-sm font-black transition-colors">24 Jam</p>
                                     </div>
                                 </label>
                             </div>
