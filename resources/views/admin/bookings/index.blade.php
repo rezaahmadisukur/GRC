@@ -306,12 +306,35 @@
                           Batalkan
                         </button>
 
+                        {{-- Print Receipt --}}
+                        <a href="{{ route('admin.bookings.receipt', $booking) }}" target="_blank"
+                          class="inline-flex items-center gap-1.25 px-3.5 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all duration-150 ease hover:-translate-y-0.5 hover:shadow-lg active:scale-95 bg-blue-500 hover:bg-blue-600 text-white shadow-sm shadow-blue-200">
+                          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                          </svg>
+                          Cetak Struk
+                        </a>
+
                         <form id="cancel-form-{{ $booking->id }}" method="POST"
                           action="{{ route('admin.bookings.update-status', $booking) }}" class="hidden">
                           @csrf @method('PATCH')
                           <input type="hidden" name="status" value="cancelled">
                           <input type="hidden" name="cancel_reason" id="cancel-reason-{{ $booking->id }}">
                         </form>
+
+                      @elseif($booking->status === 'completed')
+
+                        {{-- Print Receipt only for completed status --}}
+                        <a href="{{ route('admin.bookings.receipt', $booking) }}" target="_blank"
+                          class="inline-flex items-center gap-1.25 px-3.5 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all duration-150 ease hover:-translate-y-0.5 hover:shadow-lg active:scale-95 bg-blue-500 hover:bg-blue-600 text-white shadow-sm shadow-blue-200">
+                          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                          </svg>
+                          Cetak Struk
+                        </a>
+
                       @endif
 
                     </div>
