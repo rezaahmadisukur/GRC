@@ -280,16 +280,18 @@
           @endphp
 
           @foreach($rows as $row)
-            <div class="flex items-center justify-between py-2
-                                  border-b border-dashed border-gray-100 last:border-0">
+            <div
+              class="flex items-center justify-between py-2
+                                                                        border-b border-dashed border-gray-100 last:border-0">
               <div class="flex items-center gap-2 text-gray-500 text-xs">
                 <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="{{ $row['icon'] }}" />
                 </svg>
                 {{ $row['label'] }}
               </div>
-              <span class="text-xs text-right max-w-[55%] truncate
-                                       {{ $row['bold'] ? 'font-bold text-gray-800' : 'text-gray-600' }}">
+              <span
+                class="text-xs text-right max-w-[55%] truncate
+                                                                             {{ $row['bold'] ? 'font-bold text-gray-800' : 'text-gray-600' }}">
                 {{ $row['value'] }}
               </span>
             </div>
@@ -365,48 +367,105 @@
             Ringkasan Pembayaran
           </p>
 
-          {{-- Total --}}
-          <div class="flex items-center justify-between">
-            <span class="text-xs text-gray-500 flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-              Total Tagihan
-            </span>
-            <span class="text-base font-black text-gray-800">
-              Rp {{ number_format($booking->total_price, 0, ',', '.') }}
-            </span>
-          </div>
 
-          {{-- Cash Paid --}}
+          {{-- DP --}}
           <div class="flex items-center justify-between">
             <span class="text-xs text-gray-500 flex items-center gap-1.5">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c-1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              Uang Diterima
+              DP (Uang Muka)
             </span>
             <span class="text-sm font-bold text-gray-700">
-              Rp {{ number_format($booking->cash_paid, 0, ',', '.') }}
+              Rp {{ number_format($booking->dp_amount, 0, ',', '.') }}
             </span>
           </div>
 
-          {{-- Change --}}
-          <div class="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200
-                              rounded-2xl px-4 py-3 flex items-center justify-between">
-            <span class="text-xs font-bold text-emerald-700 flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Uang Kembalian
-            </span>
-            <span class="shimmer-text text-lg font-black">
-              Rp {{ number_format($booking->change_amount, 0, ',', '.') }}
-            </span>
-          </div>
+          @if($booking->status === 'completed')
+            {{-- PELUNASAN - Status Completed: Tampil BIASA --}}
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-gray-500 flex items-center gap-1.5">
+                ✅ Pelunasan
+              </span>
+              <span class="text-sm font-bold text-emerald-700">
+                Rp
+                {{ number_format(max($booking->total_price - $booking->dp_amount, 0), 0, ',', '.') }}
+              </span>
+            </div>
+
+
+            {{-- Denda --}}
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-gray-500 flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                Denda
+              </span>
+              <span class="text-sm font-bold {{ $booking->penalty_amount > 0 ? 'text-rose-600' : 'text-gray-600' }}">
+                Rp {{ number_format($booking->penalty_amount, 0, ',', '.') }}
+              </span>
+            </div>
+
+            {{-- Total Tagihan --}}
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-gray-500 flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Total Tagihan
+              </span>
+              <span class="text-base font-black text-gray-800">
+                Rp {{ number_format($booking->final_total_price ?? $booking->total_price, 0, ',', '.') }}
+              </span>
+            </div>
+
+          @else
+
+            {{-- Total Tagihan --}}
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-gray-500 flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Total Tagihan
+              </span>
+              <span class="text-base font-black text-gray-800">
+                Rp {{ number_format($booking->final_total_price ?? $booking->total_price, 0, ',', '.') }}
+              </span>
+            </div>
+
+            {{-- SISA PEMBAYARAN - Status Active/Pending: Tampil BERWARNA --}}
+            <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200
+                                                      rounded-2xl px-4 py-3 flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-700 flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                Sisa Pembayaran
+              </span>
+              <span class="shimmer-text text-lg font-black" style="color: #d97706;">
+                Rp
+                {{ number_format(max($booking->total_price + $booking->penalty_amount - $booking->dp_amount, 0), 0, ',', '.') }}
+              </span>
+            </div>
+
+          @endif
+
+          @if($booking->remains_payment <= 0)
+            {{-- LUNAS Badge --}}
+            <div
+              class="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl px-4 py-3 flex items-center justify-center shadow-lg shadow-emerald-200">
+              <span class="text-white font-black text-lg flex items-center gap-2">
+                ✅ LUNAS
+              </span>
+            </div>
+          @endif
 
         </div>
 
@@ -438,7 +497,7 @@
       </div>
 
       {{-- ── Action Buttons ── --}}
-      <div class="grid grid-cols-2 gap-3 no-print anim-fade-up anim-delay-4">
+      <div class="grid grid-cols-3 gap-3 no-print anim-fade-up anim-delay-4">
 
         {{-- Print --}}
         <button onclick="window.print()" class="group relative overflow-hidden flex items-center justify-center gap-2
@@ -454,15 +513,34 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
           </svg>
-          <span class="relative">Cetak Struk</span>
+          <span class="relative">Cetak</span>
         </button>
+
+        {{-- Send WhatsApp --}}
+        @php $waTotal = $booking->final_total_price ?? $booking->total_price; @endphp
+        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $booking->whatsapp_number) }}?text={{ urlencode("Halo *{$booking->customer_name}*,\n\nBerikut adalah bukti struk penyewaan mobil *{$booking->car->name}* dengan kode booking *#{$booking->booking_code}*.\n\nTotal: Rp " . number_format($waTotal, 0, ',', '.') . "\n\nLink Struk: " . url()->current() . "\n\nTerima kasih 🙏") }}"
+          target="_blank" class="group relative overflow-hidden flex items-center justify-center gap-2
+                        bg-gradient-to-r from-green-500 to-emerald-600
+                        hover:from-green-600 hover:to-emerald-700
+                        text-white font-bold py-3.5 px-4 rounded-2xl text-sm
+                        shadow-lg shadow-green-200 hover:shadow-xl hover:shadow-green-300
+                        transition-all duration-300 active:scale-95">
+          <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20
+                               to-transparent -translate-x-full group-hover:translate-x-full
+                               transition-transform duration-700 ease-in-out"></span>
+          <svg class="w-4 h-4 relative" fill="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.942-2.387-.024-.174-.15-.637.149-.846.171-.208.669-.805 9.139-6.448 8.472-5.645 8.687-5.706.215-.06.479-.197.695-.04.213.147 2.212 2.634 2.34 3.148.129.513.133.527.133 1.108 0 .58-.136 1.193-.302 1.563-.164.371-.673 1.121-.944 1.501-.271.38-.54.417-.695.297z" />
+          </svg>
+          <span class="relative">Kirim WA</span>
+        </a>
 
         {{-- New Booking --}}
         <a href="{{ route('admin.quick-booking.create') }}" class="group relative overflow-hidden flex items-center justify-center gap-2
-                        bg-gradient-to-r from-emerald-500 to-teal-500
-                        hover:from-emerald-600 hover:to-teal-600
+                        bg-gradient-to-r from-indigo-500 to-purple-600
+                        hover:from-indigo-600 hover:to-purple-700
                         text-white font-bold py-3.5 px-4 rounded-2xl text-sm
-                        shadow-lg shadow-emerald-200 hover:shadow-xl hover:shadow-emerald-300
+                        shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300
                         transition-all duration-300 active:scale-95">
           <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20
                                to-transparent -translate-x-full group-hover:translate-x-full
@@ -470,7 +548,7 @@
           <svg class="w-4 h-4 relative" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
           </svg>
-          <span class="relative">Booking Baru</span>
+          <span class="relative">Baru</span>
         </a>
 
       </div>

@@ -47,10 +47,11 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/quick-booking', [AdminBookingController::class, 'create'])->name('quick-booking.create');
             Route::post('/quick-booking', [AdminBookingController::class, 'store'])->name('quick-booking.store');
-            Route::get('/quick-booking/{booking}/receipt', [AdminBookingController::class, 'receipt'])->name('quick-booking.receipt');
+            Route::get('/quick-booking/{booking:booking_code}/receipt', [AdminBookingController::class, 'receipt'])->name('quick-booking.receipt');
 
             Route::get('/bookings', [BookingDashboardController::class, 'index'])->name('bookings.index');
             Route::patch('/bookings/{booking}/status', [BookingDashboardController::class, 'updateStatus'])->name('bookings.update-status');
+            Route::get('/bookings/{booking:booking_code}/receipt', [AdminBookingController::class, 'receipt'])->name('bookings.receipt');
 
             Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
             Route::get('/reports/download', [ReportController::class, 'downloadPDF'])->name('reports.download');
