@@ -164,7 +164,7 @@
                         <div>
                             <p class="text-[11px] text-gray-400 font-medium">Tersedia</p>
                             <p class="text-lg font-bold text-gray-800 leading-tight">
-                                {{ $cars->where('is_available', true)->count() }}</p>
+                                {{ $availableCars }}</p>
                         </div>
                     </div>
                     <div
@@ -176,9 +176,9 @@
                             </svg>
                         </div>
                         <div>
-                            <p class="text-[11px] text-gray-400 font-medium">Dibooking</p>
+                            <p class="text-[11px] text-gray-400 font-medium">Tidak Aktif</p>
                             <p class="text-lg font-bold text-gray-800 leading-tight">
-                                {{ $cars->where('is_available', false)->count() }}</p>
+                                {{ $unavailableCars }}</p>
                         </div>
                     </div>
                     <div
@@ -190,8 +190,8 @@
                             </svg>
                         </div>
                         <div>
-                            <p class="text-[11px] text-gray-400 font-medium">Total Armada</p>
-                            <p class="text-lg font-bold text-gray-800 leading-tight">{{ $cars->count() }}</p>
+                            <p class="text-[11px] text-gray-400 font-medium">Total Mobil</p>
+                            <p class="text-lg font-bold text-gray-800 leading-tight">{{ $totalCars }}</p>
                         </div>
                     </div>
                 </div>
@@ -208,9 +208,9 @@
                                         <div class="relative h-36 overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
                                             @if($car->image)
                                                 <img src="{{ asset('storage/' . $car->image) }}" alt="{{ $car->name }}"
-                                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 {{ !$car->is_available ? 'opacity-50 grayscale-[40%]' : '' }}">
                                             @else
-                                                <div class="w-full h-full flex flex-col items-center justify-center gap-2">
+                                                <div class="w-full h-full flex flex-col items-center justify-center gap-2 {{ !$car->is_available ? 'opacity-50 grayscale-[40%]' : '' }}">
                                                     <svg class="w-14 h-14 text-slate-300" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
@@ -225,7 +225,7 @@
                                             <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
 
                                             {{-- Status badge --}}
-                                            <div class="absolute top-2 left-2">
+                                            <div class="absolute top-2 left-2 z-10">
                                                 @if($car->is_available)
                                                     <span class="inline-flex items-center gap-1 px-2.5 py-1
                                                                      bg-emerald-500 text-white text-[10px] font-bold
@@ -233,15 +233,17 @@
                                                         <span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
                                                         Tersedia
                                                     </span>
-                                                @else
-                                                    <span class="inline-flex items-center gap-1 px-2.5 py-1
-                                                                     bg-rose-500 text-white text-[10px] font-bold
-                                                                     rounded-full shadow-lg shadow-rose-200">
-                                                        <span class="w-1.5 h-1.5 bg-white rounded-full"></span>
-                                                        Dibooking
-                                                    </span>
                                                 @endif
                                             </div>
+
+                                            @if(!$car->is_available)
+                                            <!-- Non Aktif Overlay Center -->
+                                            <div class="absolute inset-0 flex items-center justify-center z-20 bg-black/50 backdrop-blur-sm">
+                                                <div class="bg-rose-600/90 text-white font-black text-sm px-6 py-2.5 rounded-xl transform -rotate-6 shadow-xl border border-white/20">
+                                                  TIDAK AKTIF
+                                                </div>
+                                            </div>
+                                            @endif
 
                                             {{-- Plate code --}}
                                             <div class="absolute top-2 right-2">
@@ -311,6 +313,13 @@
                                         </div>
                                     </div>
                     @endforeach
+                </div>
+
+                {{-- ── Pagination ── --}}
+                <div class="mt-8">
+                    <div class="flex justify-center">
+                        {{ $cars->onEachSide(1)->links('pagination::tailwind') }}
+                    </div>
                 </div>
 
             </div>
@@ -676,7 +685,7 @@
                 };
 
                 modalCarId.value = selectedCar.id;
-                modalTitle.textContent = '🚗 ' + selectedCar.name;
+                modalTitle.textContent =  selectedCar.name;
 
                 // Reset extra hours
                 elExtraHours.value = 0;
