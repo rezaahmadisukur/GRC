@@ -22,7 +22,12 @@ class AdminBookingController extends Controller
 
     public function create()
     {
-        $cars = Car::orderBy('name')->get();
+        $cars = Car::orderBy('name')->paginate(12);
+
+        // Stats untuk header bar - dihitung sekali dari database bukan dari pagination
+        $totalCars = Car::count();
+        $availableCars = Car::where('is_available', true)->count();
+        $unavailableCars = Car::where('is_available', false)->count();
 
         $bookedDates = Booking::whereIn('status', ['pending', 'active'])
             ->select('car_id', 'start_date', 'end_date', 'status')
@@ -36,7 +41,7 @@ class AdminBookingController extends Controller
                 ];
             });
 
-        return view('admin.bookings.quick-create', compact('cars', 'bookedDates'));
+        return view('admin.bookings.quick-create', compact('cars', 'bookedDates', 'totalCars', 'availableCars', 'unavailableCars'));
     }
 
     public function store(Request $request)
