@@ -205,28 +205,40 @@ class BookingService
       ->get();
   }
 
-  public function getDashboardStatistics($user): array
+  public function getDashboardStatistics($user, $from = null, $to = null): array
   {
     $isOwner = $user->role === 'owner';
+    $from = $from ?? now()->subDays(7);
+    $to = $to ?? now();
 
-    $baseQuery = Booking::where('status', 'completed');
+    $days = $to->diffInDays($from);
+    $prevFrom = $from->copy()->subDays($days);
+    $prevTo = $from->copy()->subDay();
+
+    $baseQuery = Booking::where('status', 'completed')
+      ->whereBetween('created_at', [$from, $to]);
+
+    $prevQuery = Booking::where('status', 'completed')
+      ->whereBetween('created_at', [$prevFrom, $prevTo]);
+
+    $currentTotal = (clone $baseQuery)->sum('total_price');
+    $prevTotal = (clone $prevQuery)->sum('total_price');
+
+    $growth = $prevTotal > 0 ? round((($currentTotal - $prevTotal) / $prevTotal) * 100, 1) : 0;
 
     $stats = $isOwner
       ? [
-        'primaryAmount' => (clone $baseQuery)
-          ->whereMonth('created_at', now()->month)
-          ->whereYear('created_at', now()->year)
-          ->sum('total_price'),
-        'label' => 'Omzet Bulan Ini',
-        'totalDP' => Booking::sum('dp_amount'),
+        'primaryAmount' => $currentTotal,
+        'growth' => $growth,
+        'label' => 'Total Pendapatan',
+        'totalDP' => Booking::whereBetween('created_at', [$from, $to])->sum('dp_amount'),
         'staffCount' => \App\Models\User::where('role', 'admin')->count(),
       ]
       : [
-        'primaryAmount' => (clone $baseQuery)
-          ->whereDate('created_at', now()->today())
-          ->sum('total_price'),
-        'label' => 'Pendapatan Hari Ini',
-        'totalDP' => Booking::whereDate('created_at', now()->today())->sum('dp_amount'),
+        'primaryAmount' => $currentTotal,
+        'growth' => $growth,
+        'label' => 'Pendapatan',
+        'totalDP' => Booking::whereBetween('created_at', [$from, $to])->sum('dp_amount'),
         'pendingApproval' => Booking::where('status', 'pending')->count(),
       ];
 
@@ -236,18 +248,60 @@ class BookingService
     return $stats;
   }
 
-  public function getChartData(): array
+  public function getChartData($from = null, $to = null): array
   {
+    $from = $from ?? now()->subDays(7);
+    $to = $to ?? now();
+
     $chartData = [];
+    $days = $to->diffInDays($from);
 
-    for ($i = 6; $i >= 0; $i--) {
-      $date = now()->subDays($i)->format('Y-m-d');
-      $revenue = Booking::where('status', 'completed')
-        ->whereDate('created_at', $date)
-        ->sum('total_price');
+    // Auto grouping based on date range
+    if ($days <= 7) {
+      // <= 7 hari: per hari
+      for ($i = $days; $i >= 0; $i--) {
+        $date = $to->copy()->subDays($i);
+        $revenue = Booking::where('status', 'completed')
+          ->whereDate('created_at', $date)
+          ->sum('total_price');
 
-      $chartData['labels'][] = now()->subDays($i)->translatedFormat('D');
-      $chartData['data'][] = $revenue;
+        $chartData['labels'][] = $date->translatedFormat('D');
+        $chartData['data'][] = $revenue;
+      }
+    } elseif ($days <= 31) {
+      // 8 - 31 hari: per minggu
+      $current = clone $from;
+      while ($current <= $to) {
+        $weekEnd = $current->copy()->endOfWeek();
+        if ($weekEnd > $to)
+          $weekEnd = clone $to;
+
+        $revenue = Booking::where('status', 'completed')
+          ->whereBetween('created_at', [$current->startOfDay(), $weekEnd->endOfDay()])
+          ->sum('total_price');
+
+        $chartData['labels'][] = 'Mg ' . $current->weekOfMonth;
+        $chartData['data'][] = $revenue;
+
+        $current->addWeek()->startOfWeek();
+      }
+    } else {
+      // > 31 hari: per bulan
+      $current = clone $from;
+      while ($current <= $to) {
+        $monthEnd = $current->copy()->endOfMonth();
+        if ($monthEnd > $to)
+          $monthEnd = clone $to;
+
+        $revenue = Booking::where('status', 'completed')
+          ->whereBetween('created_at', [$current->startOfMonth(), $monthEnd->endOfMonth()])
+          ->sum('total_price');
+
+        $chartData['labels'][] = $current->translatedFormat('M');
+        $chartData['data'][] = $revenue;
+
+        $current->addMonth()->startOfMonth();
+      }
     }
 
     return $chartData;

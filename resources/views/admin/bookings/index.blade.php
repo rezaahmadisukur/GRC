@@ -1,44 +1,206 @@
+{{-- resources/views/admin/bookings/index.blade.php --}}
 <x-admin-layout>
   <x-slot name="header">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-      <div>
-        <h2 class="text-xl font-bold text-gray-900 tracking-tight">Manajemen Pemesanan</h2>
-        <p class="text-sm text-gray-400 mt-0.5">Kelola semua transaksi sewa kendaraan</p>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div class="flex items-center gap-3">
+        {{-- Animated Icon --}}
+        <div class="relative flex-shrink-0">
+          <div
+            class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+          </div>
+          <span class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full animate-ping opacity-75"></span>
+          <span class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full"></span>
+        </div>
+        <div>
+          <h2 class="text-xl font-extrabold text-gray-900 tracking-tight leading-tight">Manajemen Pemesanan</h2>
+          <p class="text-xs text-gray-400 mt-0.5 flex items-center gap-1.5">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            Kelola semua transaksi sewa kendaraan secara real-time
+          </p>
+        </div>
       </div>
-      <div class="relative lg:w-1/3">
-        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none"
-          stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-        <input type="text" id="search-input" placeholder="Cari nama customer, kode booking, nama kendaraan..." class="pl-9 pr-9 py-2.5 w-full  bg-white border border-gray-200 rounded-xl
-                         text-sm text-gray-700 placeholder-gray-400
-                         focus:ring-2 focus:ring-emerald-400 focus:border-transparent
-                         transition-all duration-200 shadow-sm">
+
+      {{-- Search Bar --}}
+      <div class="relative w-full sm:w-80 lg:w-96">
+        <div class="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none">
+          <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        <input type="text" id="search-input" placeholder="Cari customer, kode booking, kendaraan..."
+          class="w-full pl-10 pr-10 py-2.5 bg-white/80 backdrop-blur-sm border border-gray-200/80 rounded-2xl text-sm text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-emerald-400/50 focus:border-emerald-400 focus:bg-white transition-all duration-300 shadow-sm hover:shadow-md hover:border-gray-300">
         <button id="clear-search"
-          class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 hover:text-gray-600 transition-colors hidden">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center rounded-full text-gray-400 hover:text-white hover:bg-gray-400 transition-all duration-200 hidden">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
     </div>
   </x-slot>
 
+  {{-- =================== CUSTOM STYLES =================== --}}
+  <style>
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
 
-  <div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-emerald-50 via-blue-50 to-purple-50">
-    <div class="max-w-7xl mx-auto space-y-6">
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(0.92) translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    @keyframes overlayIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    .animate-fadeInUp {
+      animation: fadeInUp 0.45s cubic-bezier(.22, .68, 0, 1.2) both;
+    }
+
+    .animate-slideInRight {
+      animation: slideInRight 0.4s cubic-bezier(.22, .68, 0, 1.2) both;
+    }
+
+    .animate-overlayIn {
+      animation: overlayIn 0.25s ease both;
+    }
+
+    .animate-modalIn {
+      animation: modalIn 0.35s cubic-bezier(.22, .68, 0, 1.2) both;
+    }
+
+    .stat-card {
+      transition: all 0.3s cubic-bezier(.22, .68, 0, 1.2);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .table-row-hover {
+      transition: all 0.2s ease;
+    }
+
+    .table-row-hover:hover {
+      background: linear-gradient(135deg, rgba(16, 185, 129, .04) 0%, rgba(20, 184, 166, .03) 100%);
+    }
+
+    .btn-action {
+      transition: all 0.2s cubic-bezier(.22, .68, 0, 1.2);
+    }
+
+    .btn-action:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-action:active {
+      transform: scale(0.96);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .filter-pill {
+      transition: all 0.2s cubic-bezier(.22, .68, 0, 1.2);
+    }
+
+    .filter-pill.active {
+      transform: scale(1.02);
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+    }
+
+    .modal-scroll {
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .modal-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .modal-scroll::-webkit-scrollbar-thumb {
+      background: #e5e7eb;
+      border-radius: 99px;
+    }
+  </style>
+
+  <div class="min-h-screen py-6 px-4 sm:px-6 lg:px-8"
+    style="background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 50%, #faf5ff 100%);">
+    <div class="max-w-7xl mx-auto space-y-5">
+
+      {{-- =================== STAT CARDS =================== --}}
       @php
         $statCards = [
           [
             'label' => 'Total Pesanan',
             'value' => $totalAllBookings,
-            'color' => 'gray',
+            'color' => 'slate',
             'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
-            'bg' => 'from-gray-400 to-gray-600',
-            'light' => 'bg-gray-50',
-            'text' => 'text-gray-600',
+            'bg' => 'from-slate-500 to-slate-700',
+            'iconBg' => 'bg-slate-100',
+            'text' => 'text-slate-600',
+            'ring' => 'ring-slate-200',
+            'trend' => null,
           ],
           [
             'label' => 'Menunggu',
@@ -46,9 +208,10 @@
             'color' => 'amber',
             'live' => true,
             'icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
-            'bg' => 'from-amber-400 to-amber-500',
-            'light' => 'bg-amber-50',
+            'bg' => 'from-amber-400 to-orange-500',
+            'iconBg' => 'bg-amber-50',
             'text' => 'text-amber-600',
+            'ring' => 'ring-amber-200',
           ],
           [
             'label' => 'Aktif',
@@ -56,48 +219,62 @@
             'color' => 'emerald',
             'live' => true,
             'icon' => 'M5 13l4 4L19 7',
-            'bg' => 'from-emerald-400 to-emerald-600',
-            'light' => 'bg-emerald-50',
+            'bg' => 'from-emerald-400 to-teal-600',
+            'iconBg' => 'bg-emerald-50',
             'text' => 'text-emerald-600',
+            'ring' => 'ring-emerald-200',
           ],
           [
             'label' => 'Selesai',
             'value' => $completedCount,
             'color' => 'blue',
             'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
-            'bg' => 'from-blue-400 to-blue-600',
-            'light' => 'bg-blue-50',
+            'bg' => 'from-blue-400 to-indigo-600',
+            'iconBg' => 'bg-blue-50',
             'text' => 'text-blue-600',
+            'ring' => 'ring-blue-200',
           ],
         ];
       @endphp
 
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         @foreach($statCards as $sc)
           <div
-            class="transition-all duration-250 ease hover:-translate-y-1 hover:shadow-2xl animate-fadeInUp bg-white/88 backdrop-blur-md border border-white/70 rounded-2xl p-5 overflow-hidden relative"
-            style="animation-delay: {{ $loop->index * 0.05 }}s">
-            {{-- Top gradient bar --}}
-            <div class="absolute top-0 left-0 right-0 h-1 rounded-t-2xl bg-gradient-to-r {{ $sc['bg'] }}"></div>
+            class="stat-card glass-card border border-white/70 rounded-2xl p-5 overflow-hidden relative group ring-1 {{ $sc['ring'] }} shadow-sm animate-fadeInUp"
+            style="animation-delay: {{ $loop->index * 0.08 }}s">
 
-            <div class="flex items-start justify-between gap-2 mt-1">
-              <div>
-                <p class="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1.5">
+            {{-- Gradient Top Bar --}}
+            <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r {{ $sc['bg'] }} rounded-t-2xl"></div>
+
+            {{-- Background Glow --}}
+            <div
+              class="absolute -right-4 -bottom-4 w-20 h-20 rounded-full bg-gradient-to-br {{ $sc['bg'] }} opacity-5 group-hover:opacity-10 transition-opacity duration-300 blur-xl">
+            </div>
+
+            <div class="flex items-start justify-between gap-2 mt-1 relative">
+              <div class="flex-1 min-w-0">
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">
                   {{ $sc['label'] }}
                 </p>
-                <p class="text-3xl font-extrabold text-gray-900 leading-none">
+                <p class="text-3xl font-black text-gray-900 leading-none tabular-nums">
                   {{ $sc['value'] }}
                 </p>
                 @if(!empty($sc['live']))
-                  <div class="flex items-center gap-1.5 mt-1.5">
-                    <span
-                      class="inline-block w-1.75 h-1.75 rounded-full animate-[pulseRing_1.8s_ease_infinite] {{ $sc['text'] }}"
-                      style="color:{{ ['amber' => '#f59e0b', 'emerald' => '#10b981'][$sc['color']] ?? '#6b7280' }}"></span>
-                    <span class="text-[11px] text-gray-400">Live</span>
+                  <div class="flex items-center gap-1.5 mt-2">
+                    <span class="relative flex h-2 w-2">
+                      <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full {{ $sc['text'] }} opacity-75 bg-current"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-current {{ $sc['text'] }}"></span>
+                    </span>
+                    <span class="text-[10px] font-semibold text-gray-400 tracking-wide">LIVE</span>
                   </div>
+                @else
+                  <div class="mt-2 h-5"></div>
                 @endif
               </div>
-              <div class="w-10 h-10 rounded-xl {{ $sc['light'] }} flex items-center justify-center shrink-0">
+
+              <div
+                class="w-11 h-11 rounded-2xl {{ $sc['iconBg'] }} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300 ring-1 {{ $sc['ring'] }}">
                 <svg class="w-5 h-5 {{ $sc['text'] }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $sc['icon'] }}" />
                 </svg>
@@ -108,35 +285,51 @@
       </div>
 
       {{-- =================== TABLE CARD =================== --}}
-      <div class="bg-white/88 backdrop-blur-md border border-white/70 rounded-2xl overflow-hidden animate-fadeInUp"
-        style="animation-delay:.25s">
+      <div
+        class="glass-card border border-white/70 rounded-2xl overflow-hidden shadow-sm animate-fadeInUp ring-1 ring-gray-200/60"
+        style="animation-delay: .2s">
 
-        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2">
-            <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-            <span class="text-sm font-semibold text-gray-700">Daftar Pemesanan</span>
-            <span class="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+        {{-- Table Header --}}
+        <div
+          class="px-5 sm:px-6 py-4 border-b border-gray-100/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-white/50 to-gray-50/50">
+          <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2">
+              <span class="relative flex h-2.5 w-2.5">
+                <span
+                  class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+              </span>
+              <span class="text-sm font-bold text-gray-800">Daftar Pemesanan</span>
+            </div>
+            <span
+              class="inline-flex items-center gap-1 text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full font-semibold">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+              </svg>
               {{ $bookings->total() }} data
             </span>
           </div>
 
-          <div class="hidden sm:flex items-center gap-1.5" id="filter-pills">
+          {{-- Filter Pills --}}
+          <div class="flex items-center gap-1.5 flex-wrap" id="filter-pills">
             @foreach(['all' => 'Semua', 'pending' => 'Menunggu', 'active' => 'Aktif', 'completed' => 'Selesai', 'cancelled' => 'Batal'] as $val => $lbl)
               <button data-filter="{{ $val }}"
-                class="filter-pill px-3 py-1 rounded-lg text-xs font-medium transition-all duration-150 {{ $val === 'all' ? 'bg-emerald-500 text-white shadow-sm' : 'bg-gray-100 text-gray-500 hover:bg-gray-200' }}">
+                class="filter-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 {{ $val === 'all' ? 'bg-emerald-500 text-white shadow-sm shadow-emerald-200 active' : 'bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700' }}">
                 {{ $lbl }}
               </button>
             @endforeach
           </div>
         </div>
 
+        {{-- Table --}}
         <div class="overflow-x-auto">
           <table class="w-full" id="bookings-table">
             <thead>
-              <tr class="bg-gray-50/70">
-                @foreach(['Pelanggan', 'Kendaraan', 'Tanggal & Durasi', 'Total', 'Status', 'Aksi'] as $th)
+              <tr class="bg-gradient-to-r from-gray-50/80 to-slate-50/80 border-b border-gray-100">
+                @foreach(['Pelanggan', 'Kendaraan', 'Tanggal & Durasi', 'Total Harga', 'Disetujui Oleh', 'Status', 'Aksi'] as $th)
                   <th
-                    class="px-5 py-3.5 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider {{ $loop->last ? 'text-right' : '' }}">
+                    class="px-5 py-3.5 text-left text-[10px] font-extrabold text-gray-400 uppercase tracking-widest {{ $loop->last ? 'text-right' : '' }} whitespace-nowrap">
                     {{ $th }}
                   </th>
                 @endforeach
@@ -147,11 +340,11 @@
               @forelse($bookings as $booking)
                 @php
                   $badge = match ($booking->status) {
-                    'pending' => ['cls' => 'bg-amber-50 text-amber-700', 'dot' => 'bg-amber-400', 'label' => 'Menunggu', 'pulse' => true],
-                    'active' => ['cls' => 'bg-emerald-50 text-emerald-700', 'dot' => 'bg-emerald-400', 'label' => 'Aktif', 'pulse' => true],
-                    'completed' => ['cls' => 'bg-blue-50 text-blue-700', 'dot' => 'bg-blue-400', 'label' => 'Selesai', 'pulse' => false],
-                    'cancelled' => ['cls' => 'bg-red-50 text-red-600', 'dot' => 'bg-red-400', 'label' => 'Dibatalkan', 'pulse' => false],
-                    default => ['cls' => 'bg-gray-100 text-gray-600', 'dot' => 'bg-gray-400', 'label' => ucfirst($booking->status), 'pulse' => false],
+                    'pending' => ['cls' => 'bg-amber-50 text-amber-700 ring-amber-200', 'dot' => 'bg-amber-400', 'label' => 'Menunggu', 'pulse' => true],
+                    'active' => ['cls' => 'bg-emerald-50 text-emerald-700 ring-emerald-200', 'dot' => 'bg-emerald-500', 'label' => 'Aktif', 'pulse' => true],
+                    'completed' => ['cls' => 'bg-blue-50 text-blue-700 ring-blue-200', 'dot' => 'bg-blue-500', 'label' => 'Selesai', 'pulse' => false],
+                    'cancelled' => ['cls' => 'bg-red-50 text-red-600 ring-red-200', 'dot' => 'bg-red-400', 'label' => 'Dibatalkan', 'pulse' => false],
+                    default => ['cls' => 'bg-gray-100 text-gray-600 ring-gray-200', 'dot' => 'bg-gray-400', 'label' => ucfirst($booking->status), 'pulse' => false],
                   };
                   $initials = strtoupper(substr($booking->customer_name, 0, 2));
                   $h = $booking->duration_hours;
@@ -160,45 +353,73 @@
                     : (($r = $h % 24) === 0
                       ? floor($h / 24) . ' Hari'
                       : floor($h / 24) . ' Hari ' . $r . ' Jam');
+
+                  $avatarColors = [
+                    'pending' => 'from-amber-400 to-orange-500',
+                    'active' => 'from-emerald-400 to-teal-500',
+                    'completed' => 'from-blue-400 to-indigo-500',
+                    'cancelled' => 'from-gray-400 to-slate-500',
+                  ];
+                  $avatarGrad = $avatarColors[$booking->status] ?? 'from-emerald-400 to-teal-500';
                 @endphp
 
-                <tr class="transition-[background,transform] duration-150 ease hover:bg-emerald-50"
-                  data-status="{{ $booking->status }}"
+                <tr class="table-row-hover group" data-status="{{ $booking->status }}"
                   data-search="{{ strtolower($booking->customer_name . ' ' . $booking->booking_code . ' ' . ($booking->car->name ?? '')) }}">
 
                   {{-- Customer --}}
                   <td class="px-5 py-4">
                     <div class="flex items-center gap-3">
-                      <div
-                        class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-xs font-bold shrink-0">
-                        {{ $initials }}
+                      <div class="relative flex-shrink-0">
+                        <div
+                          class="w-10 h-10 rounded-2xl bg-gradient-to-br {{ $avatarGrad }} flex items-center justify-center text-white text-xs font-black shadow-sm">
+                          {{ $initials }}
+                        </div>
+                        @if($booking->status === 'active' || $booking->status === 'pending')
+                          <span
+                            class="absolute -bottom-0.5 -right-0.5 w-3 h-3 {{ $booking->status === 'active' ? 'bg-emerald-400' : 'bg-amber-400' }} rounded-full border-2 border-white"></span>
+                        @endif
                       </div>
                       <div class="min-w-0">
-                        <p class="font-semibold text-gray-900 text-sm truncate">{{ $booking->customer_name }}</p>
-                        <p class="text-xs text-gray-400">{{ $booking->whatsapp_number }}</p>
-                        <p class="text-[11px] font-mono text-gray-300 mt-0.5">#{{ $booking->booking_code }}</p>
+                        <p class="font-bold text-gray-900 text-sm truncate max-w-[140px]">{{ $booking->customer_name }}
+                        </p>
+                        <p class="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
+                          <svg class="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                          </svg>
+                          <span class="truncate">{{ $booking->whatsapp_number }}</span>
+                        </p>
+                        <p class="text-[10px] font-mono text-gray-300 mt-0.5 tracking-wide">#{{ $booking->booking_code }}
+                        </p>
                       </div>
                     </div>
                   </td>
 
                   {{-- Vehicle --}}
                   <td class="px-5 py-4">
-                    <p class="font-semibold text-gray-800 text-sm">{{ $booking->car->name }}</p>
-                    <p class="text-xs text-gray-400 mt-0.5">
-                      {{ strtoupper($booking->car->plate_code) }}
-                      <span class="mx-1 text-gray-200">•</span>
-                      {{ $booking->car->transmission === 'AT' ? 'Matic' : 'Manual' }}
-                    </p>
+                    <div class="flex items-start gap-2">
+                      <div>
+                        <p class="font-bold text-gray-800 text-sm leading-tight">{{ $booking->car->name }}</p>
+                        <div class="flex items-center gap-1.5 mt-1">
+                          <span
+                            class="text-[10px] font-mono font-bold text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded-md">{{ strtoupper($booking->car->plate_code) }}</span>
+                          <span class="text-gray-200">•</span>
+                          <span
+                            class="text-[10px] font-semibold text-gray-400">{{ $booking->car->transmission === 'AT' ? 'Otomatis' : 'Manual' }}</span>
+                        </div>
+                      </div>
+                    </div>
                   </td>
 
                   {{-- Date & Duration --}}
                   <td class="px-5 py-4">
-                    <p class="text-sm font-medium text-gray-800">
+                    <p class="text-sm font-bold text-gray-800">
                       {{ $booking->start_date->format('d M Y') }}
                     </p>
+                    <p class="text-[10px] text-gray-400 mt-0.5">s/d {{ $booking->end_date->format('d M Y') }}</p>
                     <span
-                      class="inline-flex items-center mt-1 gap-1 px-2 py-0.5 bg-purple-50text-purple-600 text-[11px] font-semibold rounded-full">
-                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      class="inline-flex items-center mt-1.5 gap-1 px-2 py-0.5 bg-violet-50 text-violet-600 text-[10px] font-bold rounded-full ring-1 ring-violet-200">
+                      <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
@@ -208,32 +429,62 @@
 
                   {{-- Total --}}
                   <td class="px-5 py-4">
-                    <p class="font-bold text-gray-900 text-sm">
+                    <p class="font-black text-gray-900 text-sm">
                       Rp {{ number_format($booking->total_price, 0, ',', '.') }}
                     </p>
-                    <p class="text-xs text-gray-400 mt-0.5">
-                      DP: Rp {{ number_format($booking->dp_amount, 0, ',', '.') }}
-                    </p>
+                    <div class="flex items-center gap-1 mt-1">
+                      <span class="text-[10px] text-gray-400 font-medium">DP:</span>
+                      <span class="text-[10px] font-bold text-emerald-600">Rp
+                        {{ number_format($booking->dp_amount, 0, ',', '.') }}</span>
+                    </div>
                   </td>
 
-                  {{-- Status --}}
+                  {{-- Approved By --}}
+                  <td class="px-5 py-4">
+                    @if($booking->admin_id && $booking->user)
+                      <div
+                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold cursor-help
+                                                    {{ $booking->user->role === 'owner' ? 'bg-purple-50 text-purple-700 ring-1 ring-purple-200' : 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' }}"
+                        title="{{ $booking->user->role === 'owner' ? '👑 Owner' : '👤 Admin' }} | {{ $booking->updated_at->translatedFormat('d M Y H:i') }}">
+                        <span
+                          class="w-1.5 h-1.5 rounded-full {{ $booking->user->role === 'owner' ? 'bg-purple-500' : 'bg-blue-400' }}"></span>
+                        {{ $booking->user->name }}
+                        @if($booking->user->role === 'owner')
+                          <svg class="w-2.5 h-2.5 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        @endif
+                      </div>
+                    @else
+                      <span class="text-[11px] text-gray-300 italic">—</span>
+                    @endif
+                  </td>
+
+                  {{-- Status Badge --}}
                   <td class="px-5 py-4">
                     <span
-                      class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold {{ $badge['cls'] }}">
-                      <span
-                        class="w-1.5 h-1.5 rounded-full inline-block {{ $badge['dot'] }} {{ $badge['pulse'] ? 'animate-pulse' : '' }}"></span>
+                      class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-bold ring-1 {{ $badge['cls'] }}">
+                      <span class="relative flex h-1.5 w-1.5 flex-shrink-0">
+                        @if($badge['pulse'])
+                          <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full {{ $badge['dot'] }} opacity-75 bg-current"></span>
+                        @endif
+                        <span class="relative inline-flex rounded-full h-1.5 w-1.5 {{ $badge['dot'] }}"></span>
+                      </span>
                       {{ $badge['label'] }}
                     </span>
                   </td>
 
                   {{-- Actions --}}
-                  <td class="px-5 py-4 text-right">
-                    <div class="flex items-center justify-end gap-2 flex-wrap">
+                  <td class="px-5 py-4">
+                    <div class="flex items-center justify-end gap-1.5 flex-wrap">
 
                       @if($booking->status === 'pending')
-                        {{-- Approve --}}
+
+                        {{-- Approve Button --}}
                         <button type="button"
-                          class="inline-flex items-center gap-1.25 px-3.5 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all duration-150 ease hover:-translate-y-0.5 hover:shadow-lg active:scale-95 bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm shadow-emerald-200 open-dp-modal"
+                          class="btn-action inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-sm shadow-emerald-200 open-dp-modal"
                           data-booking-id="{{ $booking->id }}" data-booking-code="{{ $booking->booking_code }}"
                           data-customer-name="{{ $booking->customer_name }}" data-total-price="{{ $booking->total_price }}"
                           data-current-dp="{{ $booking->dp_amount }}">
@@ -250,9 +501,9 @@
                           <input type="hidden" name="dp_amount" id="dp-input-{{ $booking->id }}">
                         </form>
 
-                        {{-- Reject → triggers custom cancel modal --}}
+                        {{-- Reject Button --}}
                         <button type="button"
-                          class="inline-flex items-center gap-1.25 px-3.5 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all duration-150 ease hover:-translate-y-0.5 hover:shadow-lg active:scale-95 bg-red-50 hover:bg-red-100 text-red-600 border border-red-100 open-cancel-modal"
+                          class="btn-action inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-red-50 hover:bg-red-100 text-red-600 ring-1 ring-red-200 hover:ring-red-300 open-cancel-modal"
                           data-booking-id="{{ $booking->id }}" data-booking-code="{{ $booking->booking_code }}"
                           data-customer-name="{{ $booking->customer_name }}"
                           data-action="{{ route('admin.bookings.update-status', $booking) }}" data-mode="reject">
@@ -263,7 +514,6 @@
                           Tolak
                         </button>
 
-                        {{-- Hidden reject form --}}
                         <form id="reject-form-{{ $booking->id }}" method="POST"
                           action="{{ route('admin.bookings.update-status', $booking) }}" class="hidden">
                           @csrf @method('PATCH')
@@ -272,9 +522,10 @@
                         </form>
 
                       @elseif($booking->status === 'active')
-                        {{-- Complete --}}
+
+                        {{-- Complete Button --}}
                         <button type="button"
-                          class="inline-flex items-center gap-1.25 px-3.5 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all duration-150 ease hover:-translate-y-0.5 hover:shadow-lg active:scale-95 bg-blue-500 hover:bg-blue-600 text-white shadow-sm shadow-blue-200 open-complete-modal"
+                          class="btn-action inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white shadow-sm shadow-blue-200 open-complete-modal"
                           data-booking-id="{{ $booking->id }}" data-booking-code="{{ $booking->booking_code }}"
                           data-customer-name="{{ $booking->customer_name }}" data-total-price="{{ $booking->total_price }}"
                           data-end-date="{{ $booking->end_date->format('d M Y H:i') }}">
@@ -293,9 +544,9 @@
                           <input type="hidden" name="return_notes" id="notes-input-{{ $booking->id }}">
                         </form>
 
-                        {{-- Cancel active booking --}}
+                        {{-- Cancel Active --}}
                         <button type="button"
-                          class="inline-flex items-center gap-1.25 px-3.5 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all duration-150 ease hover:-translate-y-0.5 hover:shadow-lg active:scale-95 bg-red-50 hover:bg-red-100 text-red-500 border border-red-100 open-cancel-modal"
+                          class="btn-action inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-orange-50 hover:bg-orange-100 text-orange-600 ring-1 ring-orange-200 open-cancel-modal"
                           data-booking-id="{{ $booking->id }}" data-booking-code="{{ $booking->booking_code }}"
                           data-customer-name="{{ $booking->customer_name }}"
                           data-action="{{ route('admin.bookings.update-status', $booking) }}" data-mode="cancel">
@@ -308,12 +559,12 @@
 
                         {{-- Print Receipt --}}
                         <a href="{{ route('admin.bookings.receipt', $booking) }}" target="_blank"
-                          class="inline-flex items-center gap-1.25 px-3.5 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all duration-150 ease hover:-translate-y-0.5 hover:shadow-lg active:scale-95 bg-blue-500 hover:bg-blue-600 text-white shadow-sm shadow-blue-200">
+                          class="btn-action inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-teal-50 hover:bg-teal-100 text-teal-600 ring-1 ring-teal-200">
                           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                           </svg>
-                          Cetak Struk
+                          Struk
                         </a>
 
                         <form id="cancel-form-{{ $booking->id }}" method="POST"
@@ -325,9 +576,9 @@
 
                       @elseif($booking->status === 'completed')
 
-                        {{-- Print Receipt only for completed status --}}
+                        {{-- Receipt Only --}}
                         <a href="{{ route('admin.bookings.receipt', $booking) }}" target="_blank"
-                          class="inline-flex items-center gap-1.25 px-3.5 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all duration-150 ease hover:-translate-y-0.5 hover:shadow-lg active:scale-95 bg-blue-500 hover:bg-blue-600 text-white shadow-sm shadow-blue-200">
+                          class="btn-action inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white shadow-sm shadow-blue-200">
                           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -336,24 +587,32 @@
                         </a>
 
                       @endif
-
                     </div>
                   </td>
                 </tr>
 
               @empty
                 <tr>
-                  <td colspan="6" class="py-20 text-center">
-                    <div class="flex flex-col items-center gap-3">
-                      <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center">
-                        <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                        </svg>
+                  <td colspan="7" class="py-24 text-center">
+                    <div class="flex flex-col items-center gap-4">
+                      <div class="relative">
+                        <div
+                          class="w-20 h-20 bg-gradient-to-br from-gray-100 to-slate-100 rounded-3xl flex items-center justify-center shadow-inner">
+                          <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                          </svg>
+                        </div>
+                        <div
+                          class="absolute -top-1 -right-1 w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center">
+                          <span class="text-gray-400 text-xs">0</span>
+                        </div>
                       </div>
-                      <p class="font-semibold text-gray-600">Belum Ada Pemesanan</p>
-                      <p class="text-sm text-gray-400 max-w-xs">Semua pemesanan baru akan muncul di sini secara otomatis.
-                      </p>
+                      <div>
+                        <p class="font-bold text-gray-600 text-base">Belum Ada Pemesanan</p>
+                        <p class="text-sm text-gray-400 mt-1 max-w-xs mx-auto leading-relaxed">Semua pemesanan baru akan
+                          muncul di sini secara otomatis.</p>
+                      </div>
                     </div>
                   </td>
                 </tr>
@@ -363,19 +622,27 @@
           </table>
         </div>
 
-        <div id="no-result" class="hidden py-12 text-center text-sm text-gray-400">
-          <div class="flex flex-col items-center gap-2">
-            <svg class="w-10 h-10 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            Tidak ada hasil untuk pencarian Anda.
+        {{-- No Search Result --}}
+        <div id="no-result" class="hidden py-16 text-center">
+          <div class="flex flex-col items-center gap-3">
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-gray-100 to-slate-100 rounded-2xl flex items-center justify-center">
+              <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            <div>
+              <p class="font-bold text-gray-500">Tidak Ada Hasil</p>
+              <p class="text-sm text-gray-400 mt-0.5">Coba ubah kata kunci pencarian Anda.</p>
+            </div>
           </div>
         </div>
 
+        {{-- Pagination --}}
         @if($bookings->total() > 0)
           <div
-            class="px-6 py-4 border-t border-gray-100 bg-gray-50/60 flex flex-col sm:flex-row items-center justify-between gap-3">
+            class="px-5 sm:px-6 py-4 border-t border-gray-100 bg-gradient-to-r from-gray-50/60 to-slate-50/40 flex flex-col sm:flex-row items-center justify-between gap-3">
             {{ $bookings->links() }}
           </div>
         @endif
@@ -384,249 +651,285 @@
     </div>
   </div>
 
+  {{-- =================== MODAL: DP / APPROVE =================== --}}
   <div id="dp-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden" role="dialog"
     aria-modal="true">
-    <div class="animate-overlayIn absolute inset-0 bg-black/40 backdrop-blur-sm" id="dp-modal-backdrop"></div>
-    <div class="animate-modalIn relative bg-white rounded-2xl shadow-2xl max-w-md w-full" id="dp-modal-content">
+    <div class="animate-overlayIn absolute inset-0 bg-black/50 backdrop-blur-md" id="dp-modal-backdrop"></div>
+    <div class="animate-modalIn relative w-full max-w-md" id="dp-modal-content">
+      <div class="bg-white rounded-3xl shadow-2xl overflow-hidden ring-1 ring-black/5">
 
-      {{-- Header --}}
-      <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
-        <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 bg-emerald-50 rounded-xl flex items-center justify-center">
-            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          <h3 class="font-bold text-gray-900">Konfirmasi Pemesanan</h3>
-        </div>
-        <button id="close-modal-btn"
-          class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-
-      {{-- Body --}}
-      <div class="p-6 space-y-4">
-        <div class="flex items-center gap-3 p-3.5 bg-emerald-50 rounded-xl border border-emerald-100">
-          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500
-                              flex items-center justify-center text-white text-sm font-bold" id="dp-modal-avatar">--
-          </div>
-          <div>
-            <p class="font-bold text-gray-900 text-sm" id="modal-customer-name">–</p>
-            <p class="text-xs text-emerald-600 font-mono" id="modal-booking-code">–</p>
+        {{-- Modal Header --}}
+        <div class="relative px-6 pt-6 pb-5 bg-gradient-to-br from-emerald-50 to-teal-50 border-b border-emerald-100">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center shadow-md shadow-emerald-200">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-extrabold text-gray-900 text-base">Konfirmasi Pemesanan</h3>
+                <p class="text-xs text-emerald-600 font-medium mt-0.5">Atur jumlah DP yang diterima</p>
+              </div>
+            </div>
+            <button id="close-modal-btn"
+              class="w-8 h-8 flex items-center justify-center rounded-xl text-gray-400 hover:text-gray-600 hover:bg-white/80 transition-all">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         </div>
 
-        <div class="bg-gray-50 rounded-xl p-4 space-y-4 border border-gray-100">
-          <div class="flex justify-between items-center">
-            <span class="text-sm text-gray-500">Total Harga</span>
-            <span class="font-bold text-gray-900" id="modal-total-price">Rp 0</span>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-              Jumlah DP
-            </label>
-            <div class="relative">
-              <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-semibold text-gray-400">Rp</span>
-              <input type="number" id="modal-dp-input" min="0" placeholder="0"
-                class="focus:ring-emerald-500/18 w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-lg font-bold text-gray-900 bg-white focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all duration-200">
+        {{-- Modal Body --}}
+        <div class="p-6 space-y-4">
+          {{-- Customer Card --}}
+          <div
+            class="flex items-center gap-3 p-4 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl ring-1 ring-emerald-200">
+            <div
+              class="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-sm font-black shadow-sm"
+              id="dp-modal-avatar">--</div>
+            <div>
+              <p class="font-bold text-gray-900 text-sm" id="modal-customer-name">–</p>
+              <p class="text-xs text-emerald-600 font-mono font-semibold" id="modal-booking-code">–</p>
+            </div>
+            <div class="ml-auto">
+              <span class="text-[10px] font-bold bg-emerald-500 text-white px-2 py-0.5 rounded-full">Pending</span>
             </div>
           </div>
-          <div class="flex justify-between items-center pt-3 border-t border-gray-200">
-            <span class="text-sm text-gray-500">Sisa Pembayaran</span>
-            <span class="text-lg font-extrabold text-emerald-600" id="modal-remaining">Rp 0</span>
+
+          {{-- Price Info --}}
+          <div class="bg-gray-50 rounded-2xl p-4 space-y-4 ring-1 ring-gray-100">
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-500 font-medium">Total Harga Sewa</span>
+              <span class="font-black text-gray-900" id="modal-total-price">Rp 0</span>
+            </div>
+
+            {{-- DP Input --}}
+            <div>
+              <label class="block text-xs font-extrabold text-gray-600 mb-2 uppercase tracking-widest">
+                Jumlah Down Payment (DP)
+              </label>
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-gray-400">Rp</span>
+                <input type="number" id="modal-dp-input" min="0" placeholder="0"
+                  class="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-2xl text-lg font-black text-gray-900 bg-white focus:ring-0 focus:border-emerald-400 transition-all duration-200 hover:border-gray-300">
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center pt-3 border-t-2 border-dashed border-gray-200">
+              <span class="text-sm text-gray-500 font-medium">Sisa Pembayaran</span>
+              <span class="text-xl font-black text-emerald-600" id="modal-remaining">Rp 0</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      {{-- Footer --}}
-      <div class="px-6 pb-6 flex gap-3">
-        <button id="modal-cancel-btn"
-          class="flex-1 py-3 rounded-xl bg-gray-100 text-gray-600 text-sm font-semibold hover:bg-gray-200 transition-all active:scale-95">
-          Batal
-        </button>
-        <button id="modal-confirm-btn"
-          class="flex-1 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-semibold shadow-lg shadow-emerald-200 hover:shadow-emerald-300 hover:-translate-y-0.5 transition-all active:scale-95">
-          Konfirmasi
-        </button>
+        {{-- Modal Footer --}}
+        <div class="px-6 pb-6 flex gap-3">
+          <button id="modal-cancel-btn"
+            class="flex-1 py-3 rounded-2xl bg-gray-100 text-gray-600 text-sm font-bold hover:bg-gray-200 transition-all active:scale-95">
+            Batal
+          </button>
+          <button id="modal-confirm-btn"
+            class="flex-1 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-sm font-bold shadow-lg shadow-emerald-200 hover:shadow-emerald-300 hover:from-emerald-600 hover:to-teal-600 transition-all active:scale-95 flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+            </svg>
+            Konfirmasi & Setujui
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
+  {{-- =================== MODAL: COMPLETE =================== --}}
   <div id="complete-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden" role="dialog"
     aria-modal="true">
-    <div class="animate-overlayIn absolute inset-0 bg-black/40 backdrop-blur-sm" id="complete-modal-backdrop"></div>
-    <div class="animate-modalIn relative bg-white rounded-2xl shadow-2xl max-w-md w-full" id="complete-modal-content">
+    <div class="animate-overlayIn absolute inset-0 bg-black/50 backdrop-blur-md" id="complete-modal-backdrop"></div>
+    <div class="animate-modalIn relative w-full max-w-md" id="complete-modal-content">
+      <div class="bg-white rounded-3xl shadow-2xl overflow-hidden ring-1 ring-black/5">
 
-      {{-- Header --}}
-      <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
-        <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 bg-blue-50 rounded-xl flex items-center justify-center">
-            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        {{-- Header --}}
+        <div class="relative px-6 pt-6 pb-5 bg-gradient-to-br from-blue-50 to-indigo-50 border-b border-blue-100">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-md shadow-blue-200">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-extrabold text-gray-900 text-base">Selesaikan Pemesanan</h3>
+                <p class="text-xs text-blue-600 font-medium mt-0.5">Tandai booking sebagai selesai</p>
+              </div>
+            </div>
+            <button id="close-complete-modal-btn"
+              class="w-8 h-8 flex items-center justify-center rounded-xl text-gray-400 hover:text-gray-600 hover:bg-white/80 transition-all">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        {{-- Body --}}
+        <div class="p-6 space-y-4">
+          <div
+            class="flex items-center gap-3 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl ring-1 ring-blue-200">
+            <div
+              class="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-sm font-black shadow-sm"
+              id="complete-modal-avatar">--</div>
+            <div>
+              <p class="font-bold text-gray-900 text-sm" id="complete-modal-customer-name">–</p>
+              <p class="text-xs text-blue-600 font-mono font-semibold" id="complete-modal-booking-code">–</p>
+            </div>
+            <div class="ml-auto">
+              <span class="text-[10px] font-bold bg-blue-500 text-white px-2 py-0.5 rounded-full">Aktif</span>
+            </div>
+          </div>
+
+          <div class="bg-gray-50 rounded-2xl p-4 space-y-4 ring-1 ring-gray-100">
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-500 font-medium">Total Harga Sewa</span>
+              <span class="font-black text-gray-900" id="complete-modal-total-price">Rp 0</span>
+            </div>
+
+            <div>
+              <label class="block text-xs font-extrabold text-gray-600 mb-2 uppercase tracking-widest">
+                Denda <span class="normal-case font-normal text-gray-400 text-[10px]">(Keterlambatan / Kerusakan)</span>
+              </label>
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-gray-400">Rp</span>
+                <input type="number" id="complete-modal-penalty-input" min="0" value="0"
+                  class="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-2xl text-lg font-black text-gray-900 bg-white focus:ring-0 focus:border-blue-400 transition-all duration-200 hover:border-gray-300">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-extrabold text-gray-600 mb-2 uppercase tracking-widest">
+                Catatan Pengembalian <span class="normal-case font-normal text-gray-400 text-[10px]">(opsional)</span>
+              </label>
+              <textarea id="complete-modal-notes-input" rows="2"
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl text-sm bg-white text-gray-700 resize-none focus:ring-0 focus:border-blue-400 transition-all duration-200 hover:border-gray-300 placeholder-gray-300"
+                placeholder="Kondisi mobil saat dikembalikan..."></textarea>
+            </div>
+
+            <div class="flex justify-between items-center pt-3 border-t-2 border-dashed border-gray-200">
+              <span class="text-sm text-gray-500 font-medium">Total Akhir</span>
+              <span class="text-xl font-black text-blue-600" id="complete-modal-final-total">Rp 0</span>
+            </div>
+          </div>
+        </div>
+
+        {{-- Footer --}}
+        <div class="px-6 pb-6 flex gap-3">
+          <button id="complete-modal-cancel-btn"
+            class="flex-1 py-3 rounded-2xl bg-gray-100 text-gray-600 text-sm font-bold hover:bg-gray-200 transition-all active:scale-95">
+            Batal
+          </button>
+          <button id="complete-modal-confirm-btn"
+            class="flex-1 py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-sm font-bold shadow-lg shadow-blue-200 hover:shadow-blue-300 hover:from-blue-600 hover:to-indigo-600 transition-all active:scale-95 flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-          </div>
-          <h3 class="font-bold text-gray-900">Selesaikan Pemesanan</h3>
+            Selesaikan Booking
+          </button>
         </div>
-        <button id="close-complete-modal-btn"
-          class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-
-      {{-- Body --}}
-      <div class="p-6 space-y-4">
-        <div class="flex items-center gap-3 p-3.5 bg-blue-50 rounded-xl border border-blue-100">
-          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500
-                              flex items-center justify-center text-white text-sm font-bold"
-            id="complete-modal-avatar">--</div>
-          <div>
-            <p class="font-bold text-gray-900 text-sm" id="complete-modal-customer-name">–</p>
-            <p class="text-xs text-blue-600 font-mono" id="complete-modal-booking-code">–</p>
-          </div>
-        </div>
-
-        <div class="bg-gray-50 rounded-xl p-4 space-y-4 border border-gray-100">
-          <div class="flex justify-between items-center">
-            <span class="text-sm text-gray-500">Total Harga Sewa</span>
-            <span class="font-bold text-gray-900" id="complete-modal-total-price">Rp 0</span>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-              Denda <span class="normal-case font-normal text-gray-400">(Keterlambatan / Kerusakan)</span>
-            </label>
-            <div class="relative">
-              <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-semibold text-gray-400">Rp</span>
-              <input type="number" id="complete-modal-penalty-input" min="0" value="0" class=" focus:ring-emerald-500/18 w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl
-                                        text-lg font-bold text-gray-900 bg-white
-                                        focus:ring-2 focus:ring-blue-400 focus:border-transparent
-                                        transition-all duration-200">
-            </div>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-              Catatan Pengembalian
-              <span class="normal-case font-normal text-gray-400 ml-1">(opsional)</span>
-            </label>
-            <textarea id="complete-modal-notes-input" rows="2"
-              class="focus:ring-emerald-500/18 w-full px-4 py-3 border border-gray-200 rounded-xl text-sm bg-white text-gray-700 resize-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
-              placeholder="Kondisi mobil saat dikembalikan..."></textarea>
-          </div>
-          <div class="flex justify-between items-center pt-3 border-t border-gray-200">
-            <span class="text-sm text-gray-500">Total Akhir</span>
-            <span class="text-xl font-extrabold text-blue-600" id="complete-modal-final-total">Rp 0</span>
-          </div>
-        </div>
-      </div>
-
-      {{-- Footer --}}
-      <div class="px-6 pb-6 flex gap-3">
-        <button id="complete-modal-cancel-btn"
-          class="flex-1 py-3 rounded-xl bg-gray-100 text-gray-600 text-sm font-semibold hover:bg-gray-200 transition-all active:scale-95">
-          Batal
-        </button>
-        <button id="complete-modal-confirm-btn"
-          class="flex-1 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold shadow-lg shadow-blue-200 hover:shadow-blue-300 hover:-translate-y-0.5 transition-all active:scale-95">
-          Selesaikan Booking
-        </button>
       </div>
     </div>
   </div>
 
+  {{-- =================== MODAL: CANCEL / REJECT =================== --}}
   <div id="cancel-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden" role="dialog"
     aria-modal="true" aria-labelledby="cancel-modal-title">
-    <div class="animate-overlayIn absolute inset-0 bg-black/50 backdrop-blur-sm" id="cancel-modal-backdrop"></div>
+    <div class="animate-overlayIn absolute inset-0 bg-black/50 backdrop-blur-md" id="cancel-modal-backdrop"></div>
+    <div class="animate-modalIn relative w-full max-w-sm" id="cancel-modal-content">
+      <div class="bg-white rounded-3xl shadow-2xl overflow-hidden ring-1 ring-black/5">
 
-    <div class="animate-modalIn relative bg-white rounded-2xl shadow-2xl max-w-sm w-full" id="cancel-modal-content">
+        {{-- Danger Header --}}
+        <div
+          class="relative px-6 pt-8 pb-6 bg-gradient-to-br from-red-50 to-rose-50 flex flex-col items-center text-center">
+          {{-- Animated Icon --}}
+          <div class="relative mb-4">
+            <div class="absolute inset-0 rounded-full bg-red-200 animate-ping opacity-30 scale-125"></div>
+            <div
+              class="relative w-16 h-16 bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl flex items-center justify-center shadow-lg shadow-red-200 rotate-3">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+          </div>
+          <h3 id="cancel-modal-title" class="text-lg font-extrabold text-gray-900">Batalkan Pesanan?</h3>
+          <p class="text-sm text-gray-500 mt-1.5 leading-relaxed" id="cancel-modal-subtitle">
+            Tindakan ini tidak dapat dibatalkan.
+          </p>
+        </div>
 
-      {{-- Danger Icon --}}
-      <div class="flex flex-col items-center pt-8 pb-2 px-6">
-        <div class="relative mb-4">
-          {{-- Outer ring glow --}}
-          <div class="absolute inset-0 rounded-full bg-red-100 animate-ping opacity-60 scale-110"></div>
-          <div class="relative w-16 h-16 bg-gradient-to-br from-red-400 to-rose-600
-                              rounded-full flex items-center justify-center shadow-lg shadow-red-200">
-            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
+        {{-- Body --}}
+        <div class="px-6 py-5 space-y-4">
+          {{-- Customer Chip --}}
+          <div class="flex items-center gap-3 p-3.5 bg-red-50 rounded-2xl ring-1 ring-red-200">
+            <div
+              class="w-10 h-10 rounded-2xl bg-gradient-to-br from-red-400 to-rose-500 flex items-center justify-center text-white text-xs font-black flex-shrink-0"
+              id="cancel-modal-avatar">--</div>
+            <div>
+              <p class="font-bold text-gray-900 text-sm" id="cancel-modal-customer">–</p>
+              <p class="text-xs text-red-500 font-mono font-semibold" id="cancel-modal-code">–</p>
+            </div>
+          </div>
+
+          {{-- Reason --}}
+          <div>
+            <label class="block text-xs font-extrabold text-gray-600 mb-2 uppercase tracking-widest">
+              Alasan Pembatalan <span class="normal-case font-normal text-gray-400">(opsional)</span>
+            </label>
+            <textarea id="cancel-modal-reason" rows="3"
+              class="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl text-sm bg-white text-gray-700 resize-none focus:ring-0 focus:border-red-400 transition-all duration-200 hover:border-gray-300 placeholder-gray-300"
+              placeholder="Masukkan alasan pembatalan..."></textarea>
           </div>
         </div>
 
-        <h3 id="cancel-modal-title" class="text-lg font-bold text-gray-900 text-center">
-          Batalkan Pesanan?
-        </h3>
-        <p class="text-sm text-gray-500 text-center mt-1 leading-relaxed" id="cancel-modal-subtitle">
-          Tindakan ini tidak dapat dibatalkan.
-        </p>
-      </div>
-
-      {{-- Customer chip --}}
-      <div class="mx-6 mt-4 flex items-center gap-3 p-3 bg-red-50 rounded-xl border border-red-100">
-        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-red-400 to-rose-500
-                          flex items-center justify-center text-white text-xs font-bold shrink-0"
-          id="cancel-modal-avatar">--</div>
-        <div>
-          <p class="font-semibold text-gray-900 text-sm" id="cancel-modal-customer">–</p>
-          <p class="text-xs text-red-500 font-mono" id="cancel-modal-code">–</p>
+        {{-- Footer --}}
+        <div class="px-6 pb-6 flex gap-3">
+          <button id="cancel-modal-dismiss"
+            class="flex-1 py-3 rounded-2xl bg-gray-100 text-gray-600 text-sm font-bold hover:bg-gray-200 transition-all active:scale-95">
+            Kembali
+          </button>
+          <button id="cancel-modal-confirm"
+            class="flex-1 py-3 rounded-2xl bg-gradient-to-r from-red-500 to-rose-600 text-white text-sm font-bold shadow-lg shadow-red-200 hover:shadow-red-300 hover:from-red-600 hover:to-rose-700 transition-all active:scale-95 flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+            Ya, Batalkan
+          </button>
         </div>
-      </div>
-
-      {{-- Reason textarea --}}
-      <div class="mx-6 mt-4">
-        <label class="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-          Alasan Pembatalan
-          <span class="normal-case font-normal text-gray-400 ml-1">(opsional)</span>
-        </label>
-        <textarea id="cancel-modal-reason" rows="2"
-          class="focus:ring-emerald-500/18 w-full px-4 py-3 border border-gray-200 rounded-xl text-sm bg-white text-gray-700 resize-none focus:ring-2 focus:ring-red-400 focus:border-transparent transition-all duration-200"
-          placeholder="Masukkan alasan pembatalan..."></textarea>
-      </div>
-
-      {{-- Footer --}}
-      <div class="p-6 flex gap-3">
-        <button id="cancel-modal-dismiss"
-          class="flex-1 py-3 rounded-xl bg-gray-100 text-gray-600 text-sm font-semibold hover:bg-gray-200 transition-all active:scale-95">
-          Kembali
-        </button>
-        <button id="cancel-modal-confirm"
-          class="flex-1 py-3 rounded-xl bg-gradient-to-r from-red-500 to-rose-600 text-white text-sm font-semibold shadow-lg shadow-red-200 hover:shadow-red-300 hover:-translate-y-0.5 transition-all active:scale-95 flex items-center justify-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-          </svg>
-          Ya, Batalkan
-        </button>
       </div>
     </div>
   </div>
 
+  {{-- =================== JAVASCRIPT =================== --}}
   <script>
     (() => {
       'use strict';
 
       const $ = id => document.getElementById(id);
-      const idr = n => 'Rp ' + new Intl.NumberFormat('id-ID').format(n);
-      const initials = name => name.trim().substring(0, 2).toUpperCase();
+      const idr = n => 'Rp ' + new Intl.NumberFormat('id-ID').format(n || 0);
+      const initials = name => (name || '--').trim().substring(0, 2).toUpperCase();
 
+      // ── Modal Factory ──────────────────────────────────────────────
       function makeModal(modalId, backdropId) {
         const el = $(modalId);
         const bd = $(backdropId);
+        if (!el || !bd) return { open() { }, close() { }, el, bd };
         return {
           open() {
             el.classList.remove('hidden');
-            // re-trigger bounce animation
-            el.querySelectorAll('.modal-box').forEach(b => {
-              b.style.animation = 'none';
-              b.offsetHeight;
-              b.style.animation = '';
-            });
-            // Prevent body scroll
             document.body.style.overflow = 'hidden';
           },
           close() {
@@ -637,6 +940,7 @@
         };
       }
 
+      // ── DP / Approve Modal ─────────────────────────────────────────
       const dpModal = makeModal('dp-modal', 'dp-modal-backdrop');
       let dpBookingId = null, dpTotal = 0;
       const dpInput = $('modal-dp-input');
@@ -656,24 +960,26 @@
           dpRemain.textContent = idr(dpTotal - curDp);
 
           dpModal.open();
-          setTimeout(() => dpInput.focus(), 50);
+          setTimeout(() => dpInput.focus(), 80);
         });
       });
 
-      dpInput.addEventListener('input', () => {
+      dpInput?.addEventListener('input', () => {
         dpRemain.textContent = idr(dpTotal - (parseInt(dpInput.value) || 0));
       });
 
-      $('modal-confirm-btn').addEventListener('click', () => {
+      $('modal-confirm-btn')?.addEventListener('click', () => {
+        const btn = $('modal-confirm-btn');
+        btn.disabled = true;
+        btn.innerHTML = `<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Memproses...`;
         $('dp-input-' + dpBookingId).value = parseInt(dpInput.value) || 0;
         $('confirm-form-' + dpBookingId).submit();
       });
 
-      ['close-modal-btn', 'modal-cancel-btn'].forEach(id =>
-        $(id).addEventListener('click', () => dpModal.close())
-      );
-      dpModal.bd.addEventListener('click', () => dpModal.close());
+      ['close-modal-btn', 'modal-cancel-btn'].forEach(id => $(id)?.addEventListener('click', () => dpModal.close()));
+      dpModal.bd?.addEventListener('click', () => dpModal.close());
 
+      // ── Complete Modal ─────────────────────────────────────────────
       const cModal = makeModal('complete-modal', 'complete-modal-backdrop');
       let cBookingId = null, cTotal = 0;
       const penaltyInput = $('complete-modal-penalty-input');
@@ -694,28 +1000,30 @@
           finalTotalEl.textContent = idr(cTotal);
 
           cModal.open();
-          setTimeout(() => penaltyInput.focus(), 50);
+          setTimeout(() => penaltyInput.focus(), 80);
         });
       });
 
-      penaltyInput.addEventListener('input', () => {
+      penaltyInput?.addEventListener('input', () => {
         finalTotalEl.textContent = idr(cTotal + (parseInt(penaltyInput.value) || 0));
       });
 
-      $('complete-modal-confirm-btn').addEventListener('click', () => {
+      $('complete-modal-confirm-btn')?.addEventListener('click', () => {
+        const btn = $('complete-modal-confirm-btn');
+        btn.disabled = true;
+        btn.innerHTML = `<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Memproses...`;
         $('penalty-input-' + cBookingId).value = parseInt(penaltyInput.value) || 0;
         $('notes-input-' + cBookingId).value = notesInput.value;
         $('complete-form-' + cBookingId).submit();
       });
 
-      ['close-complete-modal-btn', 'complete-modal-cancel-btn'].forEach(id =>
-        $(id).addEventListener('click', () => cModal.close())
-      );
-      cModal.bd.addEventListener('click', () => cModal.close());
+      ['close-complete-modal-btn', 'complete-modal-cancel-btn'].forEach(id => $(id)?.addEventListener('click', () => cModal.close()));
+      cModal.bd?.addEventListener('click', () => cModal.close());
 
+      // ── Cancel / Reject Modal ──────────────────────────────────────
       const cancelModal = makeModal('cancel-modal', 'cancel-modal-backdrop');
       let cancelBookingId = null;
-      let cancelMode = 'reject'; // 'reject' | 'cancel'
+      let cancelMode = 'reject';
       const cancelReason = $('cancel-modal-reason');
 
       document.querySelectorAll('.open-cancel-modal').forEach(btn => {
@@ -723,17 +1031,15 @@
           cancelBookingId = btn.dataset.bookingId;
           cancelMode = btn.dataset.mode || 'reject';
 
-          // Populate modal content
           $('cancel-modal-customer').textContent = btn.dataset.customerName;
           $('cancel-modal-code').textContent = '#' + btn.dataset.bookingCode;
           $('cancel-modal-avatar').textContent = initials(btn.dataset.customerName);
 
-          // Adjust wording based on mode
           const isReject = cancelMode === 'reject';
           $('cancel-modal-title').textContent = isReject ? 'Tolak Pemesanan?' : 'Batalkan Pesanan?';
           $('cancel-modal-subtitle').textContent = isReject
             ? 'Pemesanan ini akan ditolak dan pelanggan akan dinotifikasi.'
-            : 'Pemesanan aktif ini akan dibatalkan. Tindakan ini tidak dapat diurungkan.';
+            : 'Pemesanan aktif ini akan dibatalkan. Tindakan tidak dapat diurungkan.';
 
           cancelReason.value = '';
           cancelModal.open();
@@ -741,45 +1047,28 @@
         });
       });
 
-      // Confirm cancel/reject
-      $('cancel-modal-confirm').addEventListener('click', () => {
+      $('cancel-modal-confirm')?.addEventListener('click', () => {
         const btn = $('cancel-modal-confirm');
-
-        // Loading state
         btn.disabled = true;
-        btn.innerHTML = `
-              <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-              </svg>
-              Memproses...`;
+        btn.innerHTML = `<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Memproses...`;
 
-        const formId = cancelMode === 'reject'
-          ? 'reject-form-' + cancelBookingId
-          : 'cancel-form-' + cancelBookingId;
-
+        const formId = cancelMode === 'reject' ? 'reject-form-' + cancelBookingId : 'cancel-form-' + cancelBookingId;
         const reasonInputId = 'cancel-reason-' + cancelBookingId;
-        if ($(reasonInputId)) {
-          $(reasonInputId).value = cancelReason.value;
-        }
+        if ($(reasonInputId)) $(reasonInputId).value = cancelReason.value;
 
         const form = $(formId);
         if (form) {
           form.submit();
         } else {
-          // Fallback: reset button if form not found
           btn.disabled = false;
-          btn.textContent = 'Ya, Batalkan';
+          btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg> Ya, Batalkan`;
         }
       });
 
-      // Dismiss cancel modal
-      ['cancel-modal-dismiss'].forEach(id =>
-        $(id).addEventListener('click', () => cancelModal.close())
-      );
-      cancelModal.bd.addEventListener('click', () => cancelModal.close());
+      ['cancel-modal-dismiss'].forEach(id => $(id)?.addEventListener('click', () => cancelModal.close()));
+      cancelModal.bd?.addEventListener('click', () => cancelModal.close());
 
+      // ── Escape Key ─────────────────────────────────────────────────
       document.addEventListener('keydown', e => {
         if (e.key === 'Escape') {
           dpModal.close();
@@ -788,97 +1077,80 @@
         }
       });
 
+      // ── Search & Filter ────────────────────────────────────────────
       const searchInput = $('search-input');
-      const tbody = $('bookings-tbody');
       const noResult = $('no-result');
-
       let searchTimeout = null;
 
       function applyServerFilters() {
         const params = new URLSearchParams(window.location.search);
+        const search = searchInput?.value.trim();
+        const active = document.querySelector('.filter-pill.active');
+        const status = active?.dataset.filter || 'all';
 
-        const search = searchInput.value.trim();
-        const status = document.querySelector('.filter-pill.bg-emerald-500')?.dataset.filter || 'all';
-
-        // Reset ke halaman 1 setiap kali filter diubah
         params.delete('page');
-
-        if (search) params.set('search', search);
-        else params.delete('search');
-
-        if (status !== 'all') params.set('status', status);
-        else params.delete('status');
+        search ? params.set('search', search) : params.delete('search');
+        status !== 'all' ? params.set('status', status) : params.delete('status');
 
         const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
         window.location.href = newUrl;
       }
 
-      // Auto search setelah user berhenti mengetik selama 10000ms
-      searchInput.addEventListener('input', () => {
+      searchInput?.addEventListener('input', () => {
         clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(applyServerFilters, 1000);
+        searchTimeout = setTimeout(applyServerFilters, 900);
       });
 
+      // Filter Pills
       document.querySelectorAll('.filter-pill').forEach(pill => {
-        pill.addEventListener('click', (e) => {
-          // Reset SEMUA button terlebih dahulu
-          const allPills = document.querySelectorAll('.filter-pill');
-          allPills.forEach(p => {
-            p.classList.remove('bg-emerald-500', 'text-white', 'shadow-sm');
+        pill.addEventListener('click', e => {
+          document.querySelectorAll('.filter-pill').forEach(p => {
+            p.classList.remove('bg-emerald-500', 'text-white', 'shadow-sm', 'shadow-emerald-200', 'active');
             p.classList.add('bg-gray-100', 'text-gray-500');
           });
-
-          // Set yang diklik saja jadi aktif
-          e.currentTarget.classList.add('bg-emerald-500', 'text-white', 'shadow-sm');
+          e.currentTarget.classList.add('bg-emerald-500', 'text-white', 'shadow-sm', 'shadow-emerald-200', 'active');
           e.currentTarget.classList.remove('bg-gray-100', 'text-gray-500');
-
           applyServerFilters();
         });
       });
 
-      // Clear search button handler
+      // Clear Search
       const clearBtn = $('clear-search');
 
       function toggleClearButton() {
-        if (searchInput.value.trim().length > 0) {
-          clearBtn.classList.remove('hidden');
+        if (searchInput?.value.trim().length > 0) {
+          clearBtn?.classList.remove('hidden');
         } else {
-          clearBtn.classList.add('hidden');
+          clearBtn?.classList.add('hidden');
         }
       }
 
       toggleClearButton();
-
-      searchInput.addEventListener('input', toggleClearButton);
-
-      clearBtn.addEventListener('click', () => {
-        searchInput.value = '';
+      searchInput?.addEventListener('input', toggleClearButton);
+      clearBtn?.addEventListener('click', () => {
+        if (searchInput) searchInput.value = '';
         toggleClearButton();
         applyServerFilters();
       });
 
-      // Set active filter pill berdasarkan query parameter di URL
+      // ── Init active filter from URL ────────────────────────────────
       document.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
         const activeStatus = urlParams.get('status') || 'all';
         const searchQuery = urlParams.get('search') || '';
 
-        searchInput.value = searchQuery;
+        if (searchInput) searchInput.value = searchQuery;
         toggleClearButton();
 
-        // Reset SEMUA status terlebih dahulu
-        const allPills = document.querySelectorAll('.filter-pill');
-        allPills.forEach(p => {
-          p.classList.remove('bg-emerald-500', 'text-white', 'shadow-sm');
-          p.classList.add('bg-gray-100', 'text-gray-500');
-        });
-
-        // Baru set yang aktif
-        allPills.forEach(p => {
-          if (p.dataset.filter === activeStatus) {
-            p.classList.add('bg-emerald-500', 'text-white', 'shadow-sm');
-            p.classList.remove('bg-gray-100', 'text-gray-500');
-          }
+        document.querySelectorAll('.filter-pill').forEach(p => {
+          const isActive = p.dataset.filter === activeStatus;
+          p.classList.toggle('bg-emerald-500', isActive);
+          p.classList.toggle('text-white', isActive);
+          p.classList.toggle('shadow-sm', isActive);
+          p.classList.toggle('shadow-emerald-200', isActive);
+          p.classList.toggle('active', isActive);
+          p.classList.toggle('bg-gray-100', !isActive);
+          p.classList.toggle('text-gray-500', !isActive);
         });
       });
 
