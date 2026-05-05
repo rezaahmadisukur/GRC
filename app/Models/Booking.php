@@ -12,7 +12,7 @@ class Booking extends Model
 
     protected $fillable = [
         'car_id',
-        'user_id',
+        'admin_id',
         'booking_code',
         'customer_name',
         'whatsapp_number',
@@ -27,7 +27,10 @@ class Booking extends Model
         'final_total_price',
         'return_notes',
         'status',
-        'notes'
+        'notes',
+        'is_walkin',
+        'cash_paid',
+        'change_amount'
     ];
 
     /**
