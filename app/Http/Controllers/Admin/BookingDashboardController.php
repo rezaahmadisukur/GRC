@@ -44,14 +44,29 @@ class BookingDashboardController extends Controller
         }
     }
 
-    public function indexDashboard()
+    public function indexDashboard(Request $request)
     {
         $user = auth()->user();
 
-        $stats = $this->bookingService->getDashboardStatistics($user);
-        $chartData = $user->role === 'owner' ? $this->bookingService->getChartData() : [];
-        $popularCars = Car::withCount('bookings')->orderBy('bookings_count', 'desc')->take(3)->get();
-        $recentBookings = Booking::with(['car', 'user'])->latest()->take(5)->get();
+        // Period Filter Logic
+        $period = (int) $request->get('period', 7);
+        $to = now();
+        $from = match ($period) {
+            7 => now()->subDays(7),
+            30 => now()->subDays(30),
+            90 => now()->subDays(90),
+            365 => now()->subYear(),
+            default => now()->subDays(7),
+        };
+
+        $stats = $this->bookingService->getDashboardStatistics($user, $from, $to);
+        $chartData = $user->role === 'owner' ? $this->bookingService->getChartData($from, $to) : [];
+        $popularCars = Car::withCount([
+            'bookings' => function ($q) use ($from, $to) {
+                $q->whereBetween('created_at', [$from, $to]);
+            }
+        ])->orderBy('bookings_count', 'desc')->take(3)->get();
+        $recentBookings = Booking::with(['car', 'user'])->whereBetween('created_at', [$from, $to])->latest()->take(5)->get();
 
         return view('dashboard', compact('stats', 'chartData', 'popularCars', 'recentBookings', 'user'));
     }
