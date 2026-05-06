@@ -52,9 +52,7 @@ class AdminBookingController extends Controller
             'whatsapp_number' => 'required|string|max:20',
             'start_date' => 'required|date',
             'duration_type' => 'required|integer|in:12,24',
-            'extra_hours' => 'nullable|integer|min:0|max:12',
-            'transaction_mode' => 'required|in:immediate,booking',
-            'cash_paid' => 'nullable|numeric|min:0|required_if:transaction_mode,immediate',
+            'extra_hours' => 'nullable|integer|min:0',
             'dp_amount' => 'nullable|numeric|min:0|required_if:transaction_mode,booking',
             'notes' => 'nullable|string',
         ]);
@@ -71,17 +69,11 @@ class AdminBookingController extends Controller
             return back()->withInput()->with('error', 'Maaf, mobil sudah ada booking lain pada rentang tanggal ini.');
         }
 
-        if ($validated['transaction_mode'] === 'immediate') {
-            // Mode Langsung Ambil Mobil
-            $booking = $this->bookingService->createWalkinBooking($validated);
-        } else {
-            // Mode Booking Saja
-            $validated['dp_amount'] = $validated['dp_amount'] ?? 0;
-            $booking = $this->bookingService->createBooking($validated);
+        $validated['dp_amount'] = $validated['dp_amount'] ?? 0;
+        $booking = $this->bookingService->createBooking($validated);
 
-            if ($validated['dp_amount'] > 0) {
-                $this->bookingService->confirmBooking($booking, (float) $validated['dp_amount']);
-            }
+        if ($validated['dp_amount'] > 0) {
+            $this->bookingService->confirmBooking($booking, (float) $validated['dp_amount']);
         }
 
         return redirect()->route('admin.quick-booking.receipt', $booking)
