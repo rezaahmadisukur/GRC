@@ -339,7 +339,6 @@
                 class="flex flex-col h-full overflow-hidden">
                 @csrf
                 <input type="hidden" name="car_id" id="modal_car_id" value="">
-                {{-- <input type="hidden" name="transaction_mode" value="immediate"> --}}
 
                 {{-- ── Modal Header ── --}}
                 <div class="px-6 py-5 bg-gradient-to-r
