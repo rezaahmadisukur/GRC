@@ -78,7 +78,7 @@ class Car extends Model
 
         // Check for overlapping approved bookings
         $overlappingBookings = $this->bookings()
-            ->where('status', 'approved')
+            ->whereIn('status', ['approved', 'active'])
             ->when($excludeBookingId, function ($query) use ($excludeBookingId) {
                 return $query->where('id', '!=', $excludeBookingId);
             })
