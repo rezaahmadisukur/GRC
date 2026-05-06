@@ -339,7 +339,7 @@
                 class="flex flex-col h-full overflow-hidden">
                 @csrf
                 <input type="hidden" name="car_id" id="modal_car_id" value="">
-                <input type="hidden" name="transaction_mode" value="immediate">
+                {{-- <input type="hidden" name="transaction_mode" value="immediate"> --}}
 
                 {{-- ── Modal Header ── --}}
                 <div class="px-6 py-5 bg-gradient-to-r
@@ -537,7 +537,7 @@
                             <div>
                                 <label
                                     class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
-                                    Uang Diterima (DP)
+                                    Uang Diterima / DP
                                 </label>
                                 <div class="relative flex items-center border border-gray-200 rounded-xl
                                             bg-gray-50 focus-within:bg-white focus-within:border-indigo-400
@@ -548,7 +548,7 @@
                                                  bg-gray-100 self-stretch">
                                         Rp
                                     </span>
-                                    <input type="number" name="cash_paid" id="modal_cash_paid" min="0" placeholder="0"
+                                    <input type="number" name="dp_amount" id="modal_cash_paid" min="0" placeholder="0"
                                         class="flex-1 px-3 py-2.5 text-sm font-bold text-gray-700
                                                   bg-transparent outline-none w-0 border-none" >
                                 </div>
@@ -585,8 +585,8 @@
                                          bg-gray-100 self-stretch">
                                 Rp
                             </span>
-                            <input type="number" name="dp_amount" id="modal_dp_amount" min="0" placeholder="0" class="flex-1 px-3 py-2.5 text-sm font-bold text-gray-700
-                                          bg-transparent outline-none w-0 border-none">
+                            <input type="number" name="booking_dp_amount" id="modal_dp_amount" min="0" placeholder="0" class="flex-1 px-3 py-2.5 text-sm font-bold text-gray-700
+                                          bg-transparent outline-none w-0 border-none" disabled>
                         </div>
                     </div>
 
