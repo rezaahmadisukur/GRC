@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -55,7 +56,9 @@ class Booking extends Model
 
     public function scopeForPeriod($query, $startDate, $endDate)
     {
-        return $query->whereBetween('start_date', [$startDate, $endDate])
+        $endDate = Carbon::parse($endDate)->addDay();
+        return $query->where('start_date', '>=', $startDate)
+            ->where('start_date', '<', $endDate)
             ->with('car')
             ->orderBy('start_date');
     }

@@ -1,360 +1,344 @@
+{{-- resources/views/admin/reports/pdf_template.blade.php --}}
 <!DOCTYPE html>
 <html lang="id">
 
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Laporan Transaksi — GRC Rental</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Laporan Transaksi GRC Rental</title>
   <style>
-    /* ── Reset ── */
+    /* ── RESET ─────────────────────────────── */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
     }
 
-    /* ── Page ── */
     body {
-      background: #ffffff;
-      color: #1e293b;
+      font-family: 'DejaVu Sans', Arial, sans-serif;
       font-size: 11px;
+      color: #1e293b;
+      background: #ffffff;
+      padding: 28px 30px 24px;
       line-height: 1.5;
-      padding: 32px 36px;
     }
 
-    /* ════════════════════════════
-           HEADER
-        ════════════════════════════ */
-    .page-header {
+    /* ── HEADER ────────────────────────────── */
+    .header-wrap {
       border-bottom: 3px solid #1e40af;
-      padding-bottom: 16px;
-      margin-bottom: 20px;
+      padding-bottom: 14px;
+      margin-bottom: 18px;
     }
 
-    .header-top {
-      display: table;
+    .header-table {
       width: 100%;
+      border-collapse: collapse;
     }
 
-    .header-brand {
-      display: table-cell;
+    .header-left {
       vertical-align: middle;
-      width: 60%;
     }
 
-    .header-meta {
-      display: table-cell;
-      vertical-align: middle;
-      text-align: right;
-      width: 40%;
-    }
-
-    .brand-badge {
-      display: inline-block;
-      background: #1e40af;
-      color: #ffffff;
-      font-size: 18px;
-      font-weight: 900;
-      letter-spacing: 1px;
-      padding: 5px 14px;
-      border-radius: 6px;
-      margin-bottom: 4px;
-    }
-
-    .brand-tagline {
-      font-size: 10px;
-      color: #64748b;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-
-    .report-title {
-      font-size: 13px;
+    .company-name {
+      font-size: 20px;
       font-weight: 700;
       color: #1e40af;
+      letter-spacing: -0.3px;
+      line-height: 1.2;
     }
 
-    .report-period {
+    .company-tagline {
       font-size: 10px;
       color: #64748b;
       margin-top: 2px;
     }
 
-    /* ════════════════════════════
-           INFO STRIP
-        ════════════════════════════ */
-    .info-strip {
-      display: table;
+    .header-right {
+      text-align: right;
+      vertical-align: middle;
+    }
+
+    .doc-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e293b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .doc-subtitle {
+      font-size: 9px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    /* ── INFO BAR ──────────────────────────── */
+    .info-bar {
       width: 100%;
-      background: #f1f5f9;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      padding: 10px 14px;
+      border-collapse: collapse;
       margin-bottom: 20px;
     }
 
-    .info-strip-item {
-      display: table-cell;
+    .info-bar td {
+      padding: 8px 14px;
+      font-size: 10.5px;
       vertical-align: middle;
-      width: 33.33%;
     }
 
-    .info-strip-item.right {
-      text-align: right;
-    }
-
-    .info-strip-item.center {
-      text-align: center;
-    }
-
-    .info-label {
+    .info-bar .info-label {
+      color: #64748b;
       font-size: 9px;
-      color: #94a3b8;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-bottom: 2px;
+      display: block;
+      margin-bottom: 1px;
     }
 
-    .info-value {
-      font-size: 12px;
+    .info-bar .info-value {
       font-weight: 700;
       color: #1e293b;
+      font-size: 11px;
     }
 
-    .info-value.blue {
-      color: #1e40af;
+    .info-divider {
+      width: 1px;
+      background: #cbd5e1;
+      padding: 0 !important;
     }
 
-    /* ════════════════════════════
-           SECTION TITLE
-        ════════════════════════════ */
-    .section-title {
-      font-size: 10px;
+    /* ── SUMMARY CARDS ─────────────────────── */
+    .summary-title {
+      font-size: 9px;
       font-weight: 700;
-      color: #64748b;
+      color: #94a3b8;
       text-transform: uppercase;
       letter-spacing: 1px;
       margin-bottom: 8px;
-      padding-left: 8px;
-      border-left: 3px solid #1e40af;
-    }
-
-    /* ════════════════════════════
-           TABLE
-        ════════════════════════════ */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    /* Header */
-    thead tr {
-      background: #1e40af;
-    }
-
-    thead th {
-      color: #ffffff;
-      font-size: 9.5px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      padding: 9px 10px;
-      text-align: left;
-    }
-
-    thead th.text-right {
-      text-align: right;
-    }
-
-    thead th.text-center {
-      text-align: center;
-    }
-
-    /* Subheader stripe  */
-    .thead-accent tr {
-      background: #1d3a9a;
-    }
-
-    /* Body rows */
-    tbody tr {
-      border-bottom: 1px solid #e2e8f0;
-    }
-
-    tbody tr:nth-child(even) {
-      background: #f8fafc;
-    }
-
-    tbody tr:nth-child(odd) {
-      background: #ffffff;
-    }
-
-    tbody td {
-      font-size: 10.5px;
-      color: #334155;
-      padding: 8px 10px;
-      vertical-align: middle;
-    }
-
-    tbody td.text-right {
-      text-align: right;
-    }
-
-    tbody td.text-center {
-      text-align: center;
-    }
-
-    tbody td.mono {
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 10px;
-      color: #475569;
-    }
-
-    /* No data row */
-    .empty-row td {
-      text-align: center;
-      color: #94a3b8;
-      padding: 24px;
-      font-style: italic;
-    }
-
-    /* ════════════════════════════
-           STATUS BADGES
-        ════════════════════════════ */
-    .badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 20px;
-      font-size: 9px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
-    }
-
-    .badge-completed {
-      background: #dcfce7;
-      color: #166534;
-      border: 1px solid #bbf7d0;
-    }
-
-    .badge-cancelled {
-      background: #fee2e2;
-      color: #991b1b;
-      border: 1px solid #fecaca;
-    }
-
-    .badge-active {
-      background: #dbeafe;
-      color: #1e40af;
-      border: 1px solid #bfdbfe;
-    }
-
-    .badge-pending {
-      background: #fef9c3;
-      color: #854d0e;
-      border: 1px solid #fef08a;
-    }
-
-    .badge-confirmed {
-      background: #e0f2fe;
-      color: #0369a1;
-      border: 1px solid #bae6fd;
-    }
-
-    /* ════════════════════════════
-           SUMMARY / TOTAL SECTION
-        ════════════════════════════ */
-    .summary-wrapper {
-      margin-top: 16px;
-      display: table;
-      width: 100%;
-    }
-
-    .summary-spacer {
-      display: table-cell;
-      width: 55%;
-    }
-
-    .summary-box {
-      display: table-cell;
-      width: 45%;
-      vertical-align: top;
     }
 
     .summary-table {
       width: 100%;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      overflow: hidden;
+      border-collapse: collapse;
+      margin-bottom: 22px;
     }
 
     .summary-table td {
-      padding: 7px 12px;
-      font-size: 10.5px;
-      border-bottom: 1px solid #f1f5f9;
+      width: 33.333%;
+      padding: 0 5px;
+      vertical-align: top;
     }
 
-    .summary-table tr:last-child td {
-      border-bottom: none;
+    .summary-table td:first-child {
+      padding-left: 0;
     }
 
-    .summary-label {
-      color: #64748b;
-      width: 55%;
+    .summary-table td:last-child {
+      padding-right: 0;
     }
 
-    .summary-value {
-      text-align: right;
+    .stat-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 3px solid #1e40af;
+      padding: 10px 12px;
+      text-align: center;
+    }
+
+    .stat-card.green {
+      border-top-color: #16a34a;
+    }
+
+    .stat-card.blue {
+      border-top-color: #1e40af;
+    }
+
+    .stat-card.violet {
+      border-top-color: #7c3aed;
+    }
+
+    .stat-value {
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.2;
+      margin-bottom: 3px;
+    }
+
+    .stat-value.small {
+      font-size: 13px;
+    }
+
+    .stat-label {
+      font-size: 8.5px;
       font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    /* ── SECTION TITLE ─────────────────────── */
+    .section-header {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 6px;
+    }
+
+    .section-header td {
+      vertical-align: middle;
+      padding: 0;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
       color: #1e293b;
     }
 
-    .summary-total-row {
-      background: #1e40af;
-    }
-
-    .summary-total-row td {
-      color: #ffffff !important;
-      font-weight: 700 !important;
-      font-size: 11px !important;
-    }
-
-    /* ════════════════════════════
-           FOOTER
-        ════════════════════════════ */
-    .page-footer {
-      margin-top: 28px;
-      padding-top: 12px;
-      border-top: 1px solid #e2e8f0;
-      display: table;
-      width: 100%;
-    }
-
-    .footer-left {
-      display: table-cell;
-      vertical-align: middle;
-      width: 60%;
-    }
-
-    .footer-right {
-      display: table-cell;
-      vertical-align: middle;
+    .section-count {
       text-align: right;
-      width: 40%;
-    }
-
-    .footer-text {
       font-size: 9px;
-      color: #94a3b8;
-    }
-
-    .footer-text strong {
       color: #64748b;
     }
 
-    /* ════════════════════════════
-           UTILITY
-        ════════════════════════════ */
+    /* ── TABLE ─────────────────────────────── */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10px;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* Head */
+    .data-table thead tr {
+      background: #1e40af;
+    }
+
+    .data-table thead th {
+      color: #ffffff;
+      padding: 7px 8px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    /* Body */
+    .data-table tbody td {
+      padding: 7px 8px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #334155;
+      vertical-align: middle;
+    }
+
+    .data-table tbody tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+
+    .data-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* ── CELL STYLES ───────────────────────── */
+    .customer-name {
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .car-name {
+      color: #475569;
+    }
+
+    .date-cell {
+      color: #475569;
+      white-space: nowrap;
+      font-size: 9.5px;
+    }
+
+    .amount {
+      font-weight: 700;
+      color: #0f172a;
+      white-space: nowrap;
+    }
+
+    /* ── STATUS BADGES ─────────────────────── */
+    .status {
+      padding: 2px 8px;
+      font-size: 8px;
+      font-weight: 700;
+      white-space: nowrap;
+      text-align: center;
+      border-radius: 50%;
+    }
+
+    .status.completed {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .status.active {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .status.pending {
+      background: #fef9c3;
+      color: #a16207;
+    }
+
+    .status.cancelled {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    /* ── TOTAL ROW ──────────────────────────── */
+    .tfoot-row td {
+      padding: 8px;
+      background: #eff6ff;
+      border-top: 2px solid #1e40af;
+      font-weight: 700;
+      color: #1e40af;
+      font-size: 11px;
+    }
+
+    /* ── FOOTER ────────────────────────────── */
+    .footer-wrap {
+      margin-top: 24px;
+      padding-top: 10px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .footer-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .footer-table td {
+      vertical-align: middle;
+      padding: 0;
+    }
+
+    .footer-left {
+      font-size: 9px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .footer-left span {
+      display: block;
+      font-weight: 400;
+      color: #94a3b8;
+      font-size: 8.5px;
+      margin-top: 1px;
+    }
+
+    .footer-right {
+      text-align: right;
+      font-size: 8.5px;
+      color: #94a3b8;
+    }
+
+    /* ── UTILS ─────────────────────────────── */
     .text-right {
       text-align: right;
     }
@@ -363,270 +347,172 @@
       text-align: center;
     }
 
-    .font-bold {
-      font-weight: 700;
-    }
-
-    .color-blue {
-      color: #1e40af;
-    }
-
-    .color-muted {
-      color: #64748b;
-    }
-
-    /* Row number circle */
-    .row-num {
-      display: inline-block;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #e2e8f0;
-      color: #475569;
-      font-size: 9px;
-      font-weight: 700;
-      text-align: center;
-      line-height: 18px;
+    .text-left {
+      text-align: left;
     }
   </style>
 </head>
 
 <body>
 
-  {{-- ═══════════════════════════════════════════
-  PAGE HEADER
-  ═══════════════════════════════════════════ --}}
-  <div class="page-header">
-    <div class="header-top">
-
-      {{-- Brand --}}
-      <div class="header-brand">
-        <div class="brand-badge">GRC RENTAL</div>
-        <div class="brand-tagline">Layanan Sewa Kendaraan Terpercaya</div>
-      </div>
-
-      {{-- Report title --}}
-      <div class="header-meta">
-        <div class="report-title">LAPORAN TRANSAKSI</div>
-        <div class="report-period">Periode: {{ $period }}</div>
-      </div>
-
-    </div>
+  {{-- ══════════════ HEADER ══════════════ --}}
+  <div class="header-wrap">
+    <table class="header-table">
+      <tr>
+        <td class="header-left">
+          <div class="company-name">Pusat Rentcar Purwakarta</div>
+          <div class="company-tagline">Jasa Rental Mobil Terpercaya</div>
+        </td>
+        <td class="header-right">
+          <div class="doc-title">Laporan Transaksi</div>
+          <div class="doc-subtitle">Dokumen resmi — tidak perlu tanda tangan</div>
+        </td>
+      </tr>
+    </table>
   </div>
 
-  {{-- ═══════════════════════════════════════════
-  INFO STRIP
-  ═══════════════════════════════════════════ --}}
-  <div class="info-strip">
-    <div class="info-strip-item">
-      <div class="info-label">Tanggal Generate</div>
-      <div class="info-value">{{ date('d F Y') }}</div>
-    </div>
-    <div class="info-strip-item center">
-      <div class="info-label">Waktu Generate</div>
-      <div class="info-value">{{ date('H:i') }} WIB</div>
-    </div>
-    <div class="info-strip-item right">
-      <div class="info-label">Total Transaksi</div>
-      <div class="info-value blue">{{ $bookings->count() }} Booking</div>
-    </div>
-  </div>
+  {{-- ══════════════ INFO BAR ══════════════ --}}
+  <table class="info-bar">
+    <tr>
+      <td style="width:50%;">
+        <span class="info-label">Periode Laporan</span>
+        <span class="info-value">{{ $period }}</span>
+      </td>
+      <td class="info-divider">&nbsp;</td>
+      <td style="width:25%;">
+        <span class="info-label">Tanggal Cetak</span>
+        <span class="info-value">{{ now()->format('d M Y') }}</span>
+      </td>
+      <td class="info-divider">&nbsp;</td>
+      <td style="width:24%;text-align:right;">
+        <span class="info-label">Jam Cetak</span>
+        <span class="info-value">{{ now()->format('H:i') }} WIB</span>
+      </td>
+    </tr>
+  </table>
 
-  {{-- ═══════════════════════════════════════════
-  TABLE SECTION
-  ═══════════════════════════════════════════ --}}
-  <div class="section-title">Detail Transaksi</div>
+  {{-- ══════════════ SUMMARY CARDS ══════════════ --}}
+  <div class="summary-title">Ringkasan</div>
+  <table class="summary-table">
+    <tr>
+      {{-- Total Booking --}}
+      <td>
+        <div class="stat-card green">
+          <div class="stat-value">{{ $bookings->count() }}</div>
+          <div class="stat-label">Total Booking</div>
+        </div>
+      </td>
 
-  <table>
+      {{-- Total Omzet --}}
+      <td>
+        <div class="stat-card blue">
+          <div class="stat-value small">
+            Rp {{ number_format($total, 0, ',', '.') }}
+          </div>
+          <div class="stat-label">Total Omzet</div>
+        </div>
+      </td>
+
+      {{-- Rata-rata --}}
+      <td>
+        <div class="stat-card violet">
+          <div class="stat-value small">
+            Rp {{ number_format($bookings->avg('total_price') ?? 0, 0, ',', '.') }}
+          </div>
+          <div class="stat-label">Rata-rata / Transaksi</div>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  {{-- ══════════════ TABLE ══════════════ --}}
+  <table class="section-header">
+    <tr>
+      <td class="section-title">Detail Transaksi</td>
+      <td class="section-count">{{ $bookings->count() }} data tercatat</td>
+    </tr>
+  </table>
+
+  <table class="data-table">
     <thead>
       <tr>
-        <th class="text-center" style="width:4%">No</th>
-        <th style="width:13%">Kode Booking</th>
-        <th style="width:16%">Nama Mobil</th>
-        <th style="width:15%">Customer</th>
-        <th class="text-center" style="width:11%">Tgl Ambil</th>
-        <th class="text-center" style="width:9%">Durasi</th>
-        <th class="text-center" style="width:10%">Status</th>
-        <th class="text-right" style="width:15%">Total</th>
+        <th style="width:4%;" class="text-center">No</th>
+        <th style="width:22%;">Nama Pelanggan</th>
+        <th style="width:16%;">Kendaraan</th>
+        <th style="width:13%;">Tgl Mulai</th>
+        <th style="width:13%;">Tgl Selesai</th>
+        <th style="width:10%;" class="text-center">Status</th>
+        <th style="width:14%;" class="text-right">Total</th>
       </tr>
     </thead>
     <tbody>
-
-      @forelse($bookings as $index => $booking)
-
-        {{-- Determine badge class --}}
+      @forelse($bookings as $i => $booking)
         @php
-          $badgeClass = match ($booking->status) {
-            'completed' => 'badge-completed',
-            'cancelled' => 'badge-cancelled',
-            'active' => 'badge-active',
-            'pending' => 'badge-pending',
-            'confirmed' => 'badge-confirmed',
-            default => 'badge-pending',
-          };
-
-          $statusLabel = match ($booking->status) {
+          $statusLabel = [
             'completed' => 'Selesai',
-            'cancelled' => 'Dibatal',
             'active' => 'Aktif',
             'pending' => 'Menunggu',
-            'confirmed' => 'Konfirm',
-            default => ucfirst($booking->status),
-          };
-
-          $price = $booking->final_total_price ?? $booking->total_price;
+            'cancelled' => 'Batal',
+          ][$booking->status] ?? ucfirst($booking->status);
         @endphp
-
         <tr>
-          {{-- No --}}
-          <td class="text-center">
-            <span class="row-num">{{ $index + 1 }}</span>
+          <td class="text-center" style="color:#94a3b8;font-size:9px;">
+            {{ $i + 1 }}
           </td>
-
-          {{-- Kode Booking --}}
-          <td class="mono">{{ $booking->booking_code }}</td>
-
-          {{-- Mobil --}}
           <td>
-            <span style="font-weight:700;color:#1e293b;">
-              {{ $booking->car->name ?? '-' }}
+            <span class="customer-name">{{ $booking->customer_name }}</span>
+          </td>
+          <td class="car-name">
+            {{ $booking->car?->name ?? '—' }}
+          </td>
+          <td class="date-cell">
+            {{ $booking->start_date->format('d M Y') }}
+          </td>
+          <td class="date-cell">
+            {{ $booking->end_date->format('d M Y') }}
+          </td>
+          <td class="text-center">
+            <span class="status {{ $booking->status }}">
+              {{ $statusLabel }}
             </span>
-            @if($booking->car->plate_code ?? false)
-              <br>
-              <span style="font-size:9px;color:#94a3b8;">
-                {{ strtoupper($booking->car->plate_code) }}
-              </span>
-            @endif
           </td>
-
-          {{-- Customer --}}
-          <td>
-            <span style="font-weight:400;">{{ $booking->customer_name }}</span>
-            @if($booking->whatsapp_number ?? false)
-              <br>
-              <span style="font-size:9px;color:#94a3b8;">
-                {{ $booking->whatsapp_number }}
-              </span>
-            @endif
-          </td>
-
-          {{-- Tgl Ambil --}}
-          <td class="text-center">
-            {{ date('d M Y', strtotime($booking->start_date)) }}
-          </td>
-
-          {{-- Durasi --}}
-          <td class="text-center">
-            @php
-              $h = $booking->duration_hours;
-              $dur = $h < 24
-                ? $h . ' Jam'
-                : (($r = $h % 24) === 0
-                  ? floor($h / 24) . ' Hari'
-                  : floor($h / 24) . 'h ' . $r . 'j');
-            @endphp
-            <span style="font-weight:700;">{{ $dur }}</span>
-          </td>
-
-          {{-- Status --}}
-          <td class="text-center">
-            <span class="badge {{ $badgeClass }}">{{ $statusLabel }}</span>
-          </td>
-
-          {{-- Total --}}
-          <td class="text-right">
-            <span style="font-weight:700;color:#1e293b;">
-              Rp {{ number_format($price, 0, ',', '.') }}
-            </span>
+          <td class="text-right amount">
+            Rp {{ number_format($booking->total_price, 0, ',', '.') }}
           </td>
         </tr>
-
       @empty
-        <tr class="empty-row">
-          <td colspan="8">Tidak ada data transaksi pada periode ini.</td>
+        <tr>
+          <td colspan="7" class="text-center" style="padding:20px;color:#94a3b8;font-style:italic;">
+            Tidak ada transaksi pada periode ini.
+          </td>
         </tr>
       @endforelse
-
     </tbody>
+    <tfoot>
+      <tr class="tfoot-row">
+        <td colspan="6" class="text-right">
+          Total Omzet Periode Ini
+        </td>
+        <td class="text-right">
+          Rp {{ number_format($total, 0, ',', '.') }}
+        </td>
+      </tr>
+    </tfoot>
   </table>
 
-  {{-- ═══════════════════════════════════════════
-  SUMMARY BOX
-  ═══════════════════════════════════════════ --}}
-  <div class="summary-wrapper">
-    <div class="summary-spacer"></div>
-    <div class="summary-box">
-      <table class="summary-table">
-        <tbody>
-          {{-- Jumlah transaksi --}}
-          <tr>
-            <td class="summary-label">Jumlah Transaksi</td>
-            <td class="summary-value">{{ $bookings->count() }} booking</td>
-          </tr>
-
-          {{-- Breakdown by status --}}
-          @php
-            $completed = $bookings->where('status', 'completed')->count();
-            $active = $bookings->where('status', 'active')->count();
-            $cancelled = $bookings->where('status', 'cancelled')->count();
-          @endphp
-
-          @if($completed > 0)
-            <tr>
-              <td class="summary-label" style="color:#166534;">↳ Selesai</td>
-              <td class="summary-value" style="color:#166534;">{{ $completed }}</td>
-            </tr>
-          @endif
-
-          @if($active > 0)
-            <tr>
-              <td class="summary-label" style="color:#1e40af;">↳ Aktif</td>
-              <td class="summary-value" style="color:#1e40af;">{{ $active }}</td>
-            </tr>
-          @endif
-
-          @if($cancelled > 0)
-            <tr>
-              <td class="summary-label" style="color:#991b1b;">↳ Dibatalkan</td>
-              <td class="summary-value" style="color:#991b1b;">{{ $cancelled }}</td>
-            </tr>
-          @endif
-
-          {{-- Divider row --}}
-          <tr>
-            <td colspan="2" style="padding:0;background:#e2e8f0;height:1px;"></td>
-          </tr>
-
-          {{-- Total Omzet --}}
-          <tr class="summary-total-row">
-            <td class="summary-label">Total Omzet</td>
-            <td class="summary-value">
-              Rp {{ number_format($total, 0, ',', '.') }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  {{-- ═══════════════════════════════════════════
-  PAGE FOOTER
-  ═══════════════════════════════════════════ --}}
-  <div class="page-footer">
-    <div class="footer-left">
-      <div class="footer-text">
-        Dokumen ini dihasilkan secara otomatis oleh sistem
-        <strong>GRC Rental</strong> — Bersifat resmi dan tidak memerlukan tanda tangan.
-      </div>
-    </div>
-    <div class="footer-right">
-      <div class="footer-text">
-        Dicetak: <strong>{{ date('d F Y, H:i') }} WIB</strong>
-      </div>
-      <div class="footer-text" style="margin-top:2px;">
-        &copy; {{ date('Y') }} GRC Rental Mobil. All rights reserved.
-      </div>
-    </div>
+  {{-- ══════════════ FOOTER ══════════════ --}}
+  <div class="footer-wrap">
+    <table class="footer-table">
+      <tr>
+        <td class="footer-left">
+          Pusat Rentcar Purwakarta — Sistem Manajemen Rental
+          <span>Dokumen ini digenerate otomatis. Tidak memerlukan tanda tangan.</span>
+        </td>
+        <td class="footer-right">
+          Dicetak: {{ now()->format('d M Y, H:i') }} WIB
+        </td>
+      </tr>
+    </table>
   </div>
 
 </body>
