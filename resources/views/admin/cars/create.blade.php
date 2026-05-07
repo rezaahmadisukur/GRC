@@ -49,7 +49,7 @@
             <div class="group">
               <label for="name" class="block text-sm font-medium text-slate-700 mb-2">Nama Mobil</label>
               <input type="text" id="name" name="name" value="{{ old('name') }}"
-                class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 @error('name') border-red-500 focus:ring-red-500/10 @enderror"
+                class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200"
                 placeholder="e.g Toyota Avanza, Honda Innova">
               @error('name')
                 <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
@@ -60,7 +60,7 @@
             <div class="group">
               <label for="plate_code" class="block text-sm font-medium text-slate-700 mb-2">Kode Plat</label>
               <input type="text" id="plate_code" name="plate_code" value="{{ old('plate_code') }}" maxlength="3"
-                class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 uppercase tracking-widest font-medium @error('plate_code') border-red-500 focus:ring-red-500/10 @enderror"
+                class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 uppercase tracking-widest font-medium"
                 placeholder="TRM">
               @error('plate_code')
                 <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
@@ -71,7 +71,7 @@
             <div class="group">
               <label for="color" class="block text-sm font-medium text-slate-700 mb-2">Warna Mobil</label>
               <input type="text" id="color" name="color" value="{{ old('color') }}"
-                class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 @error('color') border-red-500 focus:ring-red-500/10 @enderror"
+                class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200"
                 placeholder="Black, White, Silver">
               @error('color')
                 <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
@@ -82,7 +82,7 @@
             <div class="group">
               <label for="category" class="block text-sm font-medium text-slate-700 mb-2">Kategori Mobil</label>
               <input type="text" id="category" name="category" value="{{ old('category') }}"
-                class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 @error('category') border-red-500 focus:ring-red-500/10 @enderror"
+                class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200"
                 placeholder="SUV, MPV, Sedan, Hatchback">
               @error('category')
                 <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
@@ -117,7 +117,7 @@
             <div class="group">
               <label for="seats" class="block text-sm font-medium text-slate-700 mb-2">Jumlah Kursi</label>
               <input type="number" id="seats" name="seats" value="{{ old('seats', 2) }}" min="1" max="20"
-                class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 @error('seats') border-red-500 focus:ring-red-500/10 @enderror"
+                class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200"
                 placeholder="5">
               @error('seats')
                 <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
@@ -128,7 +128,7 @@
             <div class="group">
               <label for="fuel_type" class="block text-sm font-medium text-slate-700 mb-2">Jenis Bahan Bakar</label>
               <input type="text" id="fuel_type" name="fuel_type" value="{{ old('fuel_type', 'Bensin') }}"
-                class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 @error('fuel_type') border-red-500 focus:ring-red-500/10 @enderror"
+                class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200"
                 placeholder="Bensin, Diesel, Hybrid">
               @error('fuel_type')
                 <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
@@ -141,7 +141,7 @@
               <div class="relative">
                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-medium">Rp</span>
                 <input type="number" id="price_12h" name="price_12h" value="{{ old('price_12h') }}" min="0"
-                  class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 @error('price_12h') border-red-500 focus:ring-red-500/10 @enderror"
+                  class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200"
                   placeholder="350000">
               </div>
               @error('price_12h')
@@ -155,7 +155,7 @@
               <div class="relative">
                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-medium">Rp</span>
                 <input type="number" id="price_24h" name="price_24h" value="{{ old('price_24h') }}" min="0"
-                  class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 @error('price_24h') border-red-500 focus:ring-red-500/10 @enderror"
+                  class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200"
                   placeholder="550000">
               </div>
               @error('price_24h')
