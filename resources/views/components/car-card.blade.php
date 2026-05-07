@@ -42,8 +42,8 @@
       <!-- Non Aktif Overlay Center -->
       <div class="absolute inset-0 flex items-center justify-center z-20 bg-black/50 backdrop-blur-sm">
         <div
-          class="bg-red-600/90 text-white font-black text-xl md:text-2xl px-8 py-4 rounded-xl transform -rotate-6 shadow-2xl border-2 border-white/20">
-          NON AKTIF
+          class="bg-red-600/90 text-white font-black text-xl md:text-2xl px-8 py-4 rounded-xl transform -rotate-6 shadow-2xl border-2 border-white/20 uppercase">
+          TIDAK AKTIF
         </div>
       </div>
     @endif

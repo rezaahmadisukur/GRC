@@ -408,7 +408,7 @@
                                             <div class="relative mb-6">
                                                 <div
                                                     class="w-28 h-28 rounded-3xl bg-gradient-to-br from-slate-100 to-blue-50
-                                                                                                  flex items-center justify-center shadow-inner">
+                                                                                                      flex items-center justify-center shadow-inner">
                                                     <svg class="w-14 h-14 text-gray-300" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -568,101 +568,103 @@
     {{-- ═══════════════════════════════════════════════ --}}
     {{-- SCRIPT --}}
     {{-- ═══════════════════════════════════════════════ --}}
-    <script>
-        (function () {
-            'use strict';
+    @push('scripts')
+        <script>
+            (function () {
+                'use strict';
 
-            /* ── DOM Cache ── */
-            const modal = document.getElementById('deleteConfirmModal');
-            const modalOverlay = document.getElementById('deleteModalOverlay');
-            const modalBox = document.getElementById('deleteModalBox');
-            const carNameEl = document.getElementById('deleteCarName');
-            const cancelBtn = document.getElementById('cancelDeleteBtn');
-            const confirmBtn = document.getElementById('confirmDeleteBtn');
+                /* ── DOM Cache ── */
+                const modal = document.getElementById('deleteConfirmModal');
+                const modalOverlay = document.getElementById('deleteModalOverlay');
+                const modalBox = document.getElementById('deleteModalBox');
+                const carNameEl = document.getElementById('deleteCarName');
+                const cancelBtn = document.getElementById('cancelDeleteBtn');
+                const confirmBtn = document.getElementById('confirmDeleteBtn');
 
-            const imgModal = document.getElementById('imageModal');
-            const imgOverlay = document.getElementById('imageModalOverlay');
-            const imgBox = document.getElementById('imageModalBox');
-            const imgSrc = document.getElementById('imageModalSrc');
-            const imgLabel = document.getElementById('imageModalLabel');
+                const imgModal = document.getElementById('imageModal');
+                const imgOverlay = document.getElementById('imageModalOverlay');
+                const imgBox = document.getElementById('imageModalBox');
+                const imgSrc = document.getElementById('imageModalSrc');
+                const imgLabel = document.getElementById('imageModalLabel');
 
-            let activeForm = null;
+                let activeForm = null;
 
-            /* ── Delete Modal ── */
-            function openDeleteModal(form) {
-                activeForm = form;
-                carNameEl.textContent = form.dataset.carName;
-                modal.classList.remove('hidden');
-                requestAnimationFrame(() => {
-                    modalOverlay.classList.add('opacity-100');
-                    modalBox.classList.remove('scale-90', 'opacity-0');
-                    modalBox.classList.add('scale-100', 'opacity-100');
-                });
-            }
-
-            function closeDeleteModal() {
-                modalBox.classList.remove('scale-100', 'opacity-100');
-                modalBox.classList.add('scale-90', 'opacity-0');
-                modalOverlay.classList.remove('opacity-100');
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                    activeForm = null;
-                }, 280);
-            }
-
-            document.querySelectorAll('.delete-form').forEach(form => {
-                form.addEventListener('submit', e => { e.preventDefault(); openDeleteModal(form); });
-            });
-
-            cancelBtn.addEventListener('click', closeDeleteModal);
-            modalOverlay.addEventListener('click', closeDeleteModal);
-            confirmBtn.addEventListener('click', () => { if (activeForm) activeForm.submit(); });
-
-            /* ── Image Modal ── */
-            window.openImageModal = function (src, name) {
-                imgSrc.src = src;
-                imgLabel.textContent = name;
-                imgModal.classList.remove('hidden');
-                requestAnimationFrame(() => {
-                    imgOverlay.classList.add('opacity-100');
-                    imgBox.classList.remove('scale-90', 'opacity-0');
-                    imgBox.classList.add('scale-100', 'opacity-100');
-                });
-            };
-
-            window.closeImageModal = function () {
-                imgBox.classList.remove('scale-100', 'opacity-100');
-                imgBox.classList.add('scale-90', 'opacity-0');
-                imgOverlay.classList.remove('opacity-100');
-                setTimeout(() => { imgModal.classList.add('hidden'); imgSrc.src = ''; }, 280);
-            };
-
-            /* ── Keyboard shortcuts ── */
-            document.addEventListener('keydown', e => {
-                if (e.key === 'Escape') {
-                    if (!modal.classList.contains('hidden')) closeDeleteModal();
-                    if (!imgModal.classList.contains('hidden')) closeImageModal();
+                /* ── Delete Modal ── */
+                function openDeleteModal(form) {
+                    activeForm = form;
+                    carNameEl.textContent = form.dataset.carName;
+                    modal.classList.remove('hidden');
+                    requestAnimationFrame(() => {
+                        modalOverlay.classList.add('opacity-100');
+                        modalBox.classList.remove('scale-90', 'opacity-0');
+                        modalBox.classList.add('scale-100', 'opacity-100');
+                    });
                 }
-            });
 
-            /* ── Refresh button spin ── */
-            const refreshBtn = document.getElementById('refreshBtn');
-            const refreshIcon = document.getElementById('refreshIcon');
-            if (refreshBtn) {
-                refreshBtn.addEventListener('click', () => {
-                    refreshIcon.style.transition = 'transform .6s ease';
-                    refreshIcon.style.transform = 'rotate(360deg)';
-                    setTimeout(() => { refreshIcon.style.transform = ''; }, 700);
+                function closeDeleteModal() {
+                    modalBox.classList.remove('scale-100', 'opacity-100');
+                    modalBox.classList.add('scale-90', 'opacity-0');
+                    modalOverlay.classList.remove('opacity-100');
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        activeForm = null;
+                    }, 280);
+                }
+
+                document.querySelectorAll('.delete-form').forEach(form => {
+                    form.addEventListener('submit', e => { e.preventDefault(); openDeleteModal(form); });
                 });
-            }
 
-            /* ── Row hover: subtle lift via inline style (performance-safe) ── */
-            document.querySelectorAll('.table-row').forEach(row => {
-                row.addEventListener('mouseenter', () => { row.style.boxShadow = '0 2px 12px rgba(99,102,241,.07)'; });
-                row.addEventListener('mouseleave', () => { row.style.boxShadow = ''; });
-            });
+                cancelBtn.addEventListener('click', closeDeleteModal);
+                modalOverlay.addEventListener('click', closeDeleteModal);
+                confirmBtn.addEventListener('click', () => { if (activeForm) activeForm.submit(); });
 
-        })();
-    </script>
+                /* ── Image Modal ── */
+                window.openImageModal = function (src, name) {
+                    imgSrc.src = src;
+                    imgLabel.textContent = name;
+                    imgModal.classList.remove('hidden');
+                    requestAnimationFrame(() => {
+                        imgOverlay.classList.add('opacity-100');
+                        imgBox.classList.remove('scale-90', 'opacity-0');
+                        imgBox.classList.add('scale-100', 'opacity-100');
+                    });
+                };
+
+                window.closeImageModal = function () {
+                    imgBox.classList.remove('scale-100', 'opacity-100');
+                    imgBox.classList.add('scale-90', 'opacity-0');
+                    imgOverlay.classList.remove('opacity-100');
+                    setTimeout(() => { imgModal.classList.add('hidden'); imgSrc.src = ''; }, 280);
+                };
+
+                /* ── Keyboard shortcuts ── */
+                document.addEventListener('keydown', e => {
+                    if (e.key === 'Escape') {
+                        if (!modal.classList.contains('hidden')) closeDeleteModal();
+                        if (!imgModal.classList.contains('hidden')) closeImageModal();
+                    }
+                });
+
+                /* ── Refresh button spin ── */
+                const refreshBtn = document.getElementById('refreshBtn');
+                const refreshIcon = document.getElementById('refreshIcon');
+                if (refreshBtn) {
+                    refreshBtn.addEventListener('click', () => {
+                        refreshIcon.style.transition = 'transform .6s ease';
+                        refreshIcon.style.transform = 'rotate(360deg)';
+                        setTimeout(() => { refreshIcon.style.transform = ''; }, 700);
+                    });
+                }
+
+                /* ── Row hover: subtle lift via inline style (performance-safe) ── */
+                document.querySelectorAll('.table-row').forEach(row => {
+                    row.addEventListener('mouseenter', () => { row.style.boxShadow = '0 2px 12px rgba(99,102,241,.07)'; });
+                    row.addEventListener('mouseleave', () => { row.style.boxShadow = ''; });
+                });
+
+            })();
+        </script>
+    @endpush
 
 </x-admin-layout>

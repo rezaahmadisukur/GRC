@@ -161,6 +161,9 @@
   {{-- TOAST NOTIFICATION SYSTEM --}}
   <x-toast-container />
 
+  {{-- Stack for page-specific scripts --}}
+  @stack('scripts')
+
 </body>
 
 </html>

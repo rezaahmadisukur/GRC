@@ -444,7 +444,7 @@
                     @if($booking->admin_id && $booking->user)
                       <div
                         class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold cursor-help
-                                                    {{ $booking->user->role === 'owner' ? 'bg-purple-50 text-purple-700 ring-1 ring-purple-200' : 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' }}"
+                                                            {{ $booking->user->role === 'owner' ? 'bg-purple-50 text-purple-700 ring-1 ring-purple-200' : 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' }}"
                         title="{{ $booking->user->role === 'owner' ? '👑 Owner' : '👤 Admin' }} | {{ $booking->updated_at->translatedFormat('d M Y H:i') }}">
                         <span
                           class="w-1.5 h-1.5 rounded-full {{ $booking->user->role === 'owner' ? 'bg-purple-500' : 'bg-blue-400' }}"></span>
@@ -914,247 +914,249 @@
   </div>
 
   {{-- =================== JAVASCRIPT =================== --}}
-  <script>
-    (() => {
-      'use strict';
+  @push('scripts')
+    <script>
+      (() => {
+        'use strict';
 
-      const $ = id => document.getElementById(id);
-      const idr = n => 'Rp ' + new Intl.NumberFormat('id-ID').format(n || 0);
-      const initials = name => (name || '--').trim().substring(0, 2).toUpperCase();
+        const $ = id => document.getElementById(id);
+        const idr = n => 'Rp ' + new Intl.NumberFormat('id-ID').format(n || 0);
+        const initials = name => (name || '--').trim().substring(0, 2).toUpperCase();
 
-      // ── Modal Factory ──────────────────────────────────────────────
-      function makeModal(modalId, backdropId) {
-        const el = $(modalId);
-        const bd = $(backdropId);
-        if (!el || !bd) return { open() { }, close() { }, el, bd };
-        return {
-          open() {
-            el.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-          },
-          close() {
-            el.classList.add('hidden');
-            document.body.style.overflow = '';
-          },
-          el, bd
-        };
-      }
-
-      // ── DP / Approve Modal ─────────────────────────────────────────
-      const dpModal = makeModal('dp-modal', 'dp-modal-backdrop');
-      let dpBookingId = null, dpTotal = 0;
-      const dpInput = $('modal-dp-input');
-      const dpRemain = $('modal-remaining');
-
-      document.querySelectorAll('.open-dp-modal').forEach(btn => {
-        btn.addEventListener('click', () => {
-          dpBookingId = btn.dataset.bookingId;
-          dpTotal = parseInt(btn.dataset.totalPrice) || 0;
-          const curDp = parseInt(btn.dataset.currentDp) || 0;
-
-          $('modal-customer-name').textContent = btn.dataset.customerName;
-          $('modal-booking-code').textContent = '#' + btn.dataset.bookingCode;
-          $('modal-total-price').textContent = idr(dpTotal);
-          $('dp-modal-avatar').textContent = initials(btn.dataset.customerName);
-          dpInput.value = curDp || '';
-          dpRemain.textContent = idr(dpTotal - curDp);
-
-          dpModal.open();
-          setTimeout(() => dpInput.focus(), 80);
-        });
-      });
-
-      dpInput?.addEventListener('input', () => {
-        dpRemain.textContent = idr(dpTotal - (parseInt(dpInput.value) || 0));
-      });
-
-      $('modal-confirm-btn')?.addEventListener('click', () => {
-        const btn = $('modal-confirm-btn');
-        btn.disabled = true;
-        btn.innerHTML = `<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Memproses...`;
-        $('dp-input-' + dpBookingId).value = parseInt(dpInput.value) || 0;
-        $('confirm-form-' + dpBookingId).submit();
-      });
-
-      ['close-modal-btn', 'modal-cancel-btn'].forEach(id => $(id)?.addEventListener('click', () => dpModal.close()));
-      dpModal.bd?.addEventListener('click', () => dpModal.close());
-
-      // ── Complete Modal ─────────────────────────────────────────────
-      const cModal = makeModal('complete-modal', 'complete-modal-backdrop');
-      let cBookingId = null, cTotal = 0;
-      const penaltyInput = $('complete-modal-penalty-input');
-      const finalTotalEl = $('complete-modal-final-total');
-      const notesInput = $('complete-modal-notes-input');
-
-      document.querySelectorAll('.open-complete-modal').forEach(btn => {
-        btn.addEventListener('click', () => {
-          cBookingId = btn.dataset.bookingId;
-          cTotal = parseInt(btn.dataset.totalPrice) || 0;
-
-          $('complete-modal-customer-name').textContent = btn.dataset.customerName;
-          $('complete-modal-booking-code').textContent = '#' + btn.dataset.bookingCode;
-          $('complete-modal-total-price').textContent = idr(cTotal);
-          $('complete-modal-avatar').textContent = initials(btn.dataset.customerName);
-          penaltyInput.value = 0;
-          notesInput.value = '';
-          finalTotalEl.textContent = idr(cTotal);
-
-          cModal.open();
-          setTimeout(() => penaltyInput.focus(), 80);
-        });
-      });
-
-      penaltyInput?.addEventListener('input', () => {
-        finalTotalEl.textContent = idr(cTotal + (parseInt(penaltyInput.value) || 0));
-      });
-
-      $('complete-modal-confirm-btn')?.addEventListener('click', () => {
-        const btn = $('complete-modal-confirm-btn');
-        btn.disabled = true;
-        btn.innerHTML = `<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Memproses...`;
-        $('penalty-input-' + cBookingId).value = parseInt(penaltyInput.value) || 0;
-        $('notes-input-' + cBookingId).value = notesInput.value;
-        $('complete-form-' + cBookingId).submit();
-      });
-
-      ['close-complete-modal-btn', 'complete-modal-cancel-btn'].forEach(id => $(id)?.addEventListener('click', () => cModal.close()));
-      cModal.bd?.addEventListener('click', () => cModal.close());
-
-      // ── Cancel / Reject Modal ──────────────────────────────────────
-      const cancelModal = makeModal('cancel-modal', 'cancel-modal-backdrop');
-      let cancelBookingId = null;
-      let cancelMode = 'reject';
-      const cancelReason = $('cancel-modal-reason');
-
-      document.querySelectorAll('.open-cancel-modal').forEach(btn => {
-        btn.addEventListener('click', () => {
-          cancelBookingId = btn.dataset.bookingId;
-          cancelMode = btn.dataset.mode || 'reject';
-
-          $('cancel-modal-customer').textContent = btn.dataset.customerName;
-          $('cancel-modal-code').textContent = '#' + btn.dataset.bookingCode;
-          $('cancel-modal-avatar').textContent = initials(btn.dataset.customerName);
-
-          const isReject = cancelMode === 'reject';
-          $('cancel-modal-title').textContent = isReject ? 'Tolak Pemesanan?' : 'Batalkan Pesanan?';
-          $('cancel-modal-subtitle').textContent = isReject
-            ? 'Pemesanan ini akan ditolak dan pelanggan akan dinotifikasi.'
-            : 'Pemesanan aktif ini akan dibatalkan. Tindakan tidak dapat diurungkan.';
-
-          cancelReason.value = '';
-          cancelModal.open();
-          setTimeout(() => cancelReason.focus(), 80);
-        });
-      });
-
-      $('cancel-modal-confirm')?.addEventListener('click', () => {
-        const btn = $('cancel-modal-confirm');
-        btn.disabled = true;
-        btn.innerHTML = `<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Memproses...`;
-
-        const formId = cancelMode === 'reject' ? 'reject-form-' + cancelBookingId : 'cancel-form-' + cancelBookingId;
-        const reasonInputId = 'cancel-reason-' + cancelBookingId;
-        if ($(reasonInputId)) $(reasonInputId).value = cancelReason.value;
-
-        const form = $(formId);
-        if (form) {
-          form.submit();
-        } else {
-          btn.disabled = false;
-          btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg> Ya, Batalkan`;
+        // ── Modal Factory ──────────────────────────────────────────────
+        function makeModal(modalId, backdropId) {
+          const el = $(modalId);
+          const bd = $(backdropId);
+          if (!el || !bd) return { open() { }, close() { }, el, bd };
+          return {
+            open() {
+              el.classList.remove('hidden');
+              document.body.style.overflow = 'hidden';
+            },
+            close() {
+              el.classList.add('hidden');
+              document.body.style.overflow = '';
+            },
+            el, bd
+          };
         }
-      });
 
-      ['cancel-modal-dismiss'].forEach(id => $(id)?.addEventListener('click', () => cancelModal.close()));
-      cancelModal.bd?.addEventListener('click', () => cancelModal.close());
+        // ── DP / Approve Modal ─────────────────────────────────────────
+        const dpModal = makeModal('dp-modal', 'dp-modal-backdrop');
+        let dpBookingId = null, dpTotal = 0;
+        const dpInput = $('modal-dp-input');
+        const dpRemain = $('modal-remaining');
 
-      // ── Escape Key ─────────────────────────────────────────────────
-      document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') {
-          dpModal.close();
-          cModal.close();
-          cancelModal.close();
-        }
-      });
+        document.querySelectorAll('.open-dp-modal').forEach(btn => {
+          btn.addEventListener('click', () => {
+            dpBookingId = btn.dataset.bookingId;
+            dpTotal = parseInt(btn.dataset.totalPrice) || 0;
+            const curDp = parseInt(btn.dataset.currentDp) || 0;
 
-      // ── Search & Filter ────────────────────────────────────────────
-      const searchInput = $('search-input');
-      const noResult = $('no-result');
-      let searchTimeout = null;
+            $('modal-customer-name').textContent = btn.dataset.customerName;
+            $('modal-booking-code').textContent = '#' + btn.dataset.bookingCode;
+            $('modal-total-price').textContent = idr(dpTotal);
+            $('dp-modal-avatar').textContent = initials(btn.dataset.customerName);
+            dpInput.value = curDp || '';
+            dpRemain.textContent = idr(dpTotal - curDp);
 
-      function applyServerFilters() {
-        const params = new URLSearchParams(window.location.search);
-        const search = searchInput?.value.trim();
-        const active = document.querySelector('.filter-pill.active');
-        const status = active?.dataset.filter || 'all';
-
-        params.delete('page');
-        search ? params.set('search', search) : params.delete('search');
-        status !== 'all' ? params.set('status', status) : params.delete('status');
-
-        const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
-        window.location.href = newUrl;
-      }
-
-      searchInput?.addEventListener('input', () => {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(applyServerFilters, 900);
-      });
-
-      // Filter Pills
-      document.querySelectorAll('.filter-pill').forEach(pill => {
-        pill.addEventListener('click', e => {
-          document.querySelectorAll('.filter-pill').forEach(p => {
-            p.classList.remove('bg-emerald-500', 'text-white', 'shadow-sm', 'shadow-emerald-200', 'active');
-            p.classList.add('bg-gray-100', 'text-gray-500');
+            dpModal.open();
+            setTimeout(() => dpInput.focus(), 80);
           });
-          e.currentTarget.classList.add('bg-emerald-500', 'text-white', 'shadow-sm', 'shadow-emerald-200', 'active');
-          e.currentTarget.classList.remove('bg-gray-100', 'text-gray-500');
+        });
+
+        dpInput?.addEventListener('input', () => {
+          dpRemain.textContent = idr(dpTotal - (parseInt(dpInput.value) || 0));
+        });
+
+        $('modal-confirm-btn')?.addEventListener('click', () => {
+          const btn = $('modal-confirm-btn');
+          btn.disabled = true;
+          btn.innerHTML = `<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Memproses...`;
+          $('dp-input-' + dpBookingId).value = parseInt(dpInput.value) || 0;
+          $('confirm-form-' + dpBookingId).submit();
+        });
+
+        ['close-modal-btn', 'modal-cancel-btn'].forEach(id => $(id)?.addEventListener('click', () => dpModal.close()));
+        dpModal.bd?.addEventListener('click', () => dpModal.close());
+
+        // ── Complete Modal ─────────────────────────────────────────────
+        const cModal = makeModal('complete-modal', 'complete-modal-backdrop');
+        let cBookingId = null, cTotal = 0;
+        const penaltyInput = $('complete-modal-penalty-input');
+        const finalTotalEl = $('complete-modal-final-total');
+        const notesInput = $('complete-modal-notes-input');
+
+        document.querySelectorAll('.open-complete-modal').forEach(btn => {
+          btn.addEventListener('click', () => {
+            cBookingId = btn.dataset.bookingId;
+            cTotal = parseInt(btn.dataset.totalPrice) || 0;
+
+            $('complete-modal-customer-name').textContent = btn.dataset.customerName;
+            $('complete-modal-booking-code').textContent = '#' + btn.dataset.bookingCode;
+            $('complete-modal-total-price').textContent = idr(cTotal);
+            $('complete-modal-avatar').textContent = initials(btn.dataset.customerName);
+            penaltyInput.value = 0;
+            notesInput.value = '';
+            finalTotalEl.textContent = idr(cTotal);
+
+            cModal.open();
+            setTimeout(() => penaltyInput.focus(), 80);
+          });
+        });
+
+        penaltyInput?.addEventListener('input', () => {
+          finalTotalEl.textContent = idr(cTotal + (parseInt(penaltyInput.value) || 0));
+        });
+
+        $('complete-modal-confirm-btn')?.addEventListener('click', () => {
+          const btn = $('complete-modal-confirm-btn');
+          btn.disabled = true;
+          btn.innerHTML = `<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Memproses...`;
+          $('penalty-input-' + cBookingId).value = parseInt(penaltyInput.value) || 0;
+          $('notes-input-' + cBookingId).value = notesInput.value;
+          $('complete-form-' + cBookingId).submit();
+        });
+
+        ['close-complete-modal-btn', 'complete-modal-cancel-btn'].forEach(id => $(id)?.addEventListener('click', () => cModal.close()));
+        cModal.bd?.addEventListener('click', () => cModal.close());
+
+        // ── Cancel / Reject Modal ──────────────────────────────────────
+        const cancelModal = makeModal('cancel-modal', 'cancel-modal-backdrop');
+        let cancelBookingId = null;
+        let cancelMode = 'reject';
+        const cancelReason = $('cancel-modal-reason');
+
+        document.querySelectorAll('.open-cancel-modal').forEach(btn => {
+          btn.addEventListener('click', () => {
+            cancelBookingId = btn.dataset.bookingId;
+            cancelMode = btn.dataset.mode || 'reject';
+
+            $('cancel-modal-customer').textContent = btn.dataset.customerName;
+            $('cancel-modal-code').textContent = '#' + btn.dataset.bookingCode;
+            $('cancel-modal-avatar').textContent = initials(btn.dataset.customerName);
+
+            const isReject = cancelMode === 'reject';
+            $('cancel-modal-title').textContent = isReject ? 'Tolak Pemesanan?' : 'Batalkan Pesanan?';
+            $('cancel-modal-subtitle').textContent = isReject
+              ? 'Pemesanan ini akan ditolak dan pelanggan akan dinotifikasi.'
+              : 'Pemesanan aktif ini akan dibatalkan. Tindakan tidak dapat diurungkan.';
+
+            cancelReason.value = '';
+            cancelModal.open();
+            setTimeout(() => cancelReason.focus(), 80);
+          });
+        });
+
+        $('cancel-modal-confirm')?.addEventListener('click', () => {
+          const btn = $('cancel-modal-confirm');
+          btn.disabled = true;
+          btn.innerHTML = `<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Memproses...`;
+
+          const formId = cancelMode === 'reject' ? 'reject-form-' + cancelBookingId : 'cancel-form-' + cancelBookingId;
+          const reasonInputId = 'cancel-reason-' + cancelBookingId;
+          if ($(reasonInputId)) $(reasonInputId).value = cancelReason.value;
+
+          const form = $(formId);
+          if (form) {
+            form.submit();
+          } else {
+            btn.disabled = false;
+            btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg> Ya, Batalkan`;
+          }
+        });
+
+        ['cancel-modal-dismiss'].forEach(id => $(id)?.addEventListener('click', () => cancelModal.close()));
+        cancelModal.bd?.addEventListener('click', () => cancelModal.close());
+
+        // ── Escape Key ─────────────────────────────────────────────────
+        document.addEventListener('keydown', e => {
+          if (e.key === 'Escape') {
+            dpModal.close();
+            cModal.close();
+            cancelModal.close();
+          }
+        });
+
+        // ── Search & Filter ────────────────────────────────────────────
+        const searchInput = $('search-input');
+        const noResult = $('no-result');
+        let searchTimeout = null;
+
+        function applyServerFilters() {
+          const params = new URLSearchParams(window.location.search);
+          const search = searchInput?.value.trim();
+          const active = document.querySelector('.filter-pill.active');
+          const status = active?.dataset.filter || 'all';
+
+          params.delete('page');
+          search ? params.set('search', search) : params.delete('search');
+          status !== 'all' ? params.set('status', status) : params.delete('status');
+
+          const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
+          window.location.href = newUrl;
+        }
+
+        searchInput?.addEventListener('input', () => {
+          clearTimeout(searchTimeout);
+          searchTimeout = setTimeout(applyServerFilters, 900);
+        });
+
+        // Filter Pills
+        document.querySelectorAll('.filter-pill').forEach(pill => {
+          pill.addEventListener('click', e => {
+            document.querySelectorAll('.filter-pill').forEach(p => {
+              p.classList.remove('bg-emerald-500', 'text-white', 'shadow-sm', 'shadow-emerald-200', 'active');
+              p.classList.add('bg-gray-100', 'text-gray-500');
+            });
+            e.currentTarget.classList.add('bg-emerald-500', 'text-white', 'shadow-sm', 'shadow-emerald-200', 'active');
+            e.currentTarget.classList.remove('bg-gray-100', 'text-gray-500');
+            applyServerFilters();
+          });
+        });
+
+        // Clear Search
+        const clearBtn = $('clear-search');
+
+        function toggleClearButton() {
+          if (searchInput?.value.trim().length > 0) {
+            clearBtn?.classList.remove('hidden');
+          } else {
+            clearBtn?.classList.add('hidden');
+          }
+        }
+
+        toggleClearButton();
+        searchInput?.addEventListener('input', toggleClearButton);
+        clearBtn?.addEventListener('click', () => {
+          if (searchInput) searchInput.value = '';
+          toggleClearButton();
           applyServerFilters();
         });
-      });
 
-      // Clear Search
-      const clearBtn = $('clear-search');
+        // ── Init active filter from URL ────────────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+          const urlParams = new URLSearchParams(window.location.search);
+          const activeStatus = urlParams.get('status') || 'all';
+          const searchQuery = urlParams.get('search') || '';
 
-      function toggleClearButton() {
-        if (searchInput?.value.trim().length > 0) {
-          clearBtn?.classList.remove('hidden');
-        } else {
-          clearBtn?.classList.add('hidden');
-        }
-      }
+          if (searchInput) searchInput.value = searchQuery;
+          toggleClearButton();
 
-      toggleClearButton();
-      searchInput?.addEventListener('input', toggleClearButton);
-      clearBtn?.addEventListener('click', () => {
-        if (searchInput) searchInput.value = '';
-        toggleClearButton();
-        applyServerFilters();
-      });
-
-      // ── Init active filter from URL ────────────────────────────────
-      document.addEventListener('DOMContentLoaded', () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const activeStatus = urlParams.get('status') || 'all';
-        const searchQuery = urlParams.get('search') || '';
-
-        if (searchInput) searchInput.value = searchQuery;
-        toggleClearButton();
-
-        document.querySelectorAll('.filter-pill').forEach(p => {
-          const isActive = p.dataset.filter === activeStatus;
-          p.classList.toggle('bg-emerald-500', isActive);
-          p.classList.toggle('text-white', isActive);
-          p.classList.toggle('shadow-sm', isActive);
-          p.classList.toggle('shadow-emerald-200', isActive);
-          p.classList.toggle('active', isActive);
-          p.classList.toggle('bg-gray-100', !isActive);
-          p.classList.toggle('text-gray-500', !isActive);
+          document.querySelectorAll('.filter-pill').forEach(p => {
+            const isActive = p.dataset.filter === activeStatus;
+            p.classList.toggle('bg-emerald-500', isActive);
+            p.classList.toggle('text-white', isActive);
+            p.classList.toggle('shadow-sm', isActive);
+            p.classList.toggle('shadow-emerald-200', isActive);
+            p.classList.toggle('active', isActive);
+            p.classList.toggle('bg-gray-100', !isActive);
+            p.classList.toggle('text-gray-500', !isActive);
+          });
         });
-      });
 
-    })();
-  </script>
+      })();
+    </script>
+  @endpush
 
 </x-admin-layout>

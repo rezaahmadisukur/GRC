@@ -657,149 +657,83 @@
     </div>
   </div>
 
-  {{-- =================== SCRIPTS =================== --}}
-  @if($user->role === 'owner' && !empty($chartData))
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
+  @push('scripts')
+    {{-- =================== SCRIPTS =================== --}}
+    @if($user->role === 'owner' && !empty($chartData))
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
 
-        /* ─── Palette ─────────────────────────────────────── */
-        const COLORS = [
-          '#10b981', '#3b82f6', '#f59e0b', '#8b5cf6',
-          '#ef4444', '#06b6d4', '#ec4899', '#84cc16',
-          '#f97316', '#14b8a6'
-        ];
+          /* ─── Palette ─────────────────────────────────────── */
+          const COLORS = [
+            '#10b981', '#3b82f6', '#f59e0b', '#8b5cf6',
+            '#ef4444', '#06b6d4', '#ec4899', '#84cc16',
+            '#f97316', '#14b8a6'
+          ];
 
-        const idr = v => 'Rp ' + (v >= 1e9
-          ? (v / 1e9).toFixed(1) + 'M'
-          : v >= 1e6
-            ? (v / 1e6).toFixed(1) + 'jt'
-            : v.toLocaleString('id-ID'));
+          const idr = v => 'Rp ' + (v >= 1e9
+            ? (v / 1e9).toFixed(1) + 'M'
+            : v >= 1e6
+              ? (v / 1e6).toFixed(1) + 'jt'
+              : v.toLocaleString('id-ID'));
 
-        /* ─── Revenue Chart ───────────────────────────────── */
-        const rCanvas = document.getElementById('revenueChart');
-        if (!rCanvas) return;
-        const rCtx = rCanvas.getContext('2d');
+          /* ─── Revenue Chart ───────────────────────────────── */
+          const rCanvas = document.getElementById('revenueChart');
+          if (!rCanvas) return;
+          const rCtx = rCanvas.getContext('2d');
 
-        // Multi-stop gradient fill
-        const grad = rCtx.createLinearGradient(0, 0, 0, 260);
-        grad.addColorStop(0, 'rgba(16,185,129,.30)');
-        grad.addColorStop(0.5, 'rgba(16,185,129,.10)');
-        grad.addColorStop(1, 'rgba(16,185,129,0)');
+          // Multi-stop gradient fill
+          const grad = rCtx.createLinearGradient(0, 0, 0, 260);
+          grad.addColorStop(0, 'rgba(16,185,129,.30)');
+          grad.addColorStop(0.5, 'rgba(16,185,129,.10)');
+          grad.addColorStop(1, 'rgba(16,185,129,0)');
 
-        const chartLabels = @json($chartData['labels'] ?? []);
-        const chartData = @json($chartData['data'] ?? []);
+          const chartLabels = @json($chartData['labels'] ?? []);
+          const chartData = @json($chartData['data'] ?? []);
 
-        // Compute stats
-        const avg = chartData.length ? Math.round(chartData.reduce((a, b) => a + b, 0) / chartData.length) : 0;
-        const max = chartData.length ? Math.max(...chartData) : 0;
-        const min = chartData.length ? Math.min(...chartData) : 0;
+          // Compute stats
+          const avg = chartData.length ? Math.round(chartData.reduce((a, b) => a + b, 0) / chartData.length) : 0;
+          const max = chartData.length ? Math.max(...chartData) : 0;
+          const min = chartData.length ? Math.min(...chartData) : 0;
 
-        const setChartStats = () => {
-          const avgEl = document.getElementById('chart-avg');
-          const maxEl = document.getElementById('chart-max');
-          const minEl = document.getElementById('chart-min');
-          if (avgEl) avgEl.textContent = idr(avg);
-          if (maxEl) maxEl.textContent = idr(max);
-          if (minEl) minEl.textContent = idr(min);
-        };
-        setChartStats();
+          const setChartStats = () => {
+            const avgEl = document.getElementById('chart-avg');
+            const maxEl = document.getElementById('chart-max');
+            const minEl = document.getElementById('chart-min');
+            if (avgEl) avgEl.textContent = idr(avg);
+            if (maxEl) maxEl.textContent = idr(max);
+            if (minEl) minEl.textContent = idr(min);
+          };
+          setChartStats();
 
-        const revenueChart = new Chart(rCtx, {
-          type: 'line',
-          data: {
-            labels: chartLabels,
-            datasets: [{
-              data: chartData,
-              borderColor: '#10b981',
-              borderWidth: 2.5,
-              fill: true,
-              backgroundColor: grad,
-              tension: 0.42,
-              pointBackgroundColor: '#ffffff',
-              pointBorderColor: '#10b981',
-              pointBorderWidth: 2.5,
-              pointRadius: 4,
-              pointHoverRadius: 7,
-              pointHoverBackgroundColor: '#10b981',
-              pointHoverBorderColor: '#fff',
-              pointHoverBorderWidth: 2.5,
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: { intersect: false, mode: 'index' },
-            animation: {
-              duration: 900,
-              easing: 'easeOutQuart',
-            },
-            plugins: {
-              legend: { display: false },
-              tooltip: {
-                backgroundColor: 'rgba(17,24,39,0.95)',
-                titleColor: '#9ca3af',
-                bodyColor: '#f9fafb',
-                padding: 12,
-                cornerRadius: 12,
-                borderColor: 'rgba(255,255,255,0.1)',
-                borderWidth: 1,
-                displayColors: false,
-                callbacks: {
-                  label: ctx => '  ' + idr(ctx.raw)
-                }
-              }
-            },
-            scales: {
-              y: {
-                beginAtZero: true,
-                grid: { color: 'rgba(0,0,0,0.04)', drawBorder: false },
-                border: { display: false },
-                ticks: {
-                  color: '#9ca3af',
-                  font: { size: 11, weight: '500' },
-                  callback: v => idr(v),
-                  maxTicksLimit: 5,
-                }
-              },
-              x: {
-                grid: { display: false },
-                border: { display: false },
-                ticks: {
-                  color: '#9ca3af',
-                  font: { size: 11, weight: '500' },
-                  maxRotation: 0,
-                }
-              }
-            }
-          }
-        });
-
-        /* ─── Donut Chart ─────────────────────────────────── */
-        const dCanvas = document.getElementById('donutChart');
-        if (dCanvas) {
-          const cars = @json($popularCars->pluck('name')->map(fn($n, $i) => $n ?? 'Mobil ' . ($i + 1)));
-          const counts = @json($popularCars->pluck('bookings_count'));
-          const total = counts.reduce((a, b) => a + b, 0);
-
-          const dCtx = dCanvas.getContext('2d');
-          new Chart(dCtx, {
-            type: 'doughnut',
+          const revenueChart = new Chart(rCtx, {
+            type: 'line',
             data: {
-              labels: cars,
+              labels: chartLabels,
               datasets: [{
-                data: counts,
-                backgroundColor: COLORS.slice(0, cars.length),
-                borderWidth: 3,
-                borderColor: '#ffffff',
-                hoverBorderWidth: 4,
-                hoverOffset: 8,
+                data: chartData,
+                borderColor: '#10b981',
+                borderWidth: 2.5,
+                fill: true,
+                backgroundColor: grad,
+                tension: 0.42,
+                pointBackgroundColor: '#ffffff',
+                pointBorderColor: '#10b981',
+                pointBorderWidth: 2.5,
+                pointRadius: 4,
+                pointHoverRadius: 7,
+                pointHoverBackgroundColor: '#10b981',
+                pointHoverBorderColor: '#fff',
+                pointHoverBorderWidth: 2.5,
               }]
             },
             options: {
               responsive: true,
               maintainAspectRatio: false,
-              cutout: '74%',
-              animation: { duration: 900, easing: 'easeOutQuart' },
+              interaction: { intersect: false, mode: 'index' },
+              animation: {
+                duration: 900,
+                easing: 'easeOutQuart',
+              },
               plugins: {
                 legend: { display: false },
                 tooltip: {
@@ -810,89 +744,157 @@
                   cornerRadius: 12,
                   borderColor: 'rgba(255,255,255,0.1)',
                   borderWidth: 1,
+                  displayColors: false,
                   callbacks: {
-                    label: ctx => `  ${ctx.raw} sewa  (${((ctx.raw / total) * 100).toFixed(1)}%)`
+                    label: ctx => '  ' + idr(ctx.raw)
+                  }
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  grid: { color: 'rgba(0,0,0,0.04)', drawBorder: false },
+                  border: { display: false },
+                  ticks: {
+                    color: '#9ca3af',
+                    font: { size: 11, weight: '500' },
+                    callback: v => idr(v),
+                    maxTicksLimit: 5,
+                  }
+                },
+                x: {
+                  grid: { display: false },
+                  border: { display: false },
+                  ticks: {
+                    color: '#9ca3af',
+                    font: { size: 11, weight: '500' },
+                    maxRotation: 0,
                   }
                 }
               }
             }
           });
 
-          /* Custom Legend */
-          const legend = document.getElementById('donut-legend');
-          if (legend) {
-            cars.forEach((name, i) => {
-              const pct = total > 0 ? ((counts[i] / total) * 100).toFixed(0) : 0;
-              legend.innerHTML += `
-                  <div class="flex items-center gap-2.5 group">
-                      <span class="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm"
-                          style="background:${COLORS[i]};box-shadow:0 0 6px ${COLORS[i]}60"></span>
-                      <span class="text-xs text-gray-600 flex-1 truncate font-semibold">${name}</span>
-                      <div class="flex items-center gap-2 ml-auto shrink-0">
-                          <div class="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                              <div class="w-0 h-full rounded-full transition-all duration-[1100ms] ease-out"
-                                  style="background:linear-gradient(90deg,${COLORS[i]},${COLORS[(i + 1) % COLORS.length]})"
-                                  data-w="${pct}"></div>
-                          </div>
-                          <span class="text-[11px] font-black text-gray-600 w-6 text-right tabular-nums">${counts[i]}</span>
-                      </div>
-                  </div>`;
+          /* ─── Donut Chart ─────────────────────────────────── */
+          const dCanvas = document.getElementById('donutChart');
+          if (dCanvas) {
+            const cars = @json($popularCars->pluck('name')->map(fn($n, $i) => $n ?? 'Mobil ' . ($i + 1)));
+            const counts = @json($popularCars->pluck('bookings_count'));
+            const total = counts.reduce((a, b) => a + b, 0);
+
+            const dCtx = dCanvas.getContext('2d');
+            new Chart(dCtx, {
+              type: 'doughnut',
+              data: {
+                labels: cars,
+                datasets: [{
+                  data: counts,
+                  backgroundColor: COLORS.slice(0, cars.length),
+                  borderWidth: 3,
+                  borderColor: '#ffffff',
+                  hoverBorderWidth: 4,
+                  hoverOffset: 8,
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '74%',
+                animation: { duration: 900, easing: 'easeOutQuart' },
+                plugins: {
+                  legend: { display: false },
+                  tooltip: {
+                    backgroundColor: 'rgba(17,24,39,0.95)',
+                    titleColor: '#9ca3af',
+                    bodyColor: '#f9fafb',
+                    padding: 12,
+                    cornerRadius: 12,
+                    borderColor: 'rgba(255,255,255,0.1)',
+                    borderWidth: 1,
+                    callbacks: {
+                      label: ctx => `  ${ctx.raw} sewa  (${((ctx.raw / total) * 100).toFixed(1)}%)`
+                    }
+                  }
+                }
+              }
             });
 
-            /* Animate progress bars */
-            requestAnimationFrame(() => {
-              setTimeout(() => {
-                document.querySelectorAll('[data-w]').forEach(el => {
-                  el.style.width = el.dataset.w + '%';
-                });
-              }, 350);
-            });
+            /* Custom Legend */
+            const legend = document.getElementById('donut-legend');
+            if (legend) {
+              cars.forEach((name, i) => {
+                const pct = total > 0 ? ((counts[i] / total) * 100).toFixed(0) : 0;
+                legend.innerHTML += `
+                              <div class="flex items-center gap-2.5 group">
+                                  <span class="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm"
+                                      style="background:${COLORS[i]};box-shadow:0 0 6px ${COLORS[i]}60"></span>
+                                  <span class="text-xs text-gray-600 flex-1 truncate font-semibold">${name}</span>
+                                  <div class="flex items-center gap-2 ml-auto shrink-0">
+                                      <div class="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                          <div class="w-0 h-full rounded-full transition-all duration-[1100ms] ease-out"
+                                              style="background:linear-gradient(90deg,${COLORS[i]},${COLORS[(i + 1) % COLORS.length]})"
+                                              data-w="${pct}"></div>
+                                      </div>
+                                      <span class="text-[11px] font-black text-gray-600 w-6 text-right tabular-nums">${counts[i]}</span>
+                                  </div>
+                              </div>`;
+              });
+
+              /* Animate progress bars */
+              requestAnimationFrame(() => {
+                setTimeout(() => {
+                  document.querySelectorAll('[data-w]').forEach(el => {
+                    el.style.width = el.dataset.w + '%';
+                  });
+                }, 350);
+              });
+            }
           }
-        }
 
-        /* ─── Period Filter ───────────────────────────────── */
-        const periodLabels = {
-          '7': '7 hari terakhir',
-          '30': '30 hari terakhir',
-          '90': '90 hari terakhir',
-          '365': 'Tahun ini'
-        };
+          /* ─── Period Filter ───────────────────────────────── */
+          const periodLabels = {
+            '7': '7 hari terakhir',
+            '30': '30 hari terakhir',
+            '90': '90 hari terakhir',
+            '365': 'Tahun ini'
+          };
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const currentPeriod = urlParams.get('period') || '7';
-        const periodLabel = document.getElementById('chart-period-label');
+          const urlParams = new URLSearchParams(window.location.search);
+          const currentPeriod = urlParams.get('period') || '7';
+          const periodLabel = document.getElementById('chart-period-label');
 
-        // Set initial label
-        if (periodLabel) periodLabel.textContent = periodLabels[currentPeriod] || '7 hari terakhir';
+          // Set initial label
+          if (periodLabel) periodLabel.textContent = periodLabels[currentPeriod] || '7 hari terakhir';
 
-        // Sync active button state
-        document.querySelectorAll('.chart-period-btn').forEach(btn => {
-          const isActive = btn.dataset.period == currentPeriod;
-          btn.classList.toggle('period-btn-active', isActive);
-          btn.classList.toggle('text-gray-700', isActive);
-          btn.classList.toggle('text-gray-500', !isActive);
-        });
-
-        // Period click handler
-        document.querySelectorAll('.chart-period-btn').forEach(btn => {
-          btn.addEventListener('click', function () {
-            // Visual feedback immediately
-            document.querySelectorAll('.chart-period-btn').forEach(b => {
-              b.classList.remove('period-btn-active', 'text-gray-700');
-              b.classList.add('text-gray-500');
-            });
-            this.classList.add('period-btn-active', 'text-gray-700');
-            this.classList.remove('text-gray-500');
-
-            // Navigate
-            const params = new URLSearchParams(window.location.search);
-            params.set('period', this.dataset.period);
-            window.location.search = params.toString();
+          // Sync active button state
+          document.querySelectorAll('.chart-period-btn').forEach(btn => {
+            const isActive = btn.dataset.period == currentPeriod;
+            btn.classList.toggle('period-btn-active', isActive);
+            btn.classList.toggle('text-gray-700', isActive);
+            btn.classList.toggle('text-gray-500', !isActive);
           });
-        });
 
-      });
-    </script>
-  @endif
+          // Period click handler
+          document.querySelectorAll('.chart-period-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+              // Visual feedback immediately
+              document.querySelectorAll('.chart-period-btn').forEach(b => {
+                b.classList.remove('period-btn-active', 'text-gray-700');
+                b.classList.add('text-gray-500');
+              });
+              this.classList.add('period-btn-active', 'text-gray-700');
+              this.classList.remove('text-gray-500');
+
+              // Navigate
+              const params = new URLSearchParams(window.location.search);
+              params.set('period', this.dataset.period);
+              window.location.search = params.toString();
+            });
+          });
+
+        });
+      </script>
+    @endif
+  @endpush
 
 </x-admin-layout>
