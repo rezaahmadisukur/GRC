@@ -50,6 +50,7 @@ class StoreCarRequest extends FormRequest
             'plate_code.required' => 'Plat nomor kendaraan wajib diisi',
             'plate_code.unique' => 'Plat nomor ini sudah terdaftar di sistem',
             'color.required' => 'Warna mobil wajib diisi',
+            'category.required' => 'Kategori mobil wajib diisi',
             'transmission.required' => 'Tipe transmisi wajib dipilih',
             'price_12h.required' => 'Harga sewa 12 jam wajib diisi',
             'price_12h.numeric' => 'Harga sewa 12 jam harus berupa angka',

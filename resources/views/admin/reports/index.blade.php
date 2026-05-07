@@ -227,11 +227,11 @@
                         </label>
                         <div class="grid grid-cols-2 gap-2">
                             @foreach([
-  ['preset' => 'today', 'label' => '📅 Hari Ini', 'color' => 'blue'],
-  ['preset' => 'week', 'label' => '📆 7 Hari', 'color' => 'indigo'],
-  ['preset' => 'month', 'label' => '🗓️ Bulan Ini', 'color' => 'violet'],
-  ['preset' => 'lastmonth', 'label' => '⏮️ Bulan Lalu', 'color' => 'purple'],
-] as $p)
+                                ['preset' => 'today', 'label' => '📅 Hari Ini', 'color' => 'blue'],
+                                ['preset' => 'week', 'label' => '📆 7 Hari', 'color' => 'indigo'],
+                                ['preset' => 'month', 'label' => '🗓️ Bulan Ini', 'color' => 'violet'],
+                                ['preset' => 'lastmonth', 'label' => '⏮️ Bulan Lalu', 'color' => 'purple'],
+                            ] as $p)
                             <button type="button"
                                     onclick="setDatePreset('{{ $p['preset'] }}')"
                                     class="preset-btn px-3 py-2 text-xs font-semibold rounded-xl
@@ -465,6 +465,85 @@
 ═══════════════════════════════════════════════ --}}
 @push('scripts')
 <script>
+    // ✅ Fungsi preset HARUS ADA DI GLOBAL SCOPE SEBELUM DOM READY (Laravel Blade Scope Bug)
+    window.setDatePreset = function (preset) {
+        const startDate  = document.getElementById('start_date');
+        const endDate    = document.getElementById('end_date');
+        window.isFromPreset = true;
+
+        const today = new Date();
+        let start   = new Date();
+        let end     = new Date();
+
+        // Helper function untuk format tanggal lokal (hindari bug UTC)
+        function formatLocalDate(date) {
+            const year  = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day   = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        switch (preset) {
+            case 'today':
+                start = new Date();
+                end   = new Date();
+                break;
+
+            case 'week':
+                start = new Date();
+                start.setDate(today.getDate() - 7);
+                end   = new Date();
+                break;
+
+            case 'month':
+                start = new Date(today.getFullYear(), today.getMonth(), 1);
+                end   = new Date();
+                break;
+
+            case 'lastmonth':
+                start = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+                end   = new Date(today.getFullYear(), today.getMonth(), 0);
+                break;
+        }
+
+        startDate.value = formatLocalDate(start);
+        endDate.value   = formatLocalDate(end);
+
+        // ✅ PERBAIKAN: Input date TIDAK otomatis trigger change event ketika diubah via JS (Browser Behavior)
+        // Jadi kita jalankan validateDates SECARA LANGSUNG, bukan hanya mengandalkan event
+        window.validateDates();
+
+        // Dispatch event untuk compatibility dengan listener lain
+        startDate.dispatchEvent(new Event('change', { bubbles: true }));
+        endDate.dispatchEvent(new Event('change', { bubbles: true }));
+        startDate.dispatchEvent(new Event('input', { bubbles: true }));
+        endDate.dispatchEvent(new Event('input', { bubbles: true }));
+
+        setTimeout(() => {
+            window.isFromPreset = false;
+        }, 100);
+    };
+
+    // ✅ Fungsi validasi juga harus di Global Scope agar bisa dipanggil dari setDatePreset
+    window.validateDates = function () {
+        const startDate  = document.getElementById('start_date');
+        const endDate    = document.getElementById('end_date');
+        const dateError  = document.getElementById('dateError');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        if (new Date(endDate.value) < new Date(startDate.value)) {
+            dateError.classList.remove('hidden');
+            dateError.classList.add('flex');
+            downloadBtn.disabled = true;
+            return false;
+        } else {
+            dateError.classList.add('hidden');
+            dateError.classList.remove('flex');
+            downloadBtn.disabled = false;
+            return true;
+        }
+    };
+
 document.addEventListener('DOMContentLoaded', function () {
 
     const startDate  = document.getElementById('start_date');
@@ -492,55 +571,18 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     /* ── Date validation ── */
-    startDate.addEventListener('change', () => { clearPresets(); validateDates(); });
-    endDate.addEventListener('change',   () => { clearPresets(); validateDates(); });
-
-    function validateDates() {
-        if (new Date(endDate.value) < new Date(startDate.value)) {
-            dateError.classList.remove('hidden');
-            dateError.classList.add('flex');
-            downloadBtn.disabled = true;
-            return false;
-        } else {
-            dateError.classList.add('hidden');
-            dateError.classList.remove('flex');
-            downloadBtn.disabled = false;
-            return true;
-        }
-    }
-
-    /* ── Date preset handler ── */
-    window.setDatePreset = function (preset) {
-        const today = new Date();
-        let start   = new Date();
-
-        switch (preset) {
-            case 'today':
-                start = new Date();
-                break;
-            case 'week':
-                start.setDate(today.getDate() - 7);
-                break;
-            case 'month':
-                start = new Date(today.getFullYear(), today.getMonth(), 1);
-                break;
-            case 'lastmonth':
-                start = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-                const lastDay = new Date(today.getFullYear(), today.getMonth(), 0);
-                endDate.value = lastDay.toISOString().split('T')[0];
-                break;
-        }
-
-        startDate.value = start.toISOString().split('T')[0];
-        if (preset !== 'lastmonth') {
-            endDate.value = today.toISOString().split('T')[0];
-        }
-        validateDates();
-    };
+    startDate.addEventListener('change', () => {
+        if (!window.isFromPreset) clearPresets();
+        window.validateDates();
+    });
+    endDate.addEventListener('change',   () => {
+        if (!window.isFromPreset) clearPresets();
+        window.validateDates();
+    });
 
     /* ── Form submit – loading state ── */
     reportForm.addEventListener('submit', function (e) {
-        if (!validateDates()) {
+        if (!window.validateDates()) {
             e.preventDefault();
             return;
         }
