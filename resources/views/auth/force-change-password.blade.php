@@ -108,21 +108,23 @@
     </div>
   </div>
 
-  <script>
-    function togglePassword(inputId, button) {
-      const input = document.getElementById(inputId);
-      const eyeOpen = button.querySelector('.eye-open');
-      const eyeClose = button.querySelector('.eye-close');
+  @push('scripts')
+    <script>
+      function togglePassword(inputId, button) {
+        const input = document.getElementById(inputId);
+        const eyeOpen = button.querySelector('.eye-open');
+        const eyeClose = button.querySelector('.eye-close');
 
-      if (input.type === 'password') {
-        input.type = 'text';
-        eyeOpen.classList.add('hidden');
-        eyeClose.classList.remove('hidden');
-      } else {
-        input.type = 'password';
-        eyeOpen.classList.remove('hidden');
-        eyeClose.classList.add('hidden');
+        if (input.type === 'password') {
+          input.type = 'text';
+          eyeOpen.classList.add('hidden');
+          eyeClose.classList.remove('hidden');
+        } else {
+          input.type = 'password';
+          eyeOpen.classList.remove('hidden');
+          eyeClose.classList.add('hidden');
+        }
       }
-    }
-  </script>
+    </script>
+  @endpush
 </x-guest-layout>
