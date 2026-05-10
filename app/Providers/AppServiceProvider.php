@@ -22,6 +22,5 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useTailwind();
-        Blade::anonymousComponentPath(resource_path('views/admin/cars/components'));
     }
 }

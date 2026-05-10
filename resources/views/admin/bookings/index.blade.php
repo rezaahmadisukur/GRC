@@ -1,4 +1,56 @@
-{{-- resources/views/admin/bookings/index.blade.php --}}
+@php
+  $statCards = [
+    (object) [
+      'label' => 'Total Pesanan',
+      'value' => $totalAllBookings,
+      'color' => 'slate',
+      'live' => false,
+      'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
+      'bg' => 'from-slate-700 to-slate-500',
+      'iconBg' => 'bg-slate-100',
+      'text' => 'text-slate-600',
+      'ring' => 'ring-slate-200',
+      'trend' => null,
+    ],
+    (object) [
+      'label' => 'Menunggu',
+      'value' => $pendingCount,
+      'color' => 'amber',
+      'live' => true,
+      'trend' => null,
+      'icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
+      'bg' => 'from-orange-700 to-amber-500',
+      'iconBg' => 'bg-amber-50',
+      'text' => 'text-amber-600',
+      'ring' => 'ring-amber-200',
+    ],
+    (object) [
+      'label' => 'Aktif',
+      'value' => $activeCount,
+      'color' => 'emerald',
+      'live' => true,
+      'trend' => null,
+      'icon' => 'M5 13l4 4L19 7',
+      'bg' => 'from-teal-700 to-emerald-500',
+      'iconBg' => 'bg-emerald-50',
+      'text' => 'text-emerald-600',
+      'ring' => 'ring-emerald-200',
+    ],
+    (object) [
+      'label' => 'Selesai',
+      'value' => $completedCount,
+      'color' => 'blue',
+      'live' => false,
+      'trend' => null,
+      'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+      'bg' => 'from-indigo-700 to-blue-500',
+      'iconBg' => 'bg-blue-50',
+      'text' => 'text-blue-600',
+      'ring' => 'ring-blue-200',
+    ],
+  ];
+@endphp
+
 <x-admin-layout>
   <x-slot name="header">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -46,249 +98,21 @@
     </div>
   </x-slot>
 
-  {{-- =================== CUSTOM STYLES =================== --}}
-  <style>
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(16px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes slideInRight {
-      from {
-        opacity: 0;
-        transform: translateX(20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    @keyframes modalIn {
-      from {
-        opacity: 0;
-        transform: scale(0.92) translateY(12px);
-      }
-
-      to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-      }
-    }
-
-    @keyframes overlayIn {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes shimmer {
-      0% {
-        background-position: -200% 0;
-      }
-
-      100% {
-        background-position: 200% 0;
-      }
-    }
-
-    .animate-fadeInUp {
-      animation: fadeInUp 0.45s cubic-bezier(.22, .68, 0, 1.2) both;
-    }
-
-    .animate-slideInRight {
-      animation: slideInRight 0.4s cubic-bezier(.22, .68, 0, 1.2) both;
-    }
-
-    .animate-overlayIn {
-      animation: overlayIn 0.25s ease both;
-    }
-
-    .animate-modalIn {
-      animation: modalIn 0.35s cubic-bezier(.22, .68, 0, 1.2) both;
-    }
-
-    .stat-card {
-      transition: all 0.3s cubic-bezier(.22, .68, 0, 1.2);
-    }
-
-    .stat-card:hover {
-      transform: translateY(-4px);
-    }
-
-    .table-row-hover {
-      transition: all 0.2s ease;
-    }
-
-    .table-row-hover:hover {
-      background: linear-gradient(135deg, rgba(16, 185, 129, .04) 0%, rgba(20, 184, 166, .03) 100%);
-    }
-
-    .btn-action {
-      transition: all 0.2s cubic-bezier(.22, .68, 0, 1.2);
-    }
-
-    .btn-action:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn-action:active {
-      transform: scale(0.96);
-    }
-
-    .glass-card {
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-    }
-
-    .filter-pill {
-      transition: all 0.2s cubic-bezier(.22, .68, 0, 1.2);
-    }
-
-    .filter-pill.active {
-      transform: scale(1.02);
-    }
-
-    input:focus,
-    textarea:focus {
-      outline: none;
-    }
-
-    .modal-scroll {
-      max-height: 80vh;
-      overflow-y: auto;
-    }
-
-    .modal-scroll::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    .modal-scroll::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .modal-scroll::-webkit-scrollbar-thumb {
-      background: #e5e7eb;
-      border-radius: 99px;
-    }
-  </style>
-
-  <div class="min-h-screen py-6 px-4 sm:px-6 lg:px-8"
-    style="background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 50%, #faf5ff 100%);">
+  <div class="min-h-screen py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto space-y-5">
 
       {{-- =================== STAT CARDS =================== --}}
-      @php
-        $statCards = [
-          [
-            'label' => 'Total Pesanan',
-            'value' => $totalAllBookings,
-            'color' => 'slate',
-            'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
-            'bg' => 'from-slate-500 to-slate-700',
-            'iconBg' => 'bg-slate-100',
-            'text' => 'text-slate-600',
-            'ring' => 'ring-slate-200',
-            'trend' => null,
-          ],
-          [
-            'label' => 'Menunggu',
-            'value' => $pendingCount,
-            'color' => 'amber',
-            'live' => true,
-            'icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
-            'bg' => 'from-amber-400 to-orange-500',
-            'iconBg' => 'bg-amber-50',
-            'text' => 'text-amber-600',
-            'ring' => 'ring-amber-200',
-          ],
-          [
-            'label' => 'Aktif',
-            'value' => $activeCount,
-            'color' => 'emerald',
-            'live' => true,
-            'icon' => 'M5 13l4 4L19 7',
-            'bg' => 'from-emerald-400 to-teal-600',
-            'iconBg' => 'bg-emerald-50',
-            'text' => 'text-emerald-600',
-            'ring' => 'ring-emerald-200',
-          ],
-          [
-            'label' => 'Selesai',
-            'value' => $completedCount,
-            'color' => 'blue',
-            'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
-            'bg' => 'from-blue-400 to-indigo-600',
-            'iconBg' => 'bg-blue-50',
-            'text' => 'text-blue-600',
-            'ring' => 'ring-blue-200',
-          ],
-        ];
-      @endphp
-
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        @foreach($statCards as $sc)
-          <div
-            class="stat-card glass-card border border-white/70 rounded-2xl p-5 overflow-hidden relative group ring-1 {{ $sc['ring'] }} shadow-sm animate-fadeInUp"
-            style="animation-delay: {{ $loop->index * 0.08 }}s">
-
-            {{-- Gradient Top Bar --}}
-            <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r {{ $sc['bg'] }} rounded-t-2xl"></div>
-
-            {{-- Background Glow --}}
-            <div
-              class="absolute -right-4 -bottom-4 w-20 h-20 rounded-full bg-gradient-to-br {{ $sc['bg'] }} opacity-5 group-hover:opacity-10 transition-opacity duration-300 blur-xl">
-            </div>
-
-            <div class="flex items-start justify-between gap-2 mt-1 relative">
-              <div class="flex-1 min-w-0">
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">
-                  {{ $sc['label'] }}
-                </p>
-                <p class="text-3xl font-black text-gray-900 leading-none tabular-nums">
-                  {{ $sc['value'] }}
-                </p>
-                @if(!empty($sc['live']))
-                  <div class="flex items-center gap-1.5 mt-2">
-                    <span class="relative flex h-2 w-2">
-                      <span
-                        class="animate-ping absolute inline-flex h-full w-full rounded-full {{ $sc['text'] }} opacity-75 bg-current"></span>
-                      <span class="relative inline-flex rounded-full h-2 w-2 bg-current {{ $sc['text'] }}"></span>
-                    </span>
-                    <span class="text-[10px] font-semibold text-gray-400 tracking-wide">LIVE</span>
-                  </div>
-                @else
-                  <div class="mt-2 h-5"></div>
-                @endif
-              </div>
-
-              <div
-                class="w-11 h-11 rounded-2xl {{ $sc['iconBg'] }} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300 ring-1 {{ $sc['ring'] }}">
-                <svg class="w-5 h-5 {{ $sc['text'] }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $sc['icon'] }}" />
-                </svg>
-              </div>
-            </div>
-          </div>
+        @foreach($statCards as $stat)
+          <x-admin.bookings.stat-card :label="$stat->label" :value="$stat->value" :color="$stat->color"
+            :icon="$stat->icon" :iconBg="$stat->iconBg" :text="$stat->text" :ring="$stat->ring" :trend="$stat->trend"
+            :live="$stat->live" :bg="$stat->bg" :delay="$loop->index * 0.08" />
         @endforeach
       </div>
 
       {{-- =================== TABLE CARD =================== --}}
       <div
-        class="glass-card border border-white/70 rounded-2xl overflow-hidden shadow-sm animate-fadeInUp ring-1 ring-gray-200/60"
+        class="bg-white/80 backdrop-blur-xl border border-white/70 rounded-2xl overflow-hidden shadow-sm animate-fadeInUp ring-1 ring-gray-200/60"
         style="animation-delay: .2s">
 
         {{-- Table Header --}}
@@ -317,7 +141,7 @@
           <div class="flex items-center gap-1.5 flex-wrap" id="filter-pills">
             @foreach(['all' => 'Semua', 'pending' => 'Menunggu', 'active' => 'Aktif', 'completed' => 'Selesai', 'cancelled' => 'Batal'] as $val => $lbl)
               <button data-filter="{{ $val }}"
-                class="filter-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 {{ $val === 'all' ? 'bg-emerald-500 text-white shadow-sm shadow-emerald-200 active' : 'bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700' }}">
+                class="filter-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 {{ $val === 'all' ? 'bg-emerald-500 text-white shadow-sm shadow-emerald-200 scale-[1.02]' : 'bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700 hover:scale-[1.02]' }}">
                 {{ $lbl }}
               </button>
             @endforeach
@@ -365,7 +189,9 @@
                   $avatarGrad = $avatarColors[$booking->status] ?? 'from-emerald-400 to-teal-500';
                 @endphp
 
-                <tr class="table-row-hover group" data-status="{{ $booking->status }}"
+                <tr
+                  class="transition-all duration-200 hover:bg-gradient-to-r hover:from-emerald-50/50 hover:to-teal-50/30 group"
+                  data-status="{{ $booking->status }}"
                   data-search="{{ strtolower($booking->customer_name . ' ' . $booking->booking_code . ' ' . ($booking->car->name ?? '')) }}">
 
                   {{-- Customer --}}
@@ -446,7 +272,7 @@
                     @if($booking->admin_id && $booking->user)
                       <div
                         class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold cursor-help
-                                                                {{ $booking->user->role === 'owner' ? 'bg-purple-50 text-purple-700 ring-1 ring-purple-200' : 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' }}"
+                                                                                                                                                            {{ $booking->user->role === 'owner' ? 'bg-purple-50 text-purple-700 ring-1 ring-purple-200' : 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' }}"
                         title="{{ $booking->user->role === 'owner' ? '👑 Owner' : '👤 Admin' }} | {{ $booking->updated_at->translatedFormat('d M Y H:i') }}">
                         <span
                           class="w-1.5 h-1.5 rounded-full {{ $booking->user->role === 'owner' ? 'bg-purple-500' : 'bg-blue-400' }}"></span>
@@ -486,7 +312,7 @@
 
                         {{-- Approve Button --}}
                         <button type="button"
-                          class="btn-action inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-sm shadow-emerald-200 open-dp-modal"
+                          class="transition-all duration-200 ease-out active:scale-95 hover:-translate-y-0.5 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-sm shadow-emerald-200 open-dp-modal"
                           data-booking-id="{{ $booking->id }}" data-booking-code="{{ $booking->booking_code }}"
                           data-customer-name="{{ $booking->customer_name }}" data-total-price="{{ $booking->total_price }}"
                           data-current-dp="{{ $booking->dp_amount }}">
@@ -505,7 +331,7 @@
 
                         {{-- Reject Button --}}
                         <button type="button"
-                          class="btn-action inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-red-50 hover:bg-red-100 text-red-600 ring-1 ring-red-200 hover:ring-red-300 open-cancel-modal"
+                          class="transition-all duration-200 ease-out active:scale-95 hover:-translate-y-0.5 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-red-50 hover:bg-red-100 text-red-600 ring-1 ring-red-200 hover:ring-red-300 open-cancel-modal"
                           data-booking-id="{{ $booking->id }}" data-booking-code="{{ $booking->booking_code }}"
                           data-customer-name="{{ $booking->customer_name }}"
                           data-action="{{ route('admin.bookings.update-status', $booking) }}" data-mode="reject">
@@ -527,7 +353,7 @@
 
                         {{-- Complete Button --}}
                         <button type="button"
-                          class="btn-action inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white shadow-sm shadow-blue-200 open-complete-modal"
+                          class="transition-all duration-200 ease-out active:scale-95 hover:-translate-y-0.5 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white shadow-sm shadow-blue-200 open-complete-modal"
                           data-booking-id="{{ $booking->id }}" data-booking-code="{{ $booking->booking_code }}"
                           data-customer-name="{{ $booking->customer_name }}" data-total-price="{{ $booking->total_price }}"
                           data-end-date="{{ $booking->end_date->format('d M Y H:i') }}">
@@ -548,7 +374,7 @@
 
                         {{-- Cancel Active --}}
                         <button type="button"
-                          class="btn-action inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-orange-50 hover:bg-orange-100 text-orange-600 ring-1 ring-orange-200 open-cancel-modal"
+                          class="transition-all duration-200 ease-out active:scale-95 hover:-translate-y-0.5 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-orange-50 hover:bg-orange-100 text-orange-600 ring-1 ring-orange-200 open-cancel-modal"
                           data-booking-id="{{ $booking->id }}" data-booking-code="{{ $booking->booking_code }}"
                           data-customer-name="{{ $booking->customer_name }}"
                           data-action="{{ route('admin.bookings.update-status', $booking) }}" data-mode="cancel">
@@ -561,7 +387,7 @@
 
                         {{-- Print Receipt --}}
                         <a href="{{ route('admin.bookings.receipt', $booking) }}" target="_blank"
-                          class="btn-action inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-teal-50 hover:bg-teal-100 text-teal-600 ring-1 ring-teal-200">
+                          class="transition-all duration-200 ease-out active:scale-95 hover:-translate-y-0.5 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-teal-50 hover:bg-teal-100 text-teal-600 ring-1 ring-teal-200">
                           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -580,7 +406,7 @@
 
                         {{-- Receipt Only --}}
                         <a href="{{ route('admin.bookings.receipt', $booking) }}" target="_blank"
-                          class="btn-action inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white shadow-sm shadow-blue-200">
+                          class="transition-all duration-200 ease-out active:scale-95 hover:-translate-y-0.5 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white shadow-sm shadow-blue-200">
                           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -1108,10 +934,10 @@
         document.querySelectorAll('.filter-pill').forEach(pill => {
           pill.addEventListener('click', e => {
             document.querySelectorAll('.filter-pill').forEach(p => {
-              p.classList.remove('bg-emerald-500', 'text-white', 'shadow-sm', 'shadow-emerald-200', 'active');
+              p.classList.remove('bg-emerald-500', 'text-white', 'shadow-sm', 'shadow-emerald-200', 'scale-[1.02]', 'active');
               p.classList.add('bg-gray-100', 'text-gray-500');
             });
-            e.currentTarget.classList.add('bg-emerald-500', 'text-white', 'shadow-sm', 'shadow-emerald-200', 'active');
+            e.currentTarget.classList.add('bg-emerald-500', 'text-white', 'shadow-sm', 'shadow-emerald-200', 'scale-[1.02]', 'active');
             e.currentTarget.classList.remove('bg-gray-100', 'text-gray-500');
             applyServerFilters();
           });
@@ -1151,6 +977,7 @@
             p.classList.toggle('text-white', isActive);
             p.classList.toggle('shadow-sm', isActive);
             p.classList.toggle('shadow-emerald-200', isActive);
+            p.classList.toggle('scale-[1.02]', isActive);
             p.classList.toggle('active', isActive);
             p.classList.toggle('bg-gray-100', !isActive);
             p.classList.toggle('text-gray-500', !isActive);

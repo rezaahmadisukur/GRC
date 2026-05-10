@@ -2,27 +2,27 @@
     $statsCard = [
         (object) [
             'icon' => '<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                                        d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                                        d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" />
-                                                                                </svg>',
+                                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                                                d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                                                d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" />
+                                                                                        </svg>',
             'label' => 'Total Mobil',
             'value' => $cars->total(),
             'gradient' => 'from-blue-500 to-indigo-600'
         ],
         (object) [
             'icon' => '<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                                                            </svg>',
+                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                                                    </svg>',
             'label' => 'Tersedia',
             'value' => $stats['available'],
             'gradient' => 'from-emerald-400 to-teal-500'
         ],
         (object) [
             'icon' => '<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                                                            </svg>',
+                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                                                    </svg>',
             'label' => 'Tidak Tersedia',
             'value' => $stats['unavailable'],
             'gradient' => 'from-rose-400 to-red-500'
@@ -70,7 +70,7 @@
             {{-- ════════════════════════════════════════ --}}
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 animate-fade-in-up">
                 @foreach ($statsCard as $stat)
-                    <x-stat-card :icon="$stat->icon" :label="$stat->label" :value="$stat->value"
+                    <x-admin.cars.stat-card :icon="$stat->icon" :label="$stat->label" :value="$stat->value"
                         :gradient="$stat->gradient" />
                 @endforeach
             </div>
@@ -404,7 +404,7 @@
                                             <div class="relative mb-6">
                                                 <div
                                                     class="w-28 h-28 rounded-3xl bg-gradient-to-br from-slate-100 to-blue-50
-                                                                                                                                                                                                  flex items-center justify-center shadow-inner">
+                                                                                                                                                                                                          flex items-center justify-center shadow-inner">
                                                     <svg class="w-14 h-14 text-gray-300" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
