@@ -1,7 +1,7 @@
 <x-admin-layout>
     <x-slot name="header">
         <div class="flex items-center gap-3">
-            {{-- Animated Dashboard Icon --}}
+            {{-- Animated Icon --}}
             <div class="relative flex-shrink-0">
                 <div
                     class="w-11 h-11 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200/60">
@@ -17,8 +17,11 @@
                 </span>
             </div>
             <div>
-                <h1 class="text-xl font-bold text-gray-800 leading-tight">Quick Booking</h1>
-                <p class="text-xs text-gray-400 font-medium">Walk-in Customer</p>
+                <h2 class="text-xl font-extrabold text-gray-900 tracking-tight leading-tight">Quick Booking</h2>
+                <p class="text-xs text-gray-400 mt-0.5 flex items-center gap-1.5">
+                    <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Walk-in Customer</span>
+                </p>
             </div>
         </div>
     </x-slot>
@@ -169,8 +172,8 @@
                                            py-2.5 rounded-xl font-bold text-xs transition-all duration-300
                                            group/btn
                                            {{ $car->is_available
-            ? 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 shadow-md shadow-blue-200 hover:shadow-lg hover:shadow-blue-300 active:scale-95'
-            : 'bg-gray-200 text-gray-400 cursor-not-allowed' }}"
+        ? 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 shadow-md shadow-blue-200 hover:shadow-lg hover:shadow-blue-300 active:scale-95'
+        : 'bg-gray-200 text-gray-400 cursor-not-allowed' }}"
                                     data-car-id="{{ $car->id }}" data-car-name="{{ $car->name }}"
                                     data-price12="{{ $car->price_12h }}" data-price24="{{ $car->price_24h }}"
                                     @if(!$car->is_available) disabled @endif>

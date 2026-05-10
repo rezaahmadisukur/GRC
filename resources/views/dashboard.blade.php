@@ -18,13 +18,22 @@
           </span>
         </div>
         <div>
+          <h2 class="text-xl font-extrabold text-gray-900 tracking-tight leading-tight">Dashboard</h2>
+          <p class="text-xs text-gray-400 mt-0.5 flex items-center gap-1.5">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-gray-400">Selamat datang kembali,</span>
+            <span class="font-bold text-emerald-600">{{ $user->name }}</span>
+            <span>👋</span>
+          </p>
+        </div>
+        {{-- <div>
           <h2 class="font-extrabold text-xl text-gray-900 leading-tight tracking-tight">Dashboard Admin</h2>
           <p class="text-xs text-gray-400 mt-0.5 flex items-center gap-1.5">
             <span class="text-gray-400">Selamat datang kembali,</span>
             <span class="font-bold text-emerald-600">{{ $user->name }}</span>
             <span>👋</span>
           </p>
-        </div>
+        </div> --}}
       </div>
 
       {{-- Date Badge --}}
@@ -825,19 +834,19 @@
               cars.forEach((name, i) => {
                 const pct = total > 0 ? ((counts[i] / total) * 100).toFixed(0) : 0;
                 legend.innerHTML += `
-                              <div class="flex items-center gap-2.5 group">
-                                  <span class="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm"
-                                      style="background:${COLORS[i]};box-shadow:0 0 6px ${COLORS[i]}60"></span>
-                                  <span class="text-xs text-gray-600 flex-1 truncate font-semibold">${name}</span>
-                                  <div class="flex items-center gap-2 ml-auto shrink-0">
-                                      <div class="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                                          <div class="w-0 h-full rounded-full transition-all duration-[1100ms] ease-out"
-                                              style="background:linear-gradient(90deg,${COLORS[i]},${COLORS[(i + 1) % COLORS.length]})"
-                                              data-w="${pct}"></div>
-                                      </div>
-                                      <span class="text-[11px] font-black text-gray-600 w-6 text-right tabular-nums">${counts[i]}</span>
-                                  </div>
-                              </div>`;
+                                      <div class="flex items-center gap-2.5 group">
+                                          <span class="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm"
+                                              style="background:${COLORS[i]};box-shadow:0 0 6px ${COLORS[i]}60"></span>
+                                          <span class="text-xs text-gray-600 flex-1 truncate font-semibold">${name}</span>
+                                          <div class="flex items-center gap-2 ml-auto shrink-0">
+                                              <div class="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                                  <div class="w-0 h-full rounded-full transition-all duration-[1100ms] ease-out"
+                                                      style="background:linear-gradient(90deg,${COLORS[i]},${COLORS[(i + 1) % COLORS.length]})"
+                                                      data-w="${pct}"></div>
+                                              </div>
+                                              <span class="text-[11px] font-black text-gray-600 w-6 text-right tabular-nums">${counts[i]}</span>
+                                          </div>
+                                      </div>`;
               });
 
               /* Animate progress bars */
