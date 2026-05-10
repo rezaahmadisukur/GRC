@@ -18,8 +18,9 @@
           </span>
         </div>
         <div>
-          <h2 class="font-extrabold text-xl text-gray-900 leading-tight tracking-tight">Dashboard Admin</h2>
+          <h2 class="text-xl font-extrabold text-gray-900 tracking-tight leading-tight">Dashboard</h2>
           <p class="text-xs text-gray-400 mt-0.5 flex items-center gap-1.5">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
             <span class="text-gray-400">Selamat datang kembali,</span>
             <span class="font-bold text-emerald-600">{{ $user->name }}</span>
             <span>👋</span>
@@ -53,173 +54,8 @@
     </div>
   </x-slot>
 
-  {{-- ===================== CUSTOM STYLES ===================== --}}
-  <style>
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes fadeInScale {
-      from {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    @keyframes slideInLeft {
-      from {
-        opacity: 0;
-        transform: translateX(-16px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    @keyframes countUp {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes shimmer {
-      0% {
-        background-position: -200% center;
-      }
-
-      100% {
-        background-position: 200% center;
-      }
-    }
-
-    @keyframes pulseDot {
-
-      0%,
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-
-      50% {
-        opacity: 0.6;
-        transform: scale(1.3);
-      }
-    }
-
-    .anim-1 {
-      animation: fadeInUp 0.5s cubic-bezier(.22, .68, 0, 1.2) 0.05s both;
-    }
-
-    .anim-2 {
-      animation: fadeInUp 0.5s cubic-bezier(.22, .68, 0, 1.2) 0.12s both;
-    }
-
-    .anim-3 {
-      animation: fadeInUp 0.5s cubic-bezier(.22, .68, 0, 1.2) 0.19s both;
-    }
-
-    .anim-4 {
-      animation: fadeInUp 0.5s cubic-bezier(.22, .68, 0, 1.2) 0.26s both;
-    }
-
-    .anim-5 {
-      animation: fadeInUp 0.5s cubic-bezier(.22, .68, 0, 1.2) 0.33s both;
-    }
-
-    .anim-6 {
-      animation: fadeInUp 0.5s cubic-bezier(.22, .68, 0, 1.2) 0.40s both;
-    }
-
-    .stat-card {
-      transition: all 0.35s cubic-bezier(.22, .68, 0, 1.2);
-      position: relative;
-    }
-
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-    }
-
-    .stat-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .stat-card:hover::before {
-      opacity: 1;
-    }
-
-    .glass-card {
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-    }
-
-    .chart-container canvas {
-      display: block;
-    }
-
-    .pulse-dot {
-      animation: pulseDot 1.8s ease infinite;
-    }
-
-    .table-row {
-      transition: all 0.2s ease;
-    }
-
-    .table-row:hover {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.04), rgba(20, 184, 166, 0.02));
-    }
-
-    .period-btn-active {
-      background: white;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-      color: #111827;
-    }
-
-    /* Scrollbar for table */
-    .table-wrapper::-webkit-scrollbar {
-      height: 4px;
-    }
-
-    .table-wrapper::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .table-wrapper::-webkit-scrollbar-thumb {
-      background: #e5e7eb;
-      border-radius: 99px;
-    }
-  </style>
-
   {{-- ===================== PAGE WRAPPER ===================== --}}
-  <div class="min-h-screen py-6 px-4 sm:px-6 lg:px-8"
-    style="background: linear-gradient(135deg, #f0fdf8 0%, #f8faff 55%, #fdf4ff 100%);">
+  <div class="min-h-screen py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto space-y-5">
 
       {{-- =================== STAT CARDS =================== --}}
@@ -293,10 +129,10 @@
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         @foreach($cards as $i => $card)
-          @php $animClass = 'anim-' . ($i + 1); @endphp
           <div
-            class="stat-card glass-card border border-white/70 rounded-2xl p-5 overflow-hidden ring-1 ring-gray-200/60 shadow-sm {{ $animClass }}"
-            style="box-shadow: 0 4px 24px {{ $card['glow'] }}, 0 1px 3px rgba(0,0,0,0.04);">
+            class="relative bg-white/80 backdrop-blur-xl border border-white/70 rounded-2xl p-5 overflow-hidden ring-1 ring-gray-200/60 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1.5 animate-fadeInUp
+                before:absolute before:inset-0 before:rounded-2xl before:opacity-0 hover:before:opacity-100 before:bg-gradient-to-br before:from-white/10 before:to-transparent before:transition-opacity"
+            style="box-shadow: 0 4px 24px {{ $card['glow'] }}, 0 1px 3px rgba(0,0,0,0.04); animation-delay: {{ ($i + 1) * 0.07 }}s;">
 
             {{-- Gradient Top Bar --}}
             <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r {{ $card['bg'] }} rounded-t-2xl"></div>
@@ -368,10 +204,11 @@
 
       {{-- =================== OWNER: CHART + DONUT =================== --}}
       @if($user->role === 'owner' && !empty($chartData))
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 anim-5">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 animate-fadeInUp" style="animation-delay: 0.33s">
 
           {{-- Revenue Line Chart --}}
-          <div class="lg:col-span-2 glass-card border border-white/70 rounded-2xl p-6 shadow-sm ring-1 ring-gray-200/60">
+          <div
+            class="lg:col-span-2 bg-white/80 backdrop-blur-xl border border-white/70 rounded-2xl p-6 shadow-sm ring-1 ring-gray-200/60">
 
             {{-- Chart Header --}}
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
@@ -408,7 +245,7 @@
             </div>
 
             {{-- Chart Canvas --}}
-            <div class="h-64 chart-container">
+            <div class="h-64">
               <canvas id="revenueChart"></canvas>
             </div>
 
@@ -430,7 +267,8 @@
           </div>
 
           {{-- Donut Chart --}}
-          <div class="glass-card border border-white/70 rounded-2xl p-6 shadow-sm ring-1 ring-gray-200/60">
+          <div
+            class="bg-white/80 backdrop-blur-xl border border-white/70 rounded-2xl p-6 shadow-sm ring-1 ring-gray-200/60">
             <div class="mb-5">
               <div class="flex items-center gap-2 mb-0.5">
                 <div class="w-1 h-5 bg-gradient-to-b from-blue-500 to-indigo-600 rounded-full"></div>
@@ -472,7 +310,8 @@
 
       {{-- =================== RECENT BOOKINGS =================== --}}
       <div
-        class="glass-card border border-white/70 rounded-2xl overflow-hidden shadow-sm ring-1 ring-gray-200/60 anim-6">
+        class="bg-white/80 backdrop-blur-xl border border-white/70 rounded-2xl overflow-hidden shadow-sm ring-1 ring-gray-200/60 animate-fadeInUp"
+        style="animation-delay: 0.40s">
 
         {{-- Section Header --}}
         <div
@@ -530,7 +369,7 @@
 
         @else
           {{-- Table --}}
-          <div class="table-wrapper overflow-x-auto">
+          <div class="overflow-x-auto">
             <table class="min-w-full">
               <thead>
                 <tr class="bg-gradient-to-r from-gray-50/80 to-slate-50/60 border-b border-gray-100">
@@ -561,7 +400,8 @@
                     ];
                     $avatarGrad = $avatarColors[$booking->status] ?? 'from-emerald-400 to-teal-500';
                   @endphp
-                  <tr class="table-row group">
+                  <tr
+                    class="transition-all duration-200 hover:bg-gradient-to-r hover:from-emerald-50/50 hover:to-teal-50/30 group">
                     {{-- Booking Code --}}
                     <td class="px-5 py-3.5 whitespace-nowrap">
                       <span
@@ -825,19 +665,19 @@
               cars.forEach((name, i) => {
                 const pct = total > 0 ? ((counts[i] / total) * 100).toFixed(0) : 0;
                 legend.innerHTML += `
-                              <div class="flex items-center gap-2.5 group">
-                                  <span class="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm"
-                                      style="background:${COLORS[i]};box-shadow:0 0 6px ${COLORS[i]}60"></span>
-                                  <span class="text-xs text-gray-600 flex-1 truncate font-semibold">${name}</span>
-                                  <div class="flex items-center gap-2 ml-auto shrink-0">
-                                      <div class="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                                          <div class="w-0 h-full rounded-full transition-all duration-[1100ms] ease-out"
-                                              style="background:linear-gradient(90deg,${COLORS[i]},${COLORS[(i + 1) % COLORS.length]})"
-                                              data-w="${pct}"></div>
-                                      </div>
-                                      <span class="text-[11px] font-black text-gray-600 w-6 text-right tabular-nums">${counts[i]}</span>
-                                  </div>
-                              </div>`;
+                                              <div class="flex items-center gap-2.5 group">
+                                                  <span class="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm"
+                                                      style="background:${COLORS[i]};box-shadow:0 0 6px ${COLORS[i]}60"></span>
+                                                  <span class="text-xs text-gray-600 flex-1 truncate font-semibold">${name}</span>
+                                                  <div class="flex items-center gap-2 ml-auto shrink-0">
+                                                      <div class="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                                          <div class="w-0 h-full rounded-full transition-all duration-[1100ms] ease-out"
+                                                              style="background:linear-gradient(90deg,${COLORS[i]},${COLORS[(i + 1) % COLORS.length]})"
+                                                              data-w="${pct}"></div>
+                                                      </div>
+                                                      <span class="text-[11px] font-black text-gray-600 w-6 text-right tabular-nums">${counts[i]}</span>
+                                                  </div>
+                                              </div>`;
               });
 
               /* Animate progress bars */
@@ -869,8 +709,9 @@
           // Sync active button state
           document.querySelectorAll('.chart-period-btn').forEach(btn => {
             const isActive = btn.dataset.period == currentPeriod;
-            btn.classList.toggle('period-btn-active', isActive);
-            btn.classList.toggle('text-gray-700', isActive);
+            btn.classList.toggle('bg-white', isActive);
+            btn.classList.toggle('shadow-sm', isActive);
+            btn.classList.toggle('text-gray-900', isActive);
             btn.classList.toggle('text-gray-500', !isActive);
           });
 
@@ -879,10 +720,10 @@
             btn.addEventListener('click', function () {
               // Visual feedback immediately
               document.querySelectorAll('.chart-period-btn').forEach(b => {
-                b.classList.remove('period-btn-active', 'text-gray-700');
+                b.classList.remove('bg-white', 'shadow-sm', 'text-gray-900');
                 b.classList.add('text-gray-500');
               });
-              this.classList.add('period-btn-active', 'text-gray-700');
+              this.classList.add('bg-white', 'shadow-sm', 'text-gray-900');
               this.classList.remove('text-gray-500');
 
               // Navigate

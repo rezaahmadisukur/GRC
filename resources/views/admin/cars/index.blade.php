@@ -1,18 +1,62 @@
+@php
+    $statsCard = [
+        (object) [
+            'icon' => '<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                                        d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                                        d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" />
+                                                                                </svg>',
+            'label' => 'Total Mobil',
+            'value' => $cars->total(),
+            'gradient' => 'from-blue-500 to-indigo-600'
+        ],
+        (object) [
+            'icon' => '<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                                            </svg>',
+            'label' => 'Tersedia',
+            'value' => $stats['available'],
+            'gradient' => 'from-emerald-400 to-teal-500'
+        ],
+        (object) [
+            'icon' => '<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                                            </svg>',
+            'label' => 'Tidak Tersedia',
+            'value' => $stats['unavailable'],
+            'gradient' => 'from-rose-400 to-red-500'
+        ],
+    ]
+@endphp
+
 <x-admin-layout>
 
     <x-slot name="header">
         <div class="flex items-center gap-3">
-            <div class="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" />
-                </svg>
+            {{-- Animated Icon --}}
+            <div class="relative flex-shrink-0">
+                <div
+                    class="w-11 h-11 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200/60">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" />
+                    </svg>
+                </div>
+                <span class="absolute -top-0.5 -right-0.5 flex h-3 w-3">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500 border-2 border-white"></span>
+                </span>
             </div>
             <div>
-                <h2 class="font-bold text-xl text-gray-800 leading-tight">Pengelolaan Mobil</h2>
-                <p class="text-sm text-gray-500 font-normal">Kelola armada kendaraan Anda</p>
+                <h2 class="text-xl font-extrabold text-gray-900 tracking-tight leading-tight">Pengelolaan Mobil</h2>
+                <p class="text-xs text-gray-400 mt-0.5 flex items-center gap-1.5">
+                    <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Kelola kendaraan anda</span>
+                </p>
             </div>
         </div>
     </x-slot>
@@ -25,56 +69,10 @@
             {{-- STAT CARDS --}}
             {{-- ════════════════════════════════════════ --}}
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 animate-fade-in-up">
-
-                {{-- Total --}}
-                <div
-                    class="bg-white border border-slate-100 rounded-2xl p-4 flex items-center gap-3.5 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
-                    <div class="p-2.5 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shrink-0">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" />
-                        </svg>
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-500 font-medium">Total Mobil</p>
-                        <p class="text-xl font-bold text-gray-800">{{ $cars->total() }}</p>
-                    </div>
-                </div>
-
-                {{-- Tersedia --}}
-                <div
-                    class="bg-white border border-slate-100 rounded-2xl p-4 flex items-center gap-3.5 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
-                    <div class="p-2.5 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 shrink-0">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-500 font-medium">Tersedia</p>
-                        <p class="text-xl font-bold text-emerald-600">
-                            {{ $stats['available'] }}
-                        </p>
-                    </div>
-                </div>
-
-                {{-- Tidak Tersedia --}}
-                <div
-                    class="bg-white border border-slate-100 rounded-2xl p-4 flex items-center gap-3.5 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
-                    <div class="p-2.5 rounded-xl bg-gradient-to-br from-rose-400 to-red-500 shrink-0">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-500 font-medium">Tidak Tersedia</p>
-                        <p class="text-xl font-bold text-rose-600">
-                            {{ $stats['unavailable'] }}
-                        </p>
-                    </div>
-                </div>
+                @foreach ($statsCard as $stat)
+                    <x-stat-card :icon="$stat->icon" :label="$stat->label" :value="$stat->value"
+                        :gradient="$stat->gradient" />
+                @endforeach
             </div>
 
             {{-- ════════════════════════════════════════ --}}
@@ -84,18 +82,16 @@
                 style="animation-delay: .05s">
                 <div class="flex items-center gap-2">
                     <a href="{{ route('admin.cars.create') }}"
-                        class="relative inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl font-semibold text-sm shadow-lg shadow-indigo-300 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-400 active:translate-y-0 overflow-hidden">
-                        <span
-                            class="absolute inset-0 bg-gradient-to-r from-indigo-600 to-violet-600 opacity-0 transition-opacity duration-250 hover:opacity-100"></span>
+                        class="relative inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl font-semibold text-sm shadow-lg shadow-indigo-300 transition-all duration-200 hover:shadow-lg hover:shadow-indigo-400 hover:bg-gradient-to-r hover:from-indigo-600 hover:to-violet-600 active:translate-y-0 overflow-hidden">
                         <svg class="w-4 h-4 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                 d="M12 4v16m8-8H4" />
                         </svg>
-                        <span class="relative z-10">Tambah Mobil Baru</span>
+                        <span>Tambah Mobil Baru</span>
                     </a>
 
                     <button onclick="window.location.reload()"
-                        class="relative inline-flex items-center gap-2 px-4 py-2.5 bg-white text-gray-700 border-2 border-gray-200 rounded-xl font-medium text-sm transition-all duration-200 hover:bg-gray-50 hover:border-gray-300 hover:-translate-y-0.5 hover:shadow-md"
+                        class="relative inline-flex items-center gap-2 px-4 py-2.5 bg-white text-gray-700 border-2 border-gray-200 rounded-xl font-medium text-sm transition-all duration-200 hover:bg-gray-50 hover:border-gray-300 hover:shadow-md"
                         id="refreshBtn">
                         <span class="tooltip-label">Muat Ulang</span>
                         <svg id="refreshIcon" class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor"
@@ -408,7 +404,7 @@
                                             <div class="relative mb-6">
                                                 <div
                                                     class="w-28 h-28 rounded-3xl bg-gradient-to-br from-slate-100 to-blue-50
-                                                                                                      flex items-center justify-center shadow-inner">
+                                                                                                                                                                                                  flex items-center justify-center shadow-inner">
                                                     <svg class="w-14 h-14 text-gray-300" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
