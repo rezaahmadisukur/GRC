@@ -110,7 +110,8 @@
 
     @include('layouts.navigation')
 
-    <div class="main-content flex-1 flex flex-col min-h-screen transition-all duration-300 bg-gray-50"
+    <div
+      class="main-content flex-1 flex flex-col min-h-screen transition-all duration-300 bg-gradient-to-br from-emerald-200 via-blue-200 to-indigo-200 "
       :class="sidebarCollapsed ? 'md:ml-20' : 'md:ml-72'">
 
       {{-- Mobile Header --}}
