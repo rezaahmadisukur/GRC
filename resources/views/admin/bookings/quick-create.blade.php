@@ -1,13 +1,20 @@
 <x-admin-layout>
     <x-slot name="header">
         <div class="flex items-center gap-3">
-            <div
-                class="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-r
-                from-emerald-500 to-teal-500 shadow-lg shadow-blue-200">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
+            {{-- Animated Dashboard Icon --}}
+            <div class="relative flex-shrink-0">
+                <div
+                    class="w-11 h-11 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200/60">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M16 6h-4V2a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v4H2a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h4v4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-4h4a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1z"
+                            fill="currentColor" fillRule="evenodd" />
+                    </svg>
+                </div>
+                <span class="absolute -top-0.5 -right-0.5 flex h-3 w-3">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500 border-2 border-white"></span>
+                </span>
             </div>
             <div>
                 <h1 class="text-xl font-bold text-gray-800 leading-tight">Quick Booking</h1>
@@ -16,124 +23,6 @@
         </div>
     </x-slot>
 
-    <style>
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: scale(0.93) translateY(16px);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        .car-card {
-            animation: fadeInUp 0.4s ease both;
-        }
-
-        .car-card:nth-child(1) {
-            animation-delay: 0.05s;
-        }
-
-        .car-card:nth-child(2) {
-            animation-delay: 0.10s;
-        }
-
-        .car-card:nth-child(3) {
-            animation-delay: 0.15s;
-        }
-
-        .car-card:nth-child(4) {
-            animation-delay: 0.20s;
-        }
-
-        .car-card:nth-child(5) {
-            animation-delay: 0.25s;
-        }
-
-        .car-card:nth-child(6) {
-            animation-delay: 0.30s;
-        }
-
-        .car-card:nth-child(7) {
-            animation-delay: 0.35s;
-        }
-
-        .car-card:nth-child(8) {
-            animation-delay: 0.40s;
-        }
-
-        .modal-content {
-            animation: modalSlideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-        }
-
-        /* Custom number input — hide spinners */
-        input[type=number]::-webkit-inner-spin-button,
-        input[type=number]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
-
-        /* Custom select styling */
-        .custom-select {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 0.75rem center;
-            background-size: 1rem;
-            appearance: none;
-            -webkit-appearance: none;
-        }
-
-        /* Transaction radio card active state */
-        .txn-card input[type="radio"]:checked+.txn-label-immediate {
-            border-color: #10b981;
-            background-color: #ecfdf5;
-            color: #065f46;
-        }
-
-        .txn-card input[type="radio"]:checked+.txn-label-booking {
-            border-color: #6366f1;
-            background-color: #eef2ff;
-            color: #3730a3;
-        }
-
-        .txn-card input[type="radio"]:checked+.txn-label-immediate .txn-icon-immediate {
-            background-color: #10b981;
-            color: #fff;
-        }
-
-        .txn-card input[type="radio"]:checked+.txn-label-booking .txn-icon-booking {
-            background-color: #6366f1;
-            color: #fff;
-        }
-
-        .txn-card input[type="radio"]:checked+.txn-label-immediate .txn-check {
-            display: flex;
-        }
-
-        .txn-card input[type="radio"]:checked+.txn-label-booking .txn-check {
-            display: flex;
-        }
-    </style>
-
     <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20">
         <div class="container mx-auto px-4 py-8">
             <div class="max-w-7xl mx-auto space-y-6">
@@ -141,7 +30,7 @@
                 {{-- ── Error Alert ── --}}
                 @if(session('error'))
                     <div class="flex items-start gap-3 bg-red-50 border border-red-200 text-red-700
-                                px-5 py-4 rounded-2xl shadow-sm animate-[fadeInUp_0.3s_ease]">
+                                px-5 py-4 rounded-2xl shadow-sm animate-fadeInUp">
                         <svg class="w-5 h-5 mt-0.5 flex-shrink-0 text-red-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
                                 d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
@@ -154,7 +43,7 @@
                 {{-- ── Stats Bar ── --}}
                 <div class="grid grid-cols-3 gap-3">
                     <div
-                        class="bg-white rounded-2xl px-4 py-3.5 shadow-sm border border-gray-100 flex items-center gap-3">
+                        class="bg-white rounded-2xl px-4 py-3.5 shadow-sm border-2 border-gray-100 flex items-center gap-3">
                         <div class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
                             <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -168,7 +57,7 @@
                         </div>
                     </div>
                     <div
-                        class="bg-white rounded-2xl px-4 py-3.5 shadow-sm border border-gray-100 flex items-center gap-3">
+                        class="bg-white rounded-2xl px-4 py-3.5 shadow-sm border-2 border-gray-100 flex items-center gap-3">
                         <div class="w-9 h-9 rounded-xl bg-rose-50 flex items-center justify-center flex-shrink-0">
                             <svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -182,7 +71,7 @@
                         </div>
                     </div>
                     <div
-                        class="bg-white rounded-2xl px-4 py-3.5 shadow-sm border border-gray-100 flex items-center gap-3">
+                        class="bg-white rounded-2xl px-4 py-3.5 shadow-sm border-2 border-gray-100 flex items-center gap-3">
                         <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
                             <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -199,119 +88,118 @@
                 {{-- ── Car Grid ── --}}
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                     @foreach($cars as $car)
-                                    <div class="car-card group bg-white rounded-2xl shadow-sm border border-gray-100
-                                                overflow-hidden hover:shadow-xl hover:shadow-blue-100/60
-                                                hover:-translate-y-1.5 transition-all duration-300
-                                                {{ !$car->is_available ? 'opacity-60' : '' }}">
+                        <div class="animate-fadeInUp group bg-white rounded-2xl shadow-sm border border-gray-100
+                                    overflow-hidden hover:shadow-xl hover:shadow-blue-100/60
+                                    hover:-translate-y-1.5 transition-all duration-300
+                                    {{ !$car->is_available ? 'opacity-60' : '' }}"
+                            style="animation-delay: {{ $loop->index * 0.05 }}s;">
 
-                                        {{-- Image --}}
-                                        <div class="relative h-36 overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
-                                            @if($car->image)
-                                                <img src="{{ asset('storage/' . $car->image) }}" alt="{{ $car->name }}"
-                                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 {{ !$car->is_available ? 'opacity-50 grayscale-[40%]' : '' }}">
-                                            @else
-                                                <div class="w-full h-full flex flex-col items-center justify-center gap-2 {{ !$car->is_available ? 'opacity-50 grayscale-[40%]' : '' }}">
-                                                    <svg class="w-14 h-14 text-slate-300" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                                                            d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                                                            d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1" />
-                                                    </svg>
-                                                    <span class="text-xs text-slate-300 font-medium">No Image</span>
-                                                </div>
-                                            @endif
+                            {{-- Image --}}
+                            <div class="relative h-36 overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
+                                @if($car->image)
+                                    <img src="{{ asset('storage/' . $car->image) }}" alt="{{ $car->name }}"
+                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 {{ !$car->is_available ? 'opacity-50 grayscale-[40%]' : '' }}">
+                                @else
+                                    <div class="w-full h-full flex flex-col items-center justify-center gap-2 {{ !$car->is_available ? 'opacity-50 grayscale-[40%]' : '' }}">
+                                        <svg class="w-14 h-14 text-slate-300" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                                                d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                                                d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1" />
+                                        </svg>
+                                        <span class="text-xs text-slate-300 font-medium">No Image</span>
+                                    </div>
+                                @endif
 
-                                            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
 
-                                            {{-- Status badge --}}
-                                            <div class="absolute top-2 left-2 z-10">
-                                                @if($car->is_available)
-                                                    <span class="inline-flex items-center gap-1 px-2.5 py-1
-                                                                     bg-emerald-500 text-white text-[10px] font-bold
-                                                                     rounded-full shadow-lg shadow-emerald-200">
-                                                        <span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
-                                                        Tersedia
-                                                    </span>
-                                                @endif
-                                            </div>
+                                {{-- Status badge --}}
+                                <div class="absolute top-2 left-2 z-10">
+                                    @if($car->is_available)
+                                        <span class="inline-flex items-center gap-1 px-2 py-1 bg-emerald-500 text-white text-[10px] font-bold rounded-full tracking-wide">
+                                            <span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
+                                            Tersedia
+                                        </span>
+                                    @endif
+                                </div>
 
-                                            @if(!$car->is_available)
-                                            <!-- Non Aktif Overlay Center -->
-                                            <div class="absolute inset-0 flex items-center justify-center z-20 bg-black/50 backdrop-blur-sm">
-                                                <div class="bg-rose-600/90 text-white font-black text-sm px-6 py-2.5 rounded-xl transform -rotate-6 shadow-xl border border-white/20">
-                                                  TIDAK AKTIF
-                                                </div>
-                                            </div>
-                                            @endif
+                                @if(!$car->is_available)
+                                <!-- Non Aktif Overlay Center -->
+                                <div class="absolute inset-0 flex items-center justify-center z-20 bg-black/50 backdrop-blur-sm">
+                                    <div class="bg-rose-600/90 text-white font-black text-sm px-6 py-2.5 rounded-xl transform -rotate-6 shadow-xl border border-white/20">
+                                      TIDAK AKTIF
+                                    </div>
+                                </div>
+                                @endif
 
-                                            {{-- Plate code --}}
-                                            <div class="absolute top-2 right-2">
-                                                <span class="px-2 py-1 bg-white/90 backdrop-blur-sm text-gray-700
+                                {{-- Plate code --}}
+                                <div class="absolute top-2 right-2">
+                                    <span class="px-2 py-1 bg-white/90 backdrop-blur-sm text-gray-700
                                                              text-[10px] font-bold rounded-lg shadow">
-                                                    {{ $car->plate_code }}
-                                                </span>
-                                            </div>
-                                        </div>
+                                        {{ $car->plate_code }}
+                                    </span>
+                                </div>
+                            </div>
 
-                                        {{-- Info --}}
-                                        <div class="p-3.5">
-                                            <h3 class="font-bold text-gray-800 text-sm leading-tight truncate mb-0.5">
-                                                {{ $car->name }}
-                                            </h3>
-                                            <p class="text-[11px] text-gray-400 mb-2.5">Sewa per-sesi</p>
+                            {{-- Info --}}
+                            <div class="p-3.5">
+                                <h3 class="font-bold text-gray-800 text-sm leading-tight truncate mb-0.5">
+                                    {{ $car->name }}
+                                </h3>
+                                <p class="text-[11px] text-gray-400 mb-2.5">Sewa per-sesi</p>
 
-                                            <div class="flex items-center justify-between mb-3">
-                                                <div>
-                                                    <p class="text-[10px] text-gray-400">12 Jam</p>
-                                                    <p class="text-sm font-bold text-emerald-600">
-                                                        Rp {{ number_format($car->price_12h, 0, ',', '.') }}
-                                                    </p>
-                                                </div>
-                                                <div class="w-px h-8 bg-gray-100"></div>
-                                                <div class="text-right">
-                                                    <p class="text-[10px] text-gray-400">24 Jam</p>
-                                                    <p class="text-sm font-bold text-blue-600">
-                                                        Rp {{ number_format($car->price_24h, 0, ',', '.') }}
-                                                    </p>
-                                                </div>
-                                            </div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <div>
+                                        <p class="text-[10px] text-gray-400">12 Jam</p>
+                                        <p class="text-sm font-bold text-emerald-600">
+                                            Rp {{ number_format($car->price_12h, 0, ',', '.') }}
+                                        </p>
+                                    </div>
+                                    <div class="w-px h-8 bg-gray-100"></div>
+                                    <div class="text-right">
+                                        <p class="text-[10px] text-gray-400">24 Jam</p>
+                                        <p class="text-sm font-bold text-blue-600">
+                                            Rp {{ number_format($car->price_24h, 0, ',', '.') }}
+                                        </p>
+                                    </div>
+                                </div>
 
-                                            <button class="openBookingModal w-full relative overflow-hidden text-white
-                                                       py-2.5 rounded-xl font-bold text-xs transition-all duration-300
-                                                       group/btn
-                                                       {{ $car->is_available
-        ? 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 shadow-md shadow-blue-200 hover:shadow-lg hover:shadow-blue-300 active:scale-95'
-        : 'bg-gray-200 text-gray-400 cursor-not-allowed' }}"
-                                                data-car-id="{{ $car->id }}" data-car-name="{{ $car->name }}"
-                                                data-price12="{{ $car->price_12h }}" data-price24="{{ $car->price_24h }}"
-                                                @if(!$car->is_available) disabled @endif>
+                                <button class="openBookingModal w-full relative overflow-hidden text-white
+                                           py-2.5 rounded-xl font-bold text-xs transition-all duration-300
+                                           group/btn
+                                           {{ $car->is_available
+            ? 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 shadow-md shadow-blue-200 hover:shadow-lg hover:shadow-blue-300 active:scale-95'
+            : 'bg-gray-200 text-gray-400 cursor-not-allowed' }}"
+                                    data-car-id="{{ $car->id }}" data-car-name="{{ $car->name }}"
+                                    data-price12="{{ $car->price_12h }}" data-price24="{{ $car->price_24h }}"
+                                    @if(!$car->is_available) disabled @endif>
 
-                                                @if($car->is_available)
-                                                    <span class="absolute inset-0 bg-gradient-to-r from-transparent
+                                    @if($car->is_available)
+                                        <span class="absolute inset-0 bg-gradient-to-r from-transparent
                                                                  via-white/20 to-transparent -translate-x-full
                                                                  group-hover/btn:translate-x-full transition-transform
                                                                  duration-700 ease-in-out"></span>
-                                                @endif
+                                    @endif
 
-                                                <span class="relative flex items-center justify-center gap-1.5">
-                                                    @if($car->is_available)
-                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                                                d="M12 4v16m8-8H4" />
-                                                        </svg>
-                                                        Booking Sekarang
-                                                    @else
-                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                                        </svg>
-                                                        Tidak Tersedia
-                                                    @endif
-                                                </span>
-                                            </button>
-                                        </div>
-                                    </div>
+                                    <span class="relative flex items-center justify-center gap-1.5">
+                                        @if($car->is_available)
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                                    d="M12 4v16m8-8H4" />
+                                            </svg>
+                                            Booking Sekarang
+                                        @else
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                            </svg>
+                                            Tidak Tersedia
+                                        @endif
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
                     @endforeach
                 </div>
 
@@ -332,7 +220,7 @@
     <div id="bookingModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 hidden items-center
                 justify-center p-4">
 
-        <div class="modal-content bg-white rounded-3xl shadow-2xl w-full max-w-lg
+        <div class="animate-modalIn bg-white rounded-3xl shadow-2xl w-full max-w-lg
                     max-h-[92vh] overflow-hidden flex flex-col">
 
             <form action="{{ route('admin.quick-booking.store') }}" method="POST"
@@ -371,7 +259,6 @@
 
                 {{-- ── Modal Body ── --}}
                 <div class="flex-1 overflow-y-auto px-6 py-5 space-y-5">
-
 
                     {{-- ── Customer Info ── --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -435,7 +322,6 @@
                         </div>
                     </div>
 
-
                     {{-- ── Durasi + Extra Jam ── --}}
                     <div class="grid grid-cols-1 gap-4">
                         {{-- Durasi Sewa --}}
@@ -469,7 +355,7 @@
                                         focus-within:ring-2 focus-within:ring-indigo-100
                                         transition-all duration-200 overflow-hidden">
                                 <input type="number" name="extra_hours" id="modal_extra_hours" value="0" min="0" class="flex-1 px-3 py-2.5 text-sm font-bold text-gray-700
-                                              bg-transparent outline-none w-0 border-none">
+                                              bg-transparent outline-none w-0 border-none appearance-none">
                                 <span class="flex-shrink-0 w-10 flex items-center justify-center
                                              text-xs font-bold text-gray-400 border-l border-gray-200
                                              bg-gray-100 self-stretch">
@@ -549,7 +435,7 @@
                                     </span>
                                     <input type="number" name="dp_amount" id="modal_cash_paid" min="0" placeholder="0"
                                         class="flex-1 px-3 py-2.5 text-sm font-bold text-gray-700
-                                                  bg-transparent outline-none w-0 border-none" >
+                                                  bg-transparent outline-none w-0 border-none appearance-none" >
                                 </div>
                             </div>
 
@@ -585,7 +471,7 @@
                                 Rp
                             </span>
                             <input type="number" name="booking_dp_amount" id="modal_dp_amount" min="0" placeholder="0" class="flex-1 px-3 py-2.5 text-sm font-bold text-gray-700
-                                          bg-transparent outline-none w-0 border-none" disabled>
+                                          bg-transparent outline-none w-0 border-none appearance-none" disabled>
                         </div>
                     </div>
 
