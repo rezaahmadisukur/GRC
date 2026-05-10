@@ -6,14 +6,16 @@
         {{-- Animated Icon --}}
         <div class="relative flex-shrink-0">
           <div
-            class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200">
+            class="w-11 h-11 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200/60">
             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
           </div>
-          <span class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full animate-ping opacity-75"></span>
-          <span class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full"></span>
+          <span class="absolute -top-0.5 -right-0.5 flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500 border-2 border-white"></span>
+          </span>
         </div>
         <div>
           <h2 class="text-xl font-extrabold text-gray-900 tracking-tight leading-tight">Manajemen Pemesanan</h2>
@@ -444,7 +446,7 @@
                     @if($booking->admin_id && $booking->user)
                       <div
                         class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold cursor-help
-                                                            {{ $booking->user->role === 'owner' ? 'bg-purple-50 text-purple-700 ring-1 ring-purple-200' : 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' }}"
+                                                                {{ $booking->user->role === 'owner' ? 'bg-purple-50 text-purple-700 ring-1 ring-purple-200' : 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' }}"
                         title="{{ $booking->user->role === 'owner' ? '👑 Owner' : '👤 Admin' }} | {{ $booking->updated_at->translatedFormat('d M Y H:i') }}">
                         <span
                           class="w-1.5 h-1.5 rounded-full {{ $booking->user->role === 'owner' ? 'bg-purple-500' : 'bg-blue-400' }}"></span>
