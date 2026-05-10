@@ -26,7 +26,7 @@
         </div>
     </x-slot>
 
-    <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20">
+    <div class="min-h-screen bg-white/50 backdrop-blur-sm rounded-xl">
         <div class="container mx-auto px-4 py-8">
             <div class="max-w-7xl mx-auto space-y-6">
 
