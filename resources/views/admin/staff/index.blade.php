@@ -3,15 +3,27 @@
 
     <x-slot name="header">
         <div class="flex items-center gap-3">
-            <div class="p-2 bg-gradient-to-br from-violet-500 to-indigo-600 rounded-xl shadow-lg shadow-indigo-200">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
+            {{-- Animated Icon --}}
+            <div class="relative flex-shrink-0">
+                <div
+                    class="w-11 h-11 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200/60">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586 a1 1 0 01.707.293l5.414 5.414A1 1 0 0119 9.414V19a2 2 0 01-2 2z" />
+                    </svg>
+                </div>
+                <span class="absolute -top-0.5 -right-0.5 flex h-3 w-3">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500 border-2 border-white"></span>
+                </span>
             </div>
             <div>
-                <h1 class="text-xl font-bold text-gray-800 leading-tight">Pengelolaan Karyawan</h1>
-                <p class="text-sm text-gray-400 font-normal">Manajemen akun & akses staff</p>
+                <h2 class="text-xl font-extrabold text-gray-900 tracking-tight leading-tight">Pengelolaan Karyawan</h2>
+                <p class="text-xs text-gray-400 mt-0.5 flex items-center gap-1.5">
+                    <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Manajemen akun & akses staff</span>
+                </p>
             </div>
         </div>
     </x-slot>
@@ -23,7 +35,7 @@
             {{-- STAT CARDS --}}
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <div
-                    class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3 hover:-translate-y-1 hover:shadow-md transition-all duration-200">
+                    class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3  hover:shadow-md transition-all duration-200">
                     <div class="p-2.5 rounded-xl bg-gradient-to-br from-indigo-50 to-violet-100 shrink-0">
                         <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -37,7 +49,7 @@
                 </div>
 
                 <div
-                    class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3 hover:-translate-y-1 hover:shadow-md transition-all duration-200">
+                    class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3 hover:shadow-md transition-all duration-200">
                     <div class="p-2.5 rounded-xl bg-gradient-to-br from-emerald-50 to-teal-100 shrink-0">
                         <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -52,7 +64,7 @@
                 </div>
 
                 <div
-                    class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3 hover:-translate-y-1 hover:shadow-md transition-all duration-200 col-span-2 sm:col-span-1">
+                    class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3  hover:shadow-md transition-all duration-200 col-span-2 sm:col-span-1">
                     <div class="p-2.5 rounded-xl bg-gradient-to-br from-rose-50 to-red-100 shrink-0">
                         <svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -68,15 +80,14 @@
             </div>
 
             {{-- TOOLBAR --}}
-            <div class="flex items-center justify-between gap-3 flex-wrap">
+            <div
+                class="flex items-center justify-between gap-3 flex-wrap bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden p-4">
                 <div>
                     <h2 class="text-sm font-semibold text-gray-600">Daftar Staff Terdaftar</h2>
                     <p class="text-xs text-gray-400">Kelola akun, status, dan password staff</p>
                 </div>
-                <button type="button" onclick="openModal()" class="group relative inline-flex items-center gap-2 px-5 py-2.5
-                   bg-gradient-to-r from-indigo-500 to-violet-600 text-white font-semibold text-sm rounded-xl
-                   shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300
-                   hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 overflow-hidden">
+                <button type="button" onclick="openModal()"
+                    class="group relative inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-violet-600 text-white font-semibold text-sm rounded-xl shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 active:translate-y-0 transition-all duration-200 overflow-hidden">
                     <span
                         class="absolute inset-0 bg-white/10 -translate-x-full group-hover:translate-x-full transition-transform duration-500 skew-x-12 pointer-events-none"></span>
                     <svg class="w-4 h-4 relative" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -125,7 +136,7 @@
                                                         <td class="px-6 py-4">
                                                             <span
                                                                 class="inline-flex items-center justify-center w-7 h-7 rounded-lg
-                                                                 bg-gradient-to-br from-indigo-50 to-violet-100 text-indigo-600 text-xs font-bold">
+                                                                                                                                                                                                                                         bg-gradient-to-br from-indigo-50 to-violet-100 text-indigo-600 text-xs font-bold">
                                                                 {{ $key + 1 }}
                                                             </span>
                                                         </td>
@@ -134,7 +145,7 @@
                                                             <div class="flex items-center gap-3">
                                                                 <div
                                                                     class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-400 to-violet-500
-                                                                    flex items-center justify-center text-white text-sm font-bold shrink-0 shadow-sm shadow-indigo-100">
+                                                                                                                                                                                                                                            flex items-center justify-center text-white text-sm font-bold shrink-0 shadow-sm shadow-indigo-100">
                                                                     {{ strtoupper(substr($staff->name, 0, 1)) }}
                                                                 </div>
                                                                 <div>
@@ -159,14 +170,14 @@
                                                             @if($staff->is_active)
                                                                 <span
                                                                     class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold
-                                                                         bg-gradient-to-r from-emerald-50 to-teal-50 text-emerald-700 border border-emerald-100">
+                                                                                                                                                                                                                                                                             bg-gradient-to-r from-emerald-50 to-teal-50 text-emerald-700 border border-emerald-100">
                                                                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                                                                     Aktif
                                                                 </span>
                                                             @else
                                                                 <span
                                                                     class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold
-                                                                         bg-gradient-to-r from-rose-50 to-red-50 text-rose-600 border border-rose-100">
+                                                                                                                                                                                                                                                                             bg-gradient-to-r from-rose-50 to-red-50 text-rose-600 border border-rose-100">
                                                                     <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
                                                                     Nonaktif
                                                                 </span>
@@ -177,16 +188,18 @@
                                                             <div class="flex items-center justify-center gap-2 flex-wrap">
 
                                                                 {{-- Toggle Button --}}
-                                                                <button type="button" onclick="openToggleModal(
-                                                                '{{ $staff->id }}',
-                                                                '{{ addslashes($staff->name) }}',
-                                                                {{ $staff->is_active ? 'true' : 'false' }}
-                                                            )" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold
-                                                                   transition-all duration-200 active:scale-95
-                                                                   {{ $staff->is_active
+                                                                <button type="button"
+                                                                    onclick="openToggleModal(
+                                                                                                                                                                                                                                        '{{ $staff->id }}',
+                                                                                                                                                                                                                                        '{{ addslashes($staff->name) }}',
+                                                                                                                                                                                                                                        {{ $staff->is_active ? 'true' : 'false' }}
+                                                                                                                                                                                                                                    )"
+                                                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold
+                                                                                                                                                                                                                                           transition-all duration-200 active:scale-95
+                                                                                                                                                                                                                                           {{ $staff->is_active
                                 ? 'bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 hover:border-amber-300'
                                 : 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 hover:border-emerald-300'
-                                                                   }}">
+                                                                                                                                                                                                                                           }}">
                                                                     @if($staff->is_active)
                                                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -214,9 +227,9 @@
                                                                 <button type="button"
                                                                     onclick="openResetModal('{{ $staff->id }}', '{{ addslashes($staff->name) }}')"
                                                                     class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold
-                                                                   transition-all duration-200 active:scale-95
-                                                                   bg-indigo-50 text-indigo-700 border border-indigo-200
-                                                                   hover:bg-indigo-100 hover:border-indigo-300">
+                                                                                                                                                                                                                                           transition-all duration-200 active:scale-95
+                                                                                                                                                                                                                                           bg-indigo-50 text-indigo-700 border border-indigo-200
+                                                                                                                                                                                                                                           hover:bg-indigo-100 hover:border-indigo-300">
                                                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                                             d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
@@ -259,11 +272,12 @@
                                             </h3>
                                             <p class="text-sm text-gray-400 max-w-xs mb-5">Mulai dengan menambahkan admin
                                                 baru untuk mengelola sistem.</p>
-                                            <button type="button" onclick="openModal()" class="inline-flex items-center gap-2 px-5 py-2.5
-                                               bg-gradient-to-r from-indigo-500 to-violet-600
-                                               text-white font-semibold text-sm rounded-xl
-                                               shadow-lg shadow-indigo-200 hover:-translate-y-0.5
-                                               hover:shadow-xl transition-all duration-200 active:scale-95">
+                                            <button type="button" onclick="openModal()"
+                                                class="inline-flex items-center gap-2 px-5 py-2.5
+                                                                           bg-gradient-to-r from-indigo-500 to-violet-600
+                                                                           text-white font-semibold text-sm rounded-xl
+                                                                           shadow-lg shadow-indigo-200 hover:-translate-y-0.5
+                                                                           hover:shadow-xl transition-all duration-200 active:scale-95">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                                         d="M12 4v16m8-8H4" />
@@ -654,10 +668,10 @@
                 addSubmitBtn && document.getElementById('addStaffForm').addEventListener('submit', () => {
                     addSubmitBtn.disabled = true;
                     addSubmitContent.innerHTML = `
-                    <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
-                    </svg>Menyimpan...`;
+                                                <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                                                </svg>Menyimpan...`;
                 });
 
                 /* ── TOGGLE MODAL ───────────────────────────── */
@@ -726,10 +740,10 @@
                     resetStaffInitial.textContent = name.charAt(0).toUpperCase();
                     resetConfirmBtn.disabled = false;
                     resetConfirmContent.innerHTML = `
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-                    </svg>Ya, Reset Sekarang`;
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                                </svg>Ya, Reset Sekarang`;
                     openPanel(resetModal, resetOverlay, resetBox);
                 };
 
@@ -743,10 +757,10 @@
                     if (!form) return;
                     resetConfirmBtn.disabled = true;
                     resetConfirmContent.innerHTML = `
-                    <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
-                    </svg>Mereset...`;
+                                                <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                                                </svg>Mereset...`;
                     form.submit();
                 });
 
@@ -760,15 +774,15 @@
 
                 /* ── AUTO-OPEN PADA VALIDATION ERRORS ───────── */
                 @if($errors->any())
-                            document.addEventListener('DOMContentLoaded', () => {
-                                openModal();
-                                @foreach($errors->all() as $error)
-                                    GRCToast.show({ type: 'error', message: @json($error), duration: 5000 });
-                                @endforeach
-                    });
+                    document.addEventListener('DOMContentLoaded', () => {
+                        openModal();
+                        @foreach($errors->all() as $error)
+                            GRCToast.show({ type: 'error', message: @json($error), duration: 5000 });
+                        @endforeach
+                                                                            });
                 @endif
 
-        })();
+                                    })();
         </script>
     @endpush
 
