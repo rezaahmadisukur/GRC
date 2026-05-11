@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\DownloadReportRequest;
 use App\Models\Booking;
+use App\Models\Car;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReportController extends Controller
@@ -13,7 +14,11 @@ class ReportController extends Controller
 
     public function index()
     {
-        return view('admin.reports.index');
+        $totalBookings = Booking::count();
+        $totalRevenue = Booking::where('status', 'completed')->sum('final_total_price');
+        $isCarAvailable = Car::where('is_available', true)->count();
+
+        return view('admin.reports.index', compact('totalBookings', 'totalRevenue', 'isCarAvailable'));
     }
 
     public function downloadPDF(DownloadReportRequest $request)
