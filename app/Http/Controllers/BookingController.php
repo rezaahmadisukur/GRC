@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBookingRequest;
+use App\Models\Car;
 use App\Services\BookingService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
@@ -22,11 +24,11 @@ class BookingController extends Controller
 
         // Calculate end date first
         $totalHours = (int) $data['duration_type'] + (int) ($data['extra_hours'] ?? 0);
-        $startDate = \Carbon\Carbon::parse($data['start_date']);
+        $startDate = Carbon::parse($data['start_date']);
         $endDate = $startDate->copy()->addHours($totalHours);
 
         // Check availability before creating booking
-        $car = \App\Models\Car::findOrFail($data['car_id']);
+        $car = Car::findOrFail($data['car_id']);
         if (!$car->isAvailableForDateRange($startDate, $endDate)) {
             return back()->withInput()->with('error', 'Maaf, mobil sudah ada booking lain pada rentang tanggal yang anda pilih. Silahkan pilih tanggal lain.');
         }
