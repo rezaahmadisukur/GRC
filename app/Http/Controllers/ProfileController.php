@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use Illuminate\Auth\Middleware\RequirePassword;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -45,7 +46,7 @@ class ProfileController extends Controller
         ]);
 
         return redirect()->route('profile.edit')
-            ->withoutMiddleware(\Illuminate\Auth\Middleware\RequirePassword::class)
+            ->withoutMiddleware(RequirePassword::class)
             ->with('success', 'Password berhasil diperbarui!');
     }
 
