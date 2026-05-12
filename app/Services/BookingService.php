@@ -281,4 +281,54 @@ class BookingService
 
     return $code;
   }
+
+  public function adminCreateBooking(array $data): Booking
+  {
+    return DB::transaction(function () use ($data) {
+      $extraHours = (int) ($data['extra_hours'] ?? 0);
+      $totalHours = (int) $data['duration_type'] + $extraHours;
+      $startDate = Carbon::parse($data['start_date']);
+      $endDate = $startDate->copy()->addHours($totalHours);
+
+      // Cek ketersediaan mobil
+      $car = Car::findOrFail($data['car_id']);
+      if (!$car->isAvailableForDateRange($startDate, $endDate)) {
+        return back()->withInput()->with('error', 'Maaf, mobil sudah ada booking lain pada rentang tanggal ini.');
+      }
+
+      $data['dp_amount'] = $data['dp_amount'] ?? 0;
+      $booking = $this->createBooking($data);
+
+      if ((float) $data['dp_amount'] > 0) {
+        $this->confirmBooking($booking, (float) $data['dp_amount']);
+      }
+
+      return $booking;
+    });
+  }
+
+  public function getBookedDates()
+  {
+    return Booking::whereIn('status', ['pending', 'active'])
+      ->select('car_id', 'start_date', 'end_date', 'status')
+      ->get()
+      ->map(function ($booking) {
+        return [
+          'car_id' => $booking->car_id,
+          'start' => $booking->start_date->format('Y-m-d'),
+          'end' => $booking->end_date->format('Y-m-d'),
+          'status' => $booking->status
+        ];
+      });
+    ;
+  }
+
+  public function getCarStats()
+  {
+    return [
+      'totalCars' => Car::count(),
+      'availableCars' => Car::where('is_available', true)->count(),
+      'unavailableCars' => Car::where('is_available', false)->count()
+    ];
+  }
 }

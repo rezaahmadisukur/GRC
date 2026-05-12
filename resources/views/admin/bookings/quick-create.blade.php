@@ -1,3 +1,29 @@
+@php
+$statCards = [
+    (object) [
+        'icon' => 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10',
+        'label' => 'Total Mobil',
+        'value' => $carStats['totalCars'],
+        'text' => 'text-blue-500',
+        'bg' => 'bg-blue-100'
+    ],
+    (object) [
+        'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+        'label' => 'Tersedia',
+        'value' => $carStats['availableCars'],
+        'text' => 'text-emerald-500',
+        'bg' => 'bg-emerald-100'
+    ],
+    (object) [
+        'icon' => 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+        'label' => 'Tidak Tersedia',
+        'value' => $carStats['unavailableCars'],
+        'text' => 'text-rose-500',
+        'bg' => 'bg-rose-100'
+    ]
+];
+@endphp
+
 <x-admin-layout>
     <x-slot name="header">
         <div class="flex items-center gap-3">
@@ -45,47 +71,15 @@
 
                 {{-- ── Stats Bar ── --}}
                 <div class="grid grid-cols-3 gap-3">
-                    <div
-                        class="bg-white rounded-2xl px-4 py-3.5 shadow-sm border-2 border-gray-100 flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
-                            <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-[11px] text-gray-400 font-medium">Tersedia</p>
-                            <p class="text-lg font-bold text-gray-800 leading-tight">
-                                {{ $availableCars }}</p>
-                        </div>
-                    </div>
-                    <div
-                        class="bg-white rounded-2xl px-4 py-3.5 shadow-sm border-2 border-gray-100 flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-xl bg-rose-50 flex items-center justify-center flex-shrink-0">
-                            <svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-[11px] text-gray-400 font-medium">Tidak Aktif</p>
-                            <p class="text-lg font-bold text-gray-800 leading-tight">
-                                {{ $unavailableCars }}</p>
-                        </div>
-                    </div>
-                    <div
-                        class="bg-white rounded-2xl px-4 py-3.5 shadow-sm border-2 border-gray-100 flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-[11px] text-gray-400 font-medium">Total Mobil</p>
-                            <p class="text-lg font-bold text-gray-800 leading-tight">{{ $totalCars }}</p>
-                        </div>
-                    </div>
+                    @foreach ($statCards as $stat)
+                        <x-admin.bookings.quick-stat-card 
+                        :icon="$stat->icon"
+                        :label="$stat->label"
+                        :text="$stat->text"
+                        :value="$stat->value"
+                        :bg="$stat->bg"
+                        />
+                    @endforeach
                 </div>
 
                 {{-- ── Car Grid ── --}}
