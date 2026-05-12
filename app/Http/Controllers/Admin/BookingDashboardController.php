@@ -17,6 +17,11 @@ class BookingDashboardController extends Controller
     ) {
     }
 
+    /**
+     * Summary of index
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function index(Request $request)
     {
         $bookings = Booking::filter($request)
@@ -24,7 +29,7 @@ class BookingDashboardController extends Controller
             ->orderByRaw('DATE(start_date) DESC')
             ->orderBy('start_date', 'DESC')
             ->paginate(10)
-            ->withQueryString();
+            ->appends(request()->query());
         $pendingCount = Booking::where('status', 'pending')->count();
         $activeCount = Booking::where('status', 'active')->count();
         $completedCount = Booking::where('status', 'completed')->count();
@@ -33,8 +38,10 @@ class BookingDashboardController extends Controller
         return view('admin.bookings.index', compact('bookings', 'pendingCount', 'activeCount', 'completedCount', 'totalAllBookings'));
     }
 
-    public function updateStatus(UpdateBookingStatusRequest $request, Booking $booking)
-    {
+    public function updateStatus(
+        UpdateBookingStatusRequest $request,
+        Booking $booking
+    ) {
         try {
             $this->bookingService->updateBookingStatus($booking, $request->status, $request->validated());
 
