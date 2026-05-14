@@ -111,6 +111,40 @@ export default {
                     "20%, 60%": { transform: "translateX(-5px)" },
                     "40%, 80%": { transform: "translateX(5px)" },
                 },
+                "float-orb-1": {
+                    "0%": { transform: "translate(0, 0) scale(1)" },
+                    "100%": { transform: "translate(60px, 80px) scale(1.15)" },
+                },
+                "float-orb-2": {
+                    "0%": { transform: "translate(0, 0) scale(1)" },
+                    "100%": { transform: "translate(-50px, -60px) scale(1.1)" },
+                },
+                "float-orb-3": {
+                    "0%": {
+                        transform: "translate(0, 0) scale(1) rotate(0deg)",
+                    },
+                    "33%": {
+                        transform:
+                            "translate(40px, -30px) scale(1.05) rotate(5deg)",
+                    },
+                    "66%": {
+                        transform:
+                            "translate(-20px, 40px) scale(0.95) rotate(-3deg)",
+                    },
+                    "100%": {
+                        transform: "translate(0, 0) scale(1) rotate(0deg)",
+                    },
+                },
+                "card-reveal": {
+                    "0%": {
+                        opacity: "0",
+                        transform: "translateY(24px) scale(0.97)",
+                    },
+                    "100%": {
+                        opacity: "1",
+                        transform: "translateY(0) scale(1)",
+                    },
+                },
             },
         },
     },
