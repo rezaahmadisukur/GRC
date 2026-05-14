@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-guest-layout title="Ganti Password">
   <div class="w-full max-w-md mx-auto">
     <!-- Auth Card Container -->
     <div class="bg-white/90 backdrop-blur-xl rounded-3xl border border-gray-200/50 shadow-2xl p-6 sm:p-8 md:p-10">
