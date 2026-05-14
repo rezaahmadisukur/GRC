@@ -1,3 +1,5 @@
+@props(['title'])
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -5,10 +7,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>{{ config('app.name', 'Laravel') }}</title>
+  <title>{{ isset($title) ? "$title - " . config('app.name') : config('app.name') }}</title>
 
   <!-- Fav Icon -->
-  @include('layouts.favicon')
+  @include('layouts.partials.favicon')
 
   <!-- Scripts -->
   @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -109,7 +111,7 @@
 
   <div class="flex min-h-screen overflow-hidden">
 
-    @include('layouts.navigation')
+    @include('layouts.partials.navigation')
 
     <div
       class="main-content flex-1 flex flex-col min-h-screen transition-all duration-300 bg-gradient-to-br from-emerald-200 via-blue-200 to-indigo-200 "
