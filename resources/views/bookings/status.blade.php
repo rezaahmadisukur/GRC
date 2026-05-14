@@ -1,12 +1,23 @@
-<x-app-layout>
+@php
+  $statusMapping = [
+      'pending' => 1, 
+      'active' => 2, 
+      'completed' => 3, 
+      'cancelled' => 0
+    ];
+  $statuses = [
+      1 => 'Pesanan Diterima', 
+      2 => 'Sedang Berjalan', 
+      3 => 'Selesai'
+    ];
+  $currentStatus = $statusMapping[$booking->status] ?? 1;
+  $isCancelled = $booking->status === 'cancelled';
+@endphp
+
+<x-app-layout title="Status Pemesanan">
   <div class="min-h-screen py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-emerald-50 via-blue-50 to-fuchsia-50">
 
-    @php
-      $statusMapping = ['pending' => 1, 'active' => 2, 'completed' => 3, 'cancelled' => 0];
-      $statuses = [1 => 'Pesanan Diterima', 2 => 'Sedang Berjalan', 3 => 'Selesai'];
-      $currentStatus = $statusMapping[$booking->status] ?? 1;
-      $isCancelled = $booking->status === 'cancelled';
-    @endphp
+    
 
     <div class="max-w-5xl mx-auto space-y-6">
 
@@ -50,9 +61,9 @@
         <div class="hidden md:flex items-center justify-between">
           @foreach($statuses as $index => $statusName)
                   @php
-                    $isDone = !$isCancelled && $currentStatus > $index;
-                    $isActive = !$isCancelled && $currentStatus === $index;
-                    $isPast = $isDone || $isActive;
+  $isDone = !$isCancelled && $currentStatus > $index;
+  $isActive = !$isCancelled && $currentStatus === $index;
+  $isPast = $isDone || $isActive;
                   @endphp
                   <div class="flex flex-col items-center flex-1 relative">
 
@@ -61,7 +72,7 @@
                       <div class="absolute top-5 left-1/2 w-full h-1 rounded-full bg-gray-100 overflow-hidden">
                         <div
                           class="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500
-                                                          {{ $isDone && !$isCancelled ? 'w-full' : 'w-0' }} transition-all duration-1000 [transition-delay:400ms]">
+                                                                    {{ $isDone && !$isCancelled ? 'w-full' : 'w-0' }} transition-all duration-1000 [transition-delay:400ms]">
                         </div>
                       </div>
                     @endif
@@ -69,13 +80,13 @@
                     {{-- Circle --}}
                     <div
                       class="relative z-10 w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm
-                                                  transition-all duration-300
-                                                  {{ $isCancelled
-            ? 'bg-red-500 text-white shadow-lg shadow-red-200'
-            : ($isPast
-              ? 'bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-lg shadow-emerald-200'
-              : 'bg-gray-100 text-gray-400') }}
-                                                  {{ $isActive && !$isCancelled ? 'animate-[pulse-ring_2s_ease_infinite]' : '' }}">
+                                                          transition-all duration-300
+                                                          {{ $isCancelled
+    ? 'bg-red-500 text-white shadow-lg shadow-red-200'
+    : ($isPast
+      ? 'bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-lg shadow-emerald-200'
+      : 'bg-gray-100 text-gray-400') }}
+                                                          {{ $isActive && !$isCancelled ? 'animate-[pulse-ring_2s_ease_infinite]' : '' }}">
 
                       @if($isCancelled)
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,7 +104,7 @@
                     {{-- Label --}}
                     <p
                       class="mt-3 text-xs font-semibold text-center tracking-wide uppercase
-                                                {{ $isCancelled ? 'text-red-400' : ($isPast ? 'text-emerald-600' : 'text-gray-300') }}">
+                                                        {{ $isCancelled ? 'text-red-400' : ($isPast ? 'text-emerald-600' : 'text-gray-300') }}">
                       {{ $statusName }}
                     </p>
                   </div>
@@ -104,19 +115,19 @@
         <div class="md:hidden space-y-0">
           @foreach($statuses as $index => $statusName)
                   @php
-                    $isDone = !$isCancelled && $currentStatus > $index;
-                    $isActive = !$isCancelled && $currentStatus === $index;
-                    $isPast = $isDone || $isActive;
+  $isDone = !$isCancelled && $currentStatus > $index;
+  $isActive = !$isCancelled && $currentStatus === $index;
+  $isPast = $isDone || $isActive;
                   @endphp
                   <div class="flex items-start gap-4">
                     <div class="flex flex-col items-center">
                       <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold shrink-0
-                                                    {{ $isCancelled
-            ? 'bg-red-500 text-white shadow-md shadow-red-200'
-            : ($isPast
-              ? 'bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-md shadow-emerald-200'
-              : 'bg-gray-100 text-gray-400') }}
-                                                    {{ $isActive ? 'animate-[pulse-ring_2s_ease_infinite]' : '' }}">
+                                                            {{ $isCancelled
+    ? 'bg-red-500 text-white shadow-md shadow-red-200'
+    : ($isPast
+      ? 'bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-md shadow-emerald-200'
+      : 'bg-gray-100 text-gray-400') }}
+                                                            {{ $isActive ? 'animate-[pulse-ring_2s_ease_infinite]' : '' }}">
                         @if($isCancelled)
                           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
@@ -133,7 +144,7 @@
                         <div class="w-0.5 h-10 mt-1 bg-gray-100 overflow-hidden rounded-full">
                           <div
                             class="w-full rounded-full bg-gradient-to-b from-emerald-400 to-emerald-500
-                                                            {{ $isDone && !$isCancelled ? 'h-full' : 'h-0' }} transition-all duration-1000 [transition-delay:400ms]">
+                                                                      {{ $isDone && !$isCancelled ? 'h-full' : 'h-0' }} transition-all duration-1000 [transition-delay:400ms]">
                           </div>
                         </div>
                       @endif
@@ -141,7 +152,7 @@
                     <div class="pt-1.5 pb-8">
                       <p
                         class="font-semibold text-sm
-                                                  {{ $isCancelled ? 'text-red-400' : ($isPast ? 'text-emerald-600' : 'text-gray-300') }}">
+                                                          {{ $isCancelled ? 'text-red-400' : ($isPast ? 'text-emerald-600' : 'text-gray-300') }}">
                         {{ $statusName }}
                       </p>
                       @if($isActive)
@@ -172,18 +183,18 @@
           </div>
 
           @php
-            $rows = [
-              ['label' => 'Kode Booking', 'value' => $booking->booking_code, 'class' => 'font-bold text-emerald-600 tracking-wider'],
-              ['label' => 'Nama Customer', 'value' => $booking->customer_name, 'class' => 'font-semibold text-gray-800'],
-              ['label' => 'Tanggal Sewa', 'value' => \Carbon\Carbon::parse($booking->start_date)->format('d M Y, H:i'), 'class' => 'text-gray-700'],
-              ['label' => 'Tanggal Kembali', 'value' => \Carbon\Carbon::parse($booking->end_date)->format('d M Y, H:i'), 'class' => 'text-gray-700'],
-            ];
-            $hours = $booking->duration_hours;
-            $durationLabel = $hours < 24
-              ? "{$hours} Jam"
-              : (($r = $hours % 24) == 0
-                ? floor($hours / 24) . " Hari"
-                : floor($hours / 24) . " Hari {$r} Jam");
+$rows = [
+  ['label' => 'Kode Booking', 'value' => $booking->booking_code, 'class' => 'font-bold text-emerald-600 tracking-wider'],
+  ['label' => 'Nama Customer', 'value' => $booking->customer_name, 'class' => 'font-semibold text-gray-800'],
+  ['label' => 'Tanggal Sewa', 'value' => \Carbon\Carbon::parse($booking->start_date)->format('d M Y, H:i'), 'class' => 'text-gray-700'],
+  ['label' => 'Tanggal Kembali', 'value' => \Carbon\Carbon::parse($booking->end_date)->format('d M Y, H:i'), 'class' => 'text-gray-700'],
+];
+$hours = $booking->duration_hours;
+$durationLabel = $hours < 24
+  ? "{$hours} Jam"
+  : (($r = $hours % 24) == 0
+    ? floor($hours / 24) . " Hari"
+    : floor($hours / 24) . " Hari {$r} Jam");
           @endphp
 
           @foreach($rows as $row)
@@ -244,9 +255,9 @@
               <span class="text-gray-400 text-sm">Status Pembayaran</span>
               @if($booking->remains_payment <= 0 || $booking->status === 'completed')
                 <span class="inline-flex items-center text-xs font-semibold text-emerald-600
-                                 bg-emerald-50 px-3 py-1.5 rounded-full
-                                 before:content-[''] before:w-1.75 before:h-1.75 before:rounded-full before:bg-current before:mr-1.5
-                                 before:animate-[pulse-ring_2s_ease_infinite]">
+                                   bg-emerald-50 px-3 py-1.5 rounded-full
+                                   before:content-[''] before:w-1.75 before:h-1.75 before:rounded-full before:bg-current before:mr-1.5
+                                   before:animate-[pulse-ring_2s_ease_infinite]">
                   Lunas
                 </span>
               @else
@@ -290,16 +301,16 @@
               @if($booking->car->image)
                 <img src="{{ asset('storage/' . $booking->car->image) }}" alt="{{ $booking->car->name }}" loading="lazy"
                   class="w-full h-full object-cover transition-transform duration-700
-                                    group-hover:scale-105
-                                    {{ !$booking->car->is_available ? 'opacity-70 grayscale' : '' }}">
+                                        group-hover:scale-105
+                                        {{ !$booking->car->is_available ? 'opacity-70 grayscale' : '' }}">
               @else
                 <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br
-                                    from-gray-100 to-gray-200 text-gray-300 gap-2">
+                                        from-gray-100 to-gray-200 text-gray-300 gap-2">
                   <svg class="w-14 h-14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z
-                                     M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0
-                                     01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414A1 1
-                                     0 0121 11.414V16a1 1 0 01-1 1h-1" />
+                                         M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0
+                                         01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414A1 1
+                                         0 0121 11.414V16a1 1 0 01-1 1h-1" />
                   </svg>
                   <span class="text-xs">No Image</span>
                 </div>
@@ -307,7 +318,7 @@
 
               {{-- Car name overlay --}}
               <div class="absolute bottom-0 left-0 right-0 p-3
-                              bg-gradient-to-t from-black/50 to-transparent">
+                                bg-gradient-to-t from-black/50 to-transparent">
                 <p class="text-white font-bold text-sm">{{ $booking->car->name }}</p>
                 <p class="text-white/70 text-xs">{{ strtoupper($booking->car->plate_code) }}</p>
               </div>
@@ -316,52 +327,52 @@
             {{-- Car Specs Grid --}}
             <div class="grid grid-cols-2 gap-3">
               @php
-                $specs = [
-                  [
-                    'icon' => 'M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z',
-                    'label' => 'Kategori',
-                    'value' => $booking->car->category,
-                    'color' => 'purple'
-                  ],
-                  [
-                    'icon' => 'M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01',
-                    'label' => 'Warna',
-                    'value' => $booking->car->color,
-                    'color' => 'pink'
-                  ],
-                  [
-                    'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z',
-                    'label' => 'Kapasitas',
-                    'value' => $booking->car->seats . ' Orang',
-                    'color' => 'blue'
-                  ],
-                  [
-                    'icon' => 'M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4',
-                    'label' => 'Transmisi',
-                    'value' => $booking->car->transmission === 'AT' ? 'Matic' : 'Manual',
-                    'color' => 'orange'
-                  ],
-                  [
-                    'icon' => 'M13 10V3L4 14h7v7l9-11h-7z',
-                    'label' => 'Bahan Bakar',
-                    'value' => $booking->car->fuel_type,
-                    'color' => 'yellow'
-                  ],
-                ];
-                $colorMap = [
-                  'purple' => ['bg' => 'bg-purple-50', 'text' => 'text-purple-500'],
-                  'pink' => ['bg' => 'bg-pink-50', 'text' => 'text-pink-500'],
-                  'blue' => ['bg' => 'bg-blue-50', 'text' => 'text-blue-500'],
-                  'orange' => ['bg' => 'bg-orange-50', 'text' => 'text-orange-500'],
-                  'yellow' => ['bg' => 'bg-yellow-50', 'text' => 'text-yellow-500'],
-                ];
+  $specs = [
+    [
+      'icon' => 'M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z',
+      'label' => 'Kategori',
+      'value' => $booking->car->category,
+      'color' => 'purple'
+    ],
+    [
+      'icon' => 'M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01',
+      'label' => 'Warna',
+      'value' => $booking->car->color,
+      'color' => 'pink'
+    ],
+    [
+      'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z',
+      'label' => 'Kapasitas',
+      'value' => $booking->car->seats . ' Orang',
+      'color' => 'blue'
+    ],
+    [
+      'icon' => 'M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4',
+      'label' => 'Transmisi',
+      'value' => $booking->car->transmission === 'AT' ? 'Matic' : 'Manual',
+      'color' => 'orange'
+    ],
+    [
+      'icon' => 'M13 10V3L4 14h7v7l9-11h-7z',
+      'label' => 'Bahan Bakar',
+      'value' => $booking->car->fuel_type,
+      'color' => 'yellow'
+    ],
+  ];
+  $colorMap = [
+    'purple' => ['bg' => 'bg-purple-50', 'text' => 'text-purple-500'],
+    'pink' => ['bg' => 'bg-pink-50', 'text' => 'text-pink-500'],
+    'blue' => ['bg' => 'bg-blue-50', 'text' => 'text-blue-500'],
+    'orange' => ['bg' => 'bg-orange-50', 'text' => 'text-orange-500'],
+    'yellow' => ['bg' => 'bg-yellow-50', 'text' => 'text-yellow-500'],
+  ];
               @endphp
 
               @foreach($specs as $spec)
                 @php $c = $colorMap[$spec['color']]; @endphp
                 <div class="flex items-start gap-2.5 p-3 rounded-xl bg-gray-50
-                                    hover:bg-white hover:shadow-sm transition-all duration-200 border border-transparent
-                                    hover:border-gray-100">
+                                        hover:bg-white hover:shadow-sm transition-all duration-200 border border-transparent
+                                        hover:border-gray-100">
                   <div class="w-8 h-8 {{ $c['bg'] }} rounded-lg flex items-center justify-center shrink-0">
                     <svg class="w-4 h-4 {{ $c['text'] }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $spec['icon'] }}" />

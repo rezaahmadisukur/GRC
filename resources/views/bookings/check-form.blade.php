@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout title="Cek Pemesanan">
   <div
     class="min-h-screen relative py-16 px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-br from-sky-50 via-blue-50 to-green-50">
 
