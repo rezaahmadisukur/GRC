@@ -37,7 +37,7 @@
     ];
 @endphp
 
-<x-admin-layout>
+<x-admin-layout title="Laporan">
     <x-slot name="header">
         <div class="flex items-center gap-3">
             {{-- Animated Icon --}}
@@ -180,10 +180,10 @@
                                 @foreach($listOptions as $p)
                                     <button type="button" onclick="setDatePreset('{{ $p['preset'] }}')"
                                         class="preset-btn px-3 py-2 text-xs font-semibold rounded-xl
-                                                                                                                                                                                                           bg-slate-100 text-slate-600
-                                                                                                                                                                                                           hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200
-                                                                                                                                                                                                           border border-transparent
-                                                                                                                                                                                                           active:scale-95 transition-all duration-150">
+                                                                                                                                                                                                               bg-slate-100 text-slate-600
+                                                                                                                                                                                                               hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200
+                                                                                                                                                                                                               border border-transparent
+                                                                                                                                                                                                               active:scale-95 transition-all duration-150">
                                         {{ $p['label'] }}
                                     </button>
                                 @endforeach
@@ -531,10 +531,10 @@
 
                     // Swap to spinner
                     btnIcon.innerHTML = `
-                                                                                                                                                                            <circle class="opacity-25" cx="12" cy="12" r="10"
-                                                                                                                                                                                    stroke="currentColor" stroke-width="4"></circle>
-                                                                                                                                                                            <path class="opacity-75" fill="currentColor"
-                                                                                                                                                                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>`;
+                                                                                                                                                                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                                                                                                                                                        stroke="currentColor" stroke-width="4"></circle>
+                                                                                                                                                                                <path class="opacity-75" fill="currentColor"
+                                                                                                                                                                                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>`;
                     btnIcon.setAttribute('viewBox', '0 0 24 24');
                     btnIcon.classList.add('animate-spin');
 
@@ -545,9 +545,9 @@
                         downloadBtn.disabled = false;
                         btnIcon.classList.remove('animate-spin');
                         btnIcon.innerHTML = `
-                                                                                                                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                                                                                                                                                                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2
-                                                                                                                                                                                         h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0119 9.414V19a2 2 0 01-2 2z" />`;
+                                                                                                                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                                                                                                                                                                          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2
+                                                                                                                                                                                             h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0119 9.414V19a2 2 0 01-2 2z" />`;
                         btnText.textContent = 'Unduh Laporan PDF';
                     }, 8000);
                 });

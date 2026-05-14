@@ -1,4 +1,4 @@
-<x-admin-layout>
+<x-admin-layout title="Nota Pembayaran">
 
   <style>
     /* ── Animations ─────────────────────────────── */
@@ -282,7 +282,7 @@
           @foreach($rows as $row)
             <div
               class="flex items-center justify-between py-2
-                                                                        border-b border-dashed border-gray-100 last:border-0">
+                                                                          border-b border-dashed border-gray-100 last:border-0">
               <div class="flex items-center gap-2 text-gray-500 text-xs">
                 <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="{{ $row['icon'] }}" />
@@ -291,7 +291,7 @@
               </div>
               <span
                 class="text-xs text-right max-w-[55%] truncate
-                                                                             {{ $row['bold'] ? 'font-bold text-gray-800' : 'text-gray-600' }}">
+                                                                               {{ $row['bold'] ? 'font-bold text-gray-800' : 'text-gray-600' }}">
                 {{ $row['value'] }}
               </span>
             </div>
@@ -441,7 +441,7 @@
 
             {{-- SISA PEMBAYARAN - Status Active/Pending: Tampil BERWARNA --}}
             <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200
-                                                      rounded-2xl px-4 py-3 flex items-center justify-between">
+                                                        rounded-2xl px-4 py-3 flex items-center justify-between">
               <span class="text-xs font-bold text-amber-700 flex items-center gap-1.5">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"

@@ -51,7 +51,7 @@
   ];
 @endphp
 
-<x-admin-layout>
+<x-admin-layout title="Daftar Pemesanan">
   <x-slot name="header">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
       <div class="flex items-center gap-3">
@@ -272,7 +272,7 @@
                     @if($booking->admin_id && $booking->user)
                       <div
                         class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold cursor-help
-                                                                                                                                                            {{ $booking->user->role === 'owner' ? 'bg-purple-50 text-purple-700 ring-1 ring-purple-200' : 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' }}"
+                                                                                                                                                                {{ $booking->user->role === 'owner' ? 'bg-purple-50 text-purple-700 ring-1 ring-purple-200' : 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' }}"
                         title="{{ $booking->user->role === 'owner' ? '👑 Owner' : '👤 Admin' }} | {{ $booking->updated_at->translatedFormat('d M Y H:i') }}">
                         <span
                           class="w-1.5 h-1.5 rounded-full {{ $booking->user->role === 'owner' ? 'bg-purple-500' : 'bg-blue-400' }}"></span>

@@ -1,5 +1,5 @@
 {{-- resources/views/dashboard.blade.php --}}
-<x-admin-layout>
+<x-admin-layout title="Dashboard">
   <x-slot name="header">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
       <div class="flex items-center gap-3">
@@ -131,7 +131,7 @@
         @foreach($cards as $i => $card)
           <div
             class="relative bg-white/80 backdrop-blur-xl border border-white/70 rounded-2xl p-5 overflow-hidden ring-1 ring-gray-200/60 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1.5 animate-fadeInUp
-                before:absolute before:inset-0 before:rounded-2xl before:opacity-0 hover:before:opacity-100 before:bg-gradient-to-br before:from-white/10 before:to-transparent before:transition-opacity"
+                  before:absolute before:inset-0 before:rounded-2xl before:opacity-0 hover:before:opacity-100 before:bg-gradient-to-br before:from-white/10 before:to-transparent before:transition-opacity"
             style="box-shadow: 0 4px 24px {{ $card['glow'] }}, 0 1px 3px rgba(0,0,0,0.04); animation-delay: {{ ($i + 1) * 0.07 }}s;">
 
             {{-- Gradient Top Bar --}}
@@ -665,19 +665,19 @@
               cars.forEach((name, i) => {
                 const pct = total > 0 ? ((counts[i] / total) * 100).toFixed(0) : 0;
                 legend.innerHTML += `
-                                              <div class="flex items-center gap-2.5 group">
-                                                  <span class="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm"
-                                                      style="background:${COLORS[i]};box-shadow:0 0 6px ${COLORS[i]}60"></span>
-                                                  <span class="text-xs text-gray-600 flex-1 truncate font-semibold">${name}</span>
-                                                  <div class="flex items-center gap-2 ml-auto shrink-0">
-                                                      <div class="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                                                          <div class="w-0 h-full rounded-full transition-all duration-[1100ms] ease-out"
-                                                              style="background:linear-gradient(90deg,${COLORS[i]},${COLORS[(i + 1) % COLORS.length]})"
-                                                              data-w="${pct}"></div>
+                                                  <div class="flex items-center gap-2.5 group">
+                                                      <span class="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm"
+                                                          style="background:${COLORS[i]};box-shadow:0 0 6px ${COLORS[i]}60"></span>
+                                                      <span class="text-xs text-gray-600 flex-1 truncate font-semibold">${name}</span>
+                                                      <div class="flex items-center gap-2 ml-auto shrink-0">
+                                                          <div class="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                                              <div class="w-0 h-full rounded-full transition-all duration-[1100ms] ease-out"
+                                                                  style="background:linear-gradient(90deg,${COLORS[i]},${COLORS[(i + 1) % COLORS.length]})"
+                                                                  data-w="${pct}"></div>
+                                                          </div>
+                                                          <span class="text-[11px] font-black text-gray-600 w-6 text-right tabular-nums">${counts[i]}</span>
                                                       </div>
-                                                      <span class="text-[11px] font-black text-gray-600 w-6 text-right tabular-nums">${counts[i]}</span>
-                                                  </div>
-                                              </div>`;
+                                                  </div>`;
               });
 
               /* Animate progress bars */
