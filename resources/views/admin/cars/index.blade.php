@@ -1,28 +1,19 @@
 @php
     $statsCard = [
         (object) [
-            'icon' => '<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                                                d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                                                d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" />
-                                                                                        </svg>',
+            'icon' => 'M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0zM13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1',
             'label' => 'Total Mobil',
             'value' => $cars->total(),
             'gradient' => 'from-blue-500 to-indigo-600'
         ],
         (object) [
-            'icon' => '<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                                                                    </svg>',
+            'icon' => 'M5 13l4 4L19 7',
             'label' => 'Tersedia',
             'value' => $stats['available'],
             'gradient' => 'from-emerald-400 to-teal-500'
         ],
         (object) [
-            'icon' => '<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                                                                    </svg>',
+            'icon' => 'M6 18L18 6M6 6l12 12',
             'label' => 'Tidak Tersedia',
             'value' => $stats['unavailable'],
             'gradient' => 'from-rose-400 to-red-500'
@@ -30,7 +21,7 @@
     ]
 @endphp
 
-<x-admin-layout>
+<x-admin-layout title="Daftar Mobil">
 
     <x-slot name="header">
         <div class="flex items-center gap-3">
@@ -62,7 +53,7 @@
     </x-slot>
 
 
-    <div class="py-8">
+    <div class="min-h-screen bg-white/50 backdrop-blur-sm rounded-xl py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
             {{-- ════════════════════════════════════════ --}}
@@ -404,7 +395,7 @@
                                             <div class="relative mb-6">
                                                 <div
                                                     class="w-28 h-28 rounded-3xl bg-gradient-to-br from-slate-100 to-blue-50
-                                                                                                                                                                                                          flex items-center justify-center shadow-inner">
+                                                                                                                                                                                                                          flex items-center justify-center shadow-inner">
                                                     <svg class="w-14 h-14 text-gray-300" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"

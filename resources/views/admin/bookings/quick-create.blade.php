@@ -24,7 +24,7 @@ $statCards = [
 ];
 @endphp
 
-<x-admin-layout>
+<x-admin-layout title="Buat Pemesanan">
     <x-slot name="header">
         <div class="flex items-center gap-3">
             {{-- Animated Icon --}}

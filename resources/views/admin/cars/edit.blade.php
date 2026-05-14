@@ -1,6 +1,6 @@
 {{-- Use Admin Layout --}}
-<x-admin-layout>
-  <div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 px-4 py-8 md:px-6 lg:px-8">
+<x-admin-layout title="Edit Mobil">
+  <div class="min-h-screen bg-white/50 backdrop-blur-sm rounded-xl p-12">
     <!-- Page Header -->
     <div class="mb-8 max-w-4xl mx-auto">
       <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
