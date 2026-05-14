@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout title="Cari Mobil">
     <div class="bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50 min-h-screen py-8 md:py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Page Header dengan animasi -->
