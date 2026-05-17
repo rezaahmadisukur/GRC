@@ -1,6 +1,3 @@
-{{-- ═══════════════════════════════════════════════════════════
-HERO SECTION — Deep navy gradient with animated elements
-═══════════════════════════════════════════════════════════ --}}
 <section
   class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 min-h-[92vh] flex items-center border-none"
   id="home">
@@ -96,14 +93,9 @@ HERO SECTION — Deep navy gradient with animated elements
 
           <div
             class="relative bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 shadow-2xl">
-            <div
-              class="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center mb-6 shadow-lg shadow-blue-600/30">
-              <svg class="w-10 h-10 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 17H3a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h1l3-5h10l3 5h1a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2" />
-                <circle cx="7.5" cy="17.5" r="2.5" />
-                <circle cx="16.5" cy="17.5" r="2.5" />
-              </svg>
+            <div class="w-24 h-24 rounded-2xl bg-transparent flex items-center justify-center mb-6">
+              <img src="{{ asset('images/logo/logo-transparent.png') }}" alt="Pusat Rentcar Purwakarta"
+                class="w-24 h-24 object-contain" />
             </div>
             <h3 class="text-white font-bold text-xl mb-1">Pusat Rentcar Purwakarta</h3>
             <p class="text-slate-400 text-sm mb-6">Sewa mobil terpercaya di Purwakarta</p>

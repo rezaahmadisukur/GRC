@@ -7,7 +7,7 @@ GALLERY SECTION — Responsive Slider on Mobile, Grid on Desktop
         {{-- Header --}}
         <div class="text-center mb-12">
             <h2 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">
-                Galeri <span class="text-blue-600">Armada Kami</span>
+                Galeri <span class="text-blue-600">Mobil Kami</span>
             </h2>
             <p class="text-base text-slate-500 max-w-2xl mx-auto">
                 Geser untuk melihat koleksi unit kami (khusus HP) atau lihat semua di Desktop.
