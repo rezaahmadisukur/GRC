@@ -1,10 +1,6 @@
-{{-- ═══════════════════════════════════════════════════════════
-CARS SECTION — Premium card grid
-═══════════════════════════════════════════════════════════ --}}
 <section class="bg-gray-50 py-20" id="cars">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-    {{-- Section Header --}}
     <div class="text-center mb-14">
       <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
         Daftar Mobil <span class="text-blue-600">Tersedia</span>
@@ -21,7 +17,6 @@ CARS SECTION — Premium card grid
         @endforeach
       </div>
     @else
-      {{-- Empty State --}}
       <div class="text-center py-20">
         <div class="w-24 h-24 rounded-3xl bg-slate-100 flex items-center justify-center mx-auto mb-6">
           <svg class="w-12 h-12 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
