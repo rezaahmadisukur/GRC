@@ -31,23 +31,12 @@
             <div class="absolute inset-0 rounded-2xl bg-blue-500 blur-md opacity-0
                                     group-hover:opacity-40 transition-opacity duration-500 scale-110"></div>
             {{-- Badge --}}
-            <div class="relative w-10 h-10 rounded-2xl
-                                    bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700
-                                    flex items-center justify-center
-                                    shadow-lg shadow-blue-500/25
-                                    group-hover:shadow-blue-500/50
-                                    group-hover:-translate-y-0.5
-                                    transition-all duration-300">
-              <svg class="w-[22px] h-[22px] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 17H3a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h1l3-5h10l3 5h1a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2" />
-                <circle cx="7.5" cy="17.5" r="2.5" />
-                <circle cx="16.5" cy="17.5" r="2.5" />
-              </svg>
+            <div class="relative w-10 h-10 rounded-2xl">
+              <img src="{{ asset('images/logo/logo-transparent.png') }}" alt="Pusat Rentcar Purwakarta"
+                class="w-[40px] h-[40px] object-contain" />
               {{-- Shine --}}
-              <span class="absolute top-1.5 left-2 w-3 h-1 rounded-full
-                                         bg-gradient-to-r from-white/60 to-transparent
-                                         rotate-[-30deg]"></span>
+              <span
+                class="absolute top-1.5 left-2 w-3 h-1 rounded-full bg-gradient-to-r from-white/60 to-transparent rotate-[-30deg]"></span>
             </div>
           </div>
 
@@ -74,14 +63,20 @@
             </div>
           </div>
 
-          {{-- Mobile wordmark (short) --}}
+          {{-- Mobile wordmark (full) --}}
           <div class="leading-none min-w-0 sm:hidden">
-            <span class="text-[15px] font-black tracking-tight
-                                     bg-gradient-to-r from-slate-800 to-blue-700
-                                     bg-clip-text text-transparent">
-              PRP
-            </span>
-            <span class="block text-[8px] font-bold tracking-[0.2em] text-blue-500 uppercase">
+            <div class="flex items-baseline gap-1">
+              <span class="text-[15px] font-bold tracking-tight text-slate-800">
+                Pusat Rentcar
+              </span>
+              <span class="text-[12px] font-bold tracking-tight
+                         bg-gradient-to-r from-blue-600 to-indigo-600
+                         bg-clip-text text-transparent">
+                Purwakarta
+              </span>
+            </div>
+            <span class="block text-[8px] font-bold tracking-[0.2em] text-blue-500 uppercase
+                         mt-[-1px]">
               Rental Mobil
             </span>
           </div>
@@ -118,16 +113,16 @@
                       || request()->url() === $link['href'];
                   @endphp
                   <a href="{{ $link['href'] }}" class="relative flex items-center gap-2 px-4 py-2 rounded-xl
-                                                          text-sm font-semibold transition-all duration-200 group
-                                                          {{ $isActive
+                                                                                                          text-sm font-semibold transition-all duration-200 group
+                                                                                                          {{ $isActive
             ? 'bg-white text-blue-700 shadow-sm shadow-blue-100/80'
             : 'text-slate-500 hover:text-slate-700' }}">
 
                     {{-- Icon --}}
                     <svg
                       class="w-3.5 h-3.5 flex-shrink-0 transition-transform duration-200
-                                                                group-hover:-translate-y-px
-                                                                {{ $isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600' }}"
+                                                                                                                group-hover:-translate-y-px
+                                                                                                                {{ $isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600' }}"
                       viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                       stroke-linejoin="round">
                       {!! $link['icon'] !!}
@@ -137,9 +132,10 @@
 
                     {{-- Active dot --}}
                     @if($isActive)
-                      <span class="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full
-                                                                           bg-gradient-to-br from-blue-500 to-indigo-500
-                                                                           shadow-sm shadow-blue-400/50"></span>
+                      <span
+                        class="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full
+                                                                                                                                       bg-gradient-to-br from-blue-500 to-indigo-500
+                                                                                                                                       shadow-sm shadow-blue-400/50"></span>
                     @endif
                   </a>
           @endforeach
@@ -252,17 +248,17 @@
               || request()->url() === $link['href'];
           @endphp
           <a href="{{ $link['href'] }}" @click="open = false" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl
-                                      transition-all duration-200 group
-                                      {{ $isActive
+                                                              transition-all duration-200 group
+                                                              {{ $isActive
         ? 'bg-gradient-to-r from-blue-50 to-indigo-50/60 border border-blue-100'
         : 'hover:bg-slate-50 border border-transparent hover:border-slate-100' }}">
 
             {{-- Colored icon box --}}
             <span class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center
-                                             bg-gradient-to-br {{ $link['color'] }}
-                                             shadow-md {{ $link['shadow'] }}
-                                             group-hover:-translate-y-0.5 group-hover:shadow-lg
-                                             transition-all duration-200">
+                                                                     bg-gradient-to-br {{ $link['color'] }}
+                                                                     shadow-md {{ $link['shadow'] }}
+                                                                     group-hover:-translate-y-0.5 group-hover:shadow-lg
+                                                                     transition-all duration-200">
               <svg class="w-4.5 h-4.5 text-white w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 {!! $link['icon'] !!}
@@ -272,7 +268,7 @@
             {{-- Text --}}
             <div class="flex-1 min-w-0">
               <p class="text-sm font-bold text-slate-800 leading-tight
-                                              {{ $isActive ? 'text-blue-700' : '' }}">
+                                                                      {{ $isActive ? 'text-blue-700' : '' }}">
                 {{ $link['label'] }}
               </p>
               <p class="text-xs text-slate-400 mt-0.5 leading-tight">
@@ -283,9 +279,9 @@
             {{-- Right indicator --}}
             @if($isActive)
               <span class="flex-shrink-0 w-6 h-6 rounded-full
-                                                       bg-gradient-to-br from-blue-500 to-indigo-500
-                                                       flex items-center justify-center
-                                                       shadow-sm shadow-blue-400/40">
+                                                                                           bg-gradient-to-br from-blue-500 to-indigo-500
+                                                                                           flex items-center justify-center
+                                                                                           shadow-sm shadow-blue-400/40">
                 <svg class="w-3 h-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                   stroke-linecap="round">
                   <polyline points="20 6 9 17 4 12" />
@@ -293,9 +289,9 @@
               </span>
             @else
               <svg class="flex-shrink-0 w-4 h-4 text-slate-300
-                                                      group-hover:text-slate-400 group-hover:translate-x-0.5
-                                                      transition-all duration-200" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                                                                                          group-hover:text-slate-400 group-hover:translate-x-0.5
+                                                                                          transition-all duration-200"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
                 <polyline points="9 18 15 12 9 6" />
               </svg>
             @endif
