@@ -17,13 +17,9 @@
 
         {{-- Logo --}}
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-600/30 bg-gradient-to-br from-blue-600 to-blue-700">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M5 17H3a2 2 0 01-2-2v-4a2 2 0 012-2h1l3-5h10l3 5h1a2 2 0 012 2v4a2 2 0 01-2 2h-2" />
-              <circle cx="7.5" cy="17.5" r="2.5" />
-              <circle cx="16.5" cy="17.5" r="2.5" />
-            </svg>
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0">
+            <img src="{{ asset('images/logo/logo-transparent.png') }}" alt="Pusat Rentcar Purwakarta"
+              class="w-[40px] h-[40px] object-contain" />
           </div>
           <div>
             <div class="text-white font-black text-lg leading-tight tracking-tight">Pusat Rentcar</div>
