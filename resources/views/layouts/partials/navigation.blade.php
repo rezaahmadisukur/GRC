@@ -12,15 +12,13 @@
   <!-- Logo Section -->
   <div class="h-20 flex items-center px-6 mb-2" :class="{ 'justify-center': sidebarCollapsed }">
     <a href="{{ route('dashboard') }}" class="flex items-center gap-3 group">
-      <div
-        class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-200 group-hover:scale-105 transition-transform duration-300">
-        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-        </svg>
+      <div class="relative w-10 h-10 flex-shrink-0">
+        <img src="{{ asset('images/logo/logo-transparent.png') }}" alt="Pusat Rentcar Purwakarta"
+          class="w-[40px] h-[40px] object-contain" />
       </div>
       <div class="sidebar-logo-text flex flex-col" x-show="!sidebarCollapsed" x-cloak>
         <span class="text-slate-800 font-bold tracking-tight text-lg leading-none">
-          GRC <span class="text-emerald-600">Rental</span>
+          Pusat Rentcar <span class="text-emerald-600">Purwakarta</span>
         </span>
         <span class="text-[10px] text-slate-400 font-medium uppercase tracking-[0.2em] mt-1">
           Management System
@@ -114,7 +112,7 @@
       </div>
 
       <a href="{{ route('admin.staff.index') }}" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl group relative
-                                                                                                                                    {{ request()->routeIs('admin.staff.*')
+                                                                                                                                                {{ request()->routeIs('admin.staff.*')
       ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-100 active'
       : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}" :class="{ 'justify-center': sidebarCollapsed }">
         <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
