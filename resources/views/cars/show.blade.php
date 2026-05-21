@@ -1,6 +1,6 @@
 <x-app-layout title="Detail Mobil">
 
-  <div class="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
+  <div class="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8" style="background: linear-gradient(135deg, #f0f4ff 0%, #e8effe 25%, #eef2ff 50%, #f0f9ff 75%, #f0f4ff 100%);">
     <div class="max-w-6xl mx-auto">
 
       {{-- ═══ BACK BUTTON ═══ --}}
@@ -64,7 +64,7 @@
               <div class="absolute inset-0 flex items-center justify-center z-20 bg-black/50 backdrop-blur-sm">
                 <div
                   class="bg-red-600/90 text-white font-black text-2xl md:text-3xl px-10 py-5 rounded-xl transform -rotate-6 shadow-2xl border-2 border-white/20">
-                  NON AKTIF
+                  TIDAK AKTIF
                 </div>
               </div>
             @endif
@@ -151,7 +151,7 @@ $specs = [
               Tarif Sewa
             </h2>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               {{-- 12 Jam --}}
               <div class="relative overflow-hidden rounded-2xl p-5"
                 style="background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1.5px solid #bfdbfe;">
