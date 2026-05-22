@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Models\Booking;
 use App\Models\Car;
+use App\Models\Customer;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -44,6 +45,7 @@ class BookingService
 
   public function createBooking(array $data): Booking
   {
+
     return DB::transaction(function () use ($data) {
       $bookingCode = $this->generateUniqueBookingCode();
       $extra = (int) ($data['extra_hours'] ?? 0);
@@ -55,14 +57,24 @@ class BookingService
         $totalHours
       );
 
-      return Booking::create(array_merge($data, [
+      $customer = Customer::firstOrCreate([
+        'name' => $data['customer_name'],
+        'whatsapp_number' => $data['whatsapp_number'],
+      ]);
+
+
+      return Booking::create([
+        'customer_id' => $customer->id,
+        'car_id' => $data['car_id'],
         'booking_code' => $bookingCode,
+        'start_date' => $data['start_date'],
         'duration_hours' => $totalHours,
         'end_date' => $calc['end_date'],
         'total_price' => $calc['total_price'],
         'remains_payment' => $calc['total_price'],
+        'notes' => $data['notes'] ?? null,
         'status' => 'pending'
-      ]));
+      ]);
     });
   }
 
@@ -152,7 +164,7 @@ class BookingService
     $message = "PROSES BOOKING BERHASIL\n" .
       "--------------------------\n" .
       "*Kode Booking:* {$booking->booking_code}\n" .
-      "*Nama:* {$booking->customer_name}\n" .
+      "*Nama:* {$booking->customer->name}\n" .
       "*Mobil:* {$car->name} ({$car->plate_code})\n" .
       "*Mulai:* {$booking->start_date}\n" .
       "*Durasi:* {$booking->duration_hours} Jam\n" .
@@ -166,7 +178,7 @@ class BookingService
   {
     return Booking::with('car')
       ->where('booking_code', $query)
-      ->orWhere('whatsapp_number', $query)
+      ->orWhereHas('customer', fn($q) => $q->where('whatsapp_number', $query))
       ->latest()
       ->get();
   }
