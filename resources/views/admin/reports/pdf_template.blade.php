@@ -460,7 +460,7 @@
             {{ $i + 1 }}
           </td>
           <td>
-            <span class="customer-name">{{ $booking->customer_name }}</span>
+            <span class="customer-name">{{ $booking->customer->name }}</span>
           </td>
           <td class="car-name">
             {{ $booking->car?->name ?? '—' }}

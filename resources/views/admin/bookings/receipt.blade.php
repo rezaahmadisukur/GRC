@@ -261,13 +261,13 @@
               [
                 'icon' => 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
                 'label' => 'Nama',
-                'value' => $booking->customer_name,
+                'value' => $booking->customer->name,
                 'bold' => true
               ],
               [
                 'icon' => 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z',
                 'label' => 'No HP',
-                'value' => $booking->whatsapp_number,
+                'value' => $booking->customer->whatsapp_number,
                 'bold' => false
               ],
               [
@@ -282,7 +282,7 @@
           @foreach($rows as $row)
             <div
               class="flex items-center justify-between py-2
-                                                                          border-b border-dashed border-gray-100 last:border-0">
+                                                                            border-b border-dashed border-gray-100 last:border-0">
               <div class="flex items-center gap-2 text-gray-500 text-xs">
                 <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="{{ $row['icon'] }}" />
@@ -291,7 +291,7 @@
               </div>
               <span
                 class="text-xs text-right max-w-[55%] truncate
-                                                                               {{ $row['bold'] ? 'font-bold text-gray-800' : 'text-gray-600' }}">
+                                                                                 {{ $row['bold'] ? 'font-bold text-gray-800' : 'text-gray-600' }}">
                 {{ $row['value'] }}
               </span>
             </div>
@@ -441,7 +441,7 @@
 
             {{-- SISA PEMBAYARAN - Status Active/Pending: Tampil BERWARNA --}}
             <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200
-                                                        rounded-2xl px-4 py-3 flex items-center justify-between">
+                                                          rounded-2xl px-4 py-3 flex items-center justify-between">
               <span class="text-xs font-bold text-amber-700 flex items-center gap-1.5">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
@@ -518,7 +518,7 @@
 
         {{-- Send WhatsApp --}}
         @php $waTotal = $booking->final_total_price ?? $booking->total_price; @endphp
-        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $booking->whatsapp_number) }}?text={{ urlencode("Halo *{$booking->customer_name}*,\n\nBerikut adalah bukti struk penyewaan mobil *{$booking->car->name}* dengan kode booking *#{$booking->booking_code}*.\n\nTotal: Rp " . number_format($waTotal, 0, ',', '.') . "\n\nLink Struk: " . url()->current() . "\n\nTerima kasih 🙏") }}"
+        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $booking->customer->whatsapp_number) }}?text={{ urlencode("Halo *{$booking->customer->name}*,\n\nBerikut adalah bukti struk penyewaan mobil *{$booking->car->name}* dengan kode booking *#{$booking->booking_code}*.\n\nTotal: Rp " . number_format($waTotal, 0, ',', '.') . "\n\nLink Struk: " . url()->current() . "\n\nTerima kasih 🙏") }}"
           target="_blank" class="group relative overflow-hidden flex items-center justify-center gap-2
                         bg-gradient-to-r from-green-500 to-emerald-600
                         hover:from-green-600 hover:to-emerald-700
