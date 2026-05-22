@@ -14,9 +14,8 @@ class Booking extends Model
     protected $fillable = [
         'car_id',
         'admin_id',
+        'customer_id',
         'booking_code',
-        'customer_name',
-        'whatsapp_number',
         'start_date',
         'duration_hours',
         'end_date',
@@ -54,6 +53,11 @@ class Booking extends Model
         return $this->belongsTo(User::class, 'admin_id');
     }
 
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
     public function scopeForPeriod($query, $startDate, $endDate)
     {
         $endDate = Carbon::parse($endDate)->addDay();
@@ -77,9 +81,9 @@ class Booking extends Model
         return $query->when($request->filled('search'), function ($q) use ($request) {
             $searchTerm = '%' . $request->search . '%';
             $q->where(function ($subQuery) use ($searchTerm) {
-                $subQuery->where('customer_name', 'like', $searchTerm)
+                $subQuery->whereHas('customer', fn($q) => $q->where('name', 'like', $searchTerm))
                     ->orWhere('booking_code', 'like', $searchTerm)
-                    ->orWhere('whatsapp_number', 'like', $searchTerm)
+                    ->orWhereHas('customer', fn($q) => $q->where('whatsapp_number', 'like', $searchTerm))
                     ->orWhereHas('car', function ($carQuery) use ($searchTerm) {
                         $carQuery->where('name', 'like', $searchTerm)
                             ->orWhere('plate_code', 'like', $searchTerm);
