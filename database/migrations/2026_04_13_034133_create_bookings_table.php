@@ -17,8 +17,7 @@ return new class extends Migration {
             $table->foreignId('admin_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('booking_code')->unique();
 
-            $table->string('customer_name');
-            $table->string('whatsapp_number');
+            $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
 
             $table->dateTime('start_date');
             $table->integer('duration_hours');
