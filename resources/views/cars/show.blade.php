@@ -5,8 +5,8 @@
 
       {{-- ═══ BACK BUTTON ═══ --}}
       <div class="mb-8">
-        <a href="{{ route('home') }}"
-          class="inline-flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-all duration-200 group">
+        <button onclick="window.history.length > 1 ? window.history.back() : window.location.href='{{ route('home') }}'"
+          class="inline-flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-all duration-200 group cursor-pointer">
           <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 group-hover:-translate-x-0.5"
             style="background: white; border: 1px solid #e2e8f0;">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -14,7 +14,7 @@
             </svg>
           </div>
           <span class="text-sm font-semibold">Kembali</span>
-        </a>
+        </button>
       </div>
 
       {{-- ═══ MAIN GRID ═══ --}}
