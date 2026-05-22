@@ -7,6 +7,7 @@ use App\Http\Requests\StoreBookingRequest;
 use App\Models\Car;
 use App\Services\BookingService;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
@@ -18,7 +19,7 @@ class BookingController extends Controller
         $this->bookingService = $bookingService;
     }
 
-    public function store(StoreBookingRequest $request)
+    public function store(StoreBookingRequest $request): RedirectResponse
     {
         $data = $request->validated();
 
@@ -30,7 +31,7 @@ class BookingController extends Controller
         // Check availability before creating booking
         $car = Car::findOrFail($data['car_id']);
         if (!$car->isAvailableForDateRange($startDate, $endDate)) {
-            return back()->withInput()->with('error', 'Maaf, mobil sudah ada booking lain pada rentang tanggal yang anda pilih. Silahkan pilih tanggal lain.');
+            return back()->withInput()->with('error', 'Maaf, mobil sudah di booking orang lain pada rentang tanggal dan waktu yang anda pilih. Silahkan pilih tanggal lain.');
         }
 
         $booking = $this->bookingService->createBooking($data);
