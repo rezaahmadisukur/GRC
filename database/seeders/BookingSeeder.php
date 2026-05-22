@@ -32,9 +32,11 @@ class BookingSeeder extends Seeder
         $progressBar->start();
 
         \DB::transaction(function () use ($cars, $firstNames, $lastNames, $statuses, $total, $progressBar) {
-            $bookingBatch = [];
             $now = now();
             $successCount = 0;
+            $customerMap = []; // key: "name|wa" => id
+            $customerBatch = [];
+            $bookingBatch = [];
 
             for ($i = 0; $i < $total; $i++) {
                 $car = $cars->random();
@@ -53,11 +55,26 @@ class BookingSeeder extends Seeder
                     $remainsPayment = 0;
                 }
 
+                // Generate customer data
+                $customerName = $firstNames[array_rand($firstNames)] . ' ' . $lastNames[array_rand($lastNames)];
+                $whatsappNumber = '08' . rand(1, 9) . rand(100000000, 999999999);
+                $customerKey = $customerName . '|' . $whatsappNumber;
+
+                // Cek apakah customer udah pernah dibuat
+                if (!isset($customerMap[$customerKey])) {
+                    $customerId = \DB::table('customers')->insertGetId([
+                        'name' => $customerName,
+                        'whatsapp_number' => $whatsappNumber,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ]);
+                    $customerMap[$customerKey] = $customerId;
+                }
+
                 $bookingBatch[] = [
                     'car_id' => $car->id,
+                    'customer_id' => $customerMap[$customerKey],
                     'booking_code' => 'RENT-' . $startDate->format('ymd') . '-' . strtoupper(Str::random(4)),
-                    'customer_name' => $firstNames[array_rand($firstNames)] . ' ' . $lastNames[array_rand($lastNames)],
-                    'whatsapp_number' => '08' . rand(1, 9) . rand(100000000, 999999999),
                     'start_date' => $startDate,
                     'duration_hours' => $duration,
                     'end_date' => $endDate,
