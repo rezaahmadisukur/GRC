@@ -69,7 +69,7 @@ class Car extends Model
      * @param int|null $excludeBookingId Booking id to exclude from check (for edit)
      * @return bool
      */
-    public function isAvailableForDateRange($startDate, $endDate, $excludeBookingId = null)
+    public function isAvailableForDateRange($startDate, $endDate, $excludeBookingId = null): bool
     {
         // If car is globally unavailable
         if (!$this->is_available) {
@@ -78,7 +78,7 @@ class Car extends Model
 
         // Check for overlapping approved bookings
         $overlappingBookings = $this->bookings()
-            ->whereIn('status', ['approved', 'active'])
+            ->whereIn('status', ['pending', 'active'])
             ->when($excludeBookingId, function ($query) use ($excludeBookingId) {
                 return $query->where('id', '!=', $excludeBookingId);
             })
