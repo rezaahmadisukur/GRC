@@ -185,7 +185,7 @@
           @php
 $rows = [
   ['label' => 'Kode Booking', 'value' => $booking->booking_code, 'class' => 'font-bold text-emerald-600 tracking-wider'],
-  ['label' => 'Nama Customer', 'value' => $booking->customer_name, 'class' => 'font-semibold text-gray-800'],
+  ['label' => 'Nama Customer', 'value' => $booking->customer->name, 'class' => 'font-semibold text-gray-800'],
   ['label' => 'Tanggal Sewa', 'value' => \Carbon\Carbon::parse($booking->start_date)->format('d M Y, H:i'), 'class' => 'text-gray-700'],
   ['label' => 'Tanggal Kembali', 'value' => \Carbon\Carbon::parse($booking->end_date)->format('d M Y, H:i'), 'class' => 'text-gray-700'],
 ];

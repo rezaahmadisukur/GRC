@@ -172,7 +172,7 @@
                     'cancelled' => ['cls' => 'bg-red-50 text-red-600 ring-red-200', 'dot' => 'bg-red-400', 'label' => 'Dibatalkan', 'pulse' => false],
                     default => ['cls' => 'bg-gray-100 text-gray-600 ring-gray-200', 'dot' => 'bg-gray-400', 'label' => ucfirst($booking->status), 'pulse' => false],
                   };
-                  $initials = strtoupper(substr($booking->customer_name, 0, 2));
+                  $initials = strtoupper(substr($booking->customer->name, 0, 2));
                   $h = $booking->duration_hours;
                   $dur = $h < 24
                     ? "{$h} Jam"
@@ -192,7 +192,7 @@
                 <tr
                   class="transition-all duration-200 hover:bg-gradient-to-r hover:from-emerald-50/50 hover:to-teal-50/30 group"
                   data-status="{{ $booking->status }}"
-                  data-search="{{ strtolower($booking->customer_name . ' ' . $booking->booking_code . ' ' . ($booking->car->name ?? '')) }}">
+                  data-search="{{ strtolower($booking->customer->name . ' ' . $booking->booking_code . ' ' . ($booking->car->name ?? '')) }}">
 
                   {{-- Customer --}}
                   <td class="px-5 py-4">
@@ -208,14 +208,14 @@
                         @endif
                       </div>
                       <div class="min-w-0">
-                        <p class="font-bold text-gray-900 text-sm truncate max-w-[140px]">{{ $booking->customer_name }}
+                        <p class="font-bold text-gray-900 text-sm truncate max-w-[140px]">{{ $booking->customer->name }}
                         </p>
                         <p class="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
                           <svg class="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                           </svg>
-                          <span class="truncate">{{ $booking->whatsapp_number }}</span>
+                          <span class="truncate">{{ $booking->customer->whatsapp_number }}</span>
                         </p>
                         <p class="text-[10px] font-mono text-gray-300 mt-0.5 tracking-wide">#{{ $booking->booking_code }}
                         </p>
@@ -272,7 +272,7 @@
                     @if($booking->admin_id && $booking->user)
                       <div
                         class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold cursor-help
-                                                                                                                                                                {{ $booking->user->role === 'owner' ? 'bg-purple-50 text-purple-700 ring-1 ring-purple-200' : 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' }}"
+                              {{ $booking->user->role === 'owner' ? 'bg-purple-50 text-purple-700 ring-1 ring-purple-200' : 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' }}"
                         title="{{ $booking->user->role === 'owner' ? '👑 Owner' : '👤 Admin' }} | {{ $booking->updated_at->translatedFormat('d M Y H:i') }}">
                         <span
                           class="w-1.5 h-1.5 rounded-full {{ $booking->user->role === 'owner' ? 'bg-purple-500' : 'bg-blue-400' }}"></span>
@@ -314,7 +314,7 @@
                         <button type="button"
                           class="transition-all duration-200 ease-out active:scale-95 hover:-translate-y-0.5 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-sm shadow-emerald-200 open-dp-modal"
                           data-booking-id="{{ $booking->id }}" data-booking-code="{{ $booking->booking_code }}"
-                          data-customer-name="{{ $booking->customer_name }}" data-total-price="{{ $booking->total_price }}"
+                          data-customer-name="{{ $booking->customer->name }}" data-total-price="{{ $booking->total_price }}"
                           data-current-dp="{{ $booking->dp_amount }}">
                           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
@@ -333,7 +333,7 @@
                         <button type="button"
                           class="transition-all duration-200 ease-out active:scale-95 hover:-translate-y-0.5 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-red-50 hover:bg-red-100 text-red-600 ring-1 ring-red-200 hover:ring-red-300 open-cancel-modal"
                           data-booking-id="{{ $booking->id }}" data-booking-code="{{ $booking->booking_code }}"
-                          data-customer-name="{{ $booking->customer_name }}"
+                          data-customer-name="{{ $booking->customer->name }}"
                           data-action="{{ route('admin.bookings.update-status', $booking) }}" data-mode="reject">
                           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
@@ -355,7 +355,7 @@
                         <button type="button"
                           class="transition-all duration-200 ease-out active:scale-95 hover:-translate-y-0.5 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white shadow-sm shadow-blue-200 open-complete-modal"
                           data-booking-id="{{ $booking->id }}" data-booking-code="{{ $booking->booking_code }}"
-                          data-customer-name="{{ $booking->customer_name }}" data-total-price="{{ $booking->total_price }}"
+                          data-customer-name="{{ $booking->customer->name }}" data-total-price="{{ $booking->total_price }}"
                           data-end-date="{{ $booking->end_date->format('d M Y H:i') }}">
                           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
@@ -376,7 +376,7 @@
                         <button type="button"
                           class="transition-all duration-200 ease-out active:scale-95 hover:-translate-y-0.5 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-orange-50 hover:bg-orange-100 text-orange-600 ring-1 ring-orange-200 open-cancel-modal"
                           data-booking-id="{{ $booking->id }}" data-booking-code="{{ $booking->booking_code }}"
-                          data-customer-name="{{ $booking->customer_name }}"
+                          data-customer-name="{{ $booking->customer->name }}"
                           data-action="{{ route('admin.bookings.update-status', $booking) }}" data-mode="cancel">
                           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

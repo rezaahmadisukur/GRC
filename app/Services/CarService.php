@@ -5,13 +5,13 @@ namespace App\Services;
 
 use App\DTOs\CarDTO;
 use App\Models\Car;
-use Illuminate\Support\Collection;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class CarService
 {
 
-  public function getAllCars($request, int $perPage = 10)
+  public function getAllCars(Request $request, int $perPage = 10): mixed
   {
     return Car::latest()->filter($request->only(['search', 'category', 'seats', 'transmission', 'fuel_type', 'status']))->paginate($perPage);
   }
@@ -76,7 +76,7 @@ class CarService
     return $car;
   }
 
-  public function deleteCar(Car $car): bool
+  public function deleteCar(Car $car): bool|null
   {
     if ($car->image) {
       Storage::disk('public')->delete($car->image);
