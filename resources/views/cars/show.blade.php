@@ -554,4 +554,56 @@ $specs = [
     });
   </script>
 
+  {{-- ═══ ERROR MODAL ═══ --}}
+  @if(session('error'))
+    <div id="error-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+      {{-- Backdrop blur --}}
+      <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeErrorModal()"></div>
+      {{-- Card --}}
+      <div class="relative w-full max-w-sm sm:max-w-md bg-white rounded-3xl shadow-2xl p-6 sm:p-8 text-center animate-modalIn">
+        {{-- Icon --}}
+        <div class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-red-50 to-rose-50 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-5 shadow-sm ring-1 ring-red-200">
+          <svg class="w-7 h-7 sm:w-8 sm:h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        {{-- Title --}}
+        <h3 class="text-base sm:text-lg font-extrabold text-gray-900 mb-2">Booking Gagal</h3>
+        {{-- Message --}}
+        <p class="text-sm sm:text-base text-gray-500 leading-relaxed mb-6 sm:mb-8">{{ session('error') }}</p>
+        {{-- Button --}}
+        <button onclick="closeErrorModal()"
+          class="w-full py-3 px-6 rounded-2xl bg-gradient-to-r from-red-500 to-rose-600 text-white text-sm font-bold shadow-lg shadow-red-200 hover:shadow-red-300 hover:from-red-600 hover:to-rose-700 transition-all active:scale-95">
+          Tutup
+        </button>
+      </div>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('error-modal');
+        if (modal) modal.classList.remove('hidden');
+      });
+      function closeErrorModal() {
+        const modal = document.getElementById('error-modal');
+        if (modal) modal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+      // Escape key to close
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeErrorModal();
+      });
+      // Prevent body scroll when modal is open
+      if (document.getElementById('error-modal')) {
+        document.body.style.overflow = 'hidden';
+      }
+    </script>
+    <style>
+      @keyframes modalIn {
+        from { opacity: 0; transform: scale(0.9) translateY(10px); }
+        to   { opacity: 1; transform: scale(1) translateY(0); }
+      }
+      .animate-modalIn { animation: modalIn 0.3s ease-out both; }
+    </style>
+  @endif
+
 </x-app-layout>
