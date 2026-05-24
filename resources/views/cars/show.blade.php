@@ -1,3 +1,36 @@
+@php
+  $specs = [
+    [
+      'label' => 'Warna',
+      'value' => $car->color,
+      'bg' => '#eff6ff',
+      'iconColor' => '#2563eb',
+      'icon' => 'M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01'
+    ],
+    [
+      'label' => 'Transmisi',
+      'value' => $car->transmission,
+      'bg' => '#f5f3ff',
+      'iconColor' => '#7c3aed',
+      'icon' => 'M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4'
+    ],
+    [
+      'label' => 'Kapasitas',
+      'value' => ($car->seats ?? '-') . ' Kursi',
+      'bg' => '#ecfdf5',
+      'iconColor' => '#059669',
+      'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z'
+    ],
+    [
+      'label' => 'BBM',
+      'value' => $car->fuel_type ?? 'Bensin',
+      'bg' => '#fff7ed',
+      'iconColor' => '#ea580c',
+      'icon' => 'M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z'
+    ],
+  ];
+@endphp
+
 <x-app-layout title="Detail Mobil">
 
   <div class="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8" style="background: linear-gradient(135deg, #f0f4ff 0%, #e8effe 25%, #eef2ff 50%, #f0f9ff 75%, #f0f4ff 100%);">
@@ -94,39 +127,6 @@
             </h2>
 
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              @php
-$specs = [
-  [
-    'label' => 'Warna',
-    'value' => $car->color,
-    'bg' => '#eff6ff',
-    'iconColor' => '#2563eb',
-    'icon' => 'M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01'
-  ],
-  [
-    'label' => 'Transmisi',
-    'value' => $car->transmission,
-    'bg' => '#f5f3ff',
-    'iconColor' => '#7c3aed',
-    'icon' => 'M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4'
-  ],
-  [
-    'label' => 'Kapasitas',
-    'value' => ($car->seats ?? '-') . ' Kursi',
-    'bg' => '#ecfdf5',
-    'iconColor' => '#059669',
-    'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z'
-  ],
-  [
-    'label' => 'BBM',
-    'value' => $car->fuel_type ?? 'Bensin',
-    'bg' => '#fff7ed',
-    'iconColor' => '#ea580c',
-    'icon' => 'M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z'
-  ],
-];
-              @endphp
-
               @foreach($specs as $spec)
                 <div class="flex flex-col gap-3 p-4 rounded-2xl" style="background: {{ $spec['bg'] }};">
                   <div class="w-9 h-9 rounded-xl flex items-center justify-center bg-white shadow-sm">

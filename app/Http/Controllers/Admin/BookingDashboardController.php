@@ -7,6 +7,8 @@ use App\Http\Requests\UpdateBookingStatusRequest;
 use App\Models\Booking;
 use App\Models\Car;
 use App\Services\BookingService;
+use Illuminate\Contracts\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InvalidArgumentException;
 
@@ -22,12 +24,19 @@ class BookingDashboardController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function index(Request $request)
+    public function index(Request $request): View\Factory|View\View
     {
         $bookings = Booking::filter($request)
-            ->with('car')
-            ->orderByRaw('DATE(start_date) DESC')
-            ->orderBy('start_date', 'DESC')
+            ->with(['car', 'customer', 'user'])
+            ->orderByRaw("CASE 
+                WHEN status = 'pending' THEN 1 
+                WHEN status = 'active' THEN 2 
+                WHEN status = 'completed' THEN 3 
+                WHEN status = 'cancelled' THEN 4 
+                ELSE 5 
+            END")
+            ->orderByRaw("CASE WHEN status IN ('pending', 'active') THEN start_date END ASC")
+            ->orderByRaw("CASE WHEN status IN ('completed', 'cancelled') THEN updated_at END DESC")
             ->paginate(10)
             ->appends(request()->query());
         $pendingCount = Booking::where('status', 'pending')->count();
@@ -38,10 +47,16 @@ class BookingDashboardController extends Controller
         return view('admin.bookings.index', compact('bookings', 'pendingCount', 'activeCount', 'completedCount', 'totalAllBookings'));
     }
 
+    /**
+     * Summary of updateStatus
+     * @param UpdateBookingStatusRequest $request
+     * @param Booking $booking
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateStatus(
         UpdateBookingStatusRequest $request,
         Booking $booking
-    ) {
+    ): RedirectResponse {
         try {
             $this->bookingService->updateBookingStatus($booking, $request->status, $request->validated());
 
@@ -51,7 +66,7 @@ class BookingDashboardController extends Controller
         }
     }
 
-    public function indexDashboard(Request $request)
+    public function indexDashboard(Request $request): View\View|View\Factory
     {
         $user = auth()->user();
 

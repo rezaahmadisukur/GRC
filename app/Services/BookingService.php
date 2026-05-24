@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\DTOs\BookingDTO;
 use App\Models\Booking;
 use App\Models\Car;
 use App\Models\Customer;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +18,7 @@ class BookingService
   public const DURATION_12H = 12;
   public const DURATION_24H = 24;
 
-  public function calculateBooking(int $carId, string $startDate, int $durationHours): array
+  public function calculateBooking(int $carId, Carbon $startDate, int $durationHours): array
   {
     $car = Car::findOrFail($carId);
     $start = Carbon::parse($startDate);
@@ -43,36 +45,34 @@ class BookingService
     ];
   }
 
-  public function createBooking(array $data): Booking
+  public function createBooking(BookingDTO $bookingDTO): Booking
   {
 
-    return DB::transaction(function () use ($data) {
+    return DB::transaction(function () use ($bookingDTO) {
       $bookingCode = $this->generateUniqueBookingCode();
-      $extra = (int) ($data['extra_hours'] ?? 0);
-      $totalHours = (int) $data['duration_type'] + $extra;
 
       $calc = $this->calculateBooking(
-        (int) $data['car_id'],
-        $data['start_date'],
-        $totalHours
+        (int) $bookingDTO->carId,
+        $bookingDTO->startDate,
+        $bookingDTO->getTotalHours()
       );
 
       $customer = Customer::firstOrCreate([
-        'name' => $data['customer_name'],
-        'whatsapp_number' => $data['whatsapp_number'],
+        'name' => $bookingDTO->customerName,
+        'whatsapp_number' => $bookingDTO->whatsappNumber,
       ]);
 
 
       return Booking::create([
         'customer_id' => $customer->id,
-        'car_id' => $data['car_id'],
+        'car_id' => $bookingDTO->carId,
         'booking_code' => $bookingCode,
-        'start_date' => $data['start_date'],
-        'duration_hours' => $totalHours,
+        'start_date' => $bookingDTO->startDate,
+        'duration_hours' => $bookingDTO->getTotalHours(),
         'end_date' => $calc['end_date'],
         'total_price' => $calc['total_price'],
         'remains_payment' => $calc['total_price'],
-        'notes' => $data['notes'] ?? null,
+        'notes' => $bookingDTO->notes ?? null,
         'status' => 'pending'
       ]);
     });
@@ -168,7 +168,7 @@ class BookingService
       "*Mobil:* {$car->name} ({$car->plate_code})\n" .
       "*Mulai:* {$booking->start_date}\n" .
       "*Durasi:* {$booking->duration_hours} Jam\n" .
-      "*Total:* Rp " . number_format($booking->total_price, 0, ',', '.') . "\n\n" .
+      "*Total:* Rp " . number_format((float) $booking->total_price, 0, ',', '.') . "\n\n" .
       "Halo Admin, saya sudah melakukan booking di website. Mohon instruksi selanjutnya.";
 
     return "https://wa.me/" . $adminNumber . "?text=" . rawurlencode($message);
@@ -183,7 +183,7 @@ class BookingService
       ->get();
   }
 
-  public function getDashboardStatistics($user, $from = null, $to = null): array
+  public function getDashboardStatistics(User $user, $from = null, $to = null): array
   {
     $isOwner = $user->role === 'owner';
     $from = $from ?? now()->subDays(7);
@@ -210,7 +210,7 @@ class BookingService
         'growth' => $growth,
         'label' => 'Total Pendapatan',
         'totalDP' => Booking::whereBetween('created_at', [$from, $to])->sum('dp_amount'),
-        'staffCount' => \App\Models\User::where('role', 'admin')->count(),
+        'staffCount' => User::where('role', 'admin')->count(),
       ]
       : [
         'primaryAmount' => $currentTotal,
@@ -294,32 +294,29 @@ class BookingService
     return $code;
   }
 
-  public function adminCreateBooking(array $data): Booking
+  public function adminCreateBooking(BookingDTO $bookingDTO, float $dpAmount = 0): Booking
   {
-    return DB::transaction(function () use ($data) {
-      $extraHours = (int) ($data['extra_hours'] ?? 0);
-      $totalHours = (int) $data['duration_type'] + $extraHours;
-      $startDate = Carbon::parse($data['start_date']);
-      $endDate = $startDate->copy()->addHours($totalHours);
+    return DB::transaction(function () use ($bookingDTO, $dpAmount) {
+      $startDate = $bookingDTO->startDate;
+      $endDate = $bookingDTO->endDate();
 
       // Cek ketersediaan mobil
-      $car = Car::findOrFail($data['car_id']);
+      $car = Car::findOrFail($bookingDTO->carId);
       if (!$car->isAvailableForDateRange($startDate, $endDate)) {
-        return back()->withInput()->with('error', 'Maaf, mobil sudah ada booking lain pada rentang tanggal ini.');
+        throw new InvalidArgumentException('Mobil sudah ada booking lain pada rentang tanggal ini.');
       }
 
-      $data['dp_amount'] = $data['dp_amount'] ?? 0;
-      $booking = $this->createBooking($data);
+      $booking = $this->createBooking($bookingDTO);
 
-      if ((float) $data['dp_amount'] > 0) {
-        $this->confirmBooking($booking, (float) $data['dp_amount']);
+      if ($dpAmount > 0) {
+        $this->confirmBooking($booking, $dpAmount);
       }
 
       return $booking;
     });
   }
 
-  public function getBookedDates()
+  public function getBookedDates(): mixed
   {
     return Booking::whereIn('status', ['pending', 'active'])
       ->select('car_id', 'start_date', 'end_date', 'status')
@@ -332,7 +329,6 @@ class BookingService
           'status' => $booking->status
         ];
       });
-    ;
   }
 
   public function getCarStats()
