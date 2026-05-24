@@ -50,7 +50,7 @@ class ProfileController extends Controller
             ->with('success', 'Password berhasil diperbarui!');
     }
 
-    public function showForceChangePassword()
+    public function showForceChangePassword(): View|RedirectResponse
     {
         if (!auth()->user()->must_change_password) {
             return redirect()->route('dashboard');

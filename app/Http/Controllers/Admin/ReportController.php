@@ -24,8 +24,7 @@ class ReportController extends Controller
     public function downloadPDF(DownloadReportRequest $request)
     {
         $bookings = Booking::forPeriod($request->start_date, $request->end_date)->get();
-
-        $totalOmzet = Booking::calculateRevenueForPeriod($request->start_date, $request->end_date);
+        $totalOmzet = $bookings->sum('final_total_price');
 
         $pdf = Pdf::loadView('admin.reports.pdf_template', [
             'bookings' => $bookings,
