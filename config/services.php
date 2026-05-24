@@ -32,7 +32,7 @@ return [
     ],
 
     'whatsapp' => [
-        'number' => env('WHATSAPP_ADMIN_NUMBER'),
+        'number' => env('WHATSAPP_ADMIN_NUMBER', ''),
     ],
 
 ];
