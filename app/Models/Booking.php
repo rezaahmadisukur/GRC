@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Http\Request;
 
 class Booking extends Model
 {
@@ -41,6 +43,12 @@ class Booking extends Model
     protected $casts = [
         'start_date' => 'datetime',
         'end_date' => 'datetime',
+        'actual_end_date' => 'datetime',
+        'dp_amount' => 'decimal:2',
+        'penalty_amount' => 'decimal:2',
+        'final_total_price' => 'decimal:2',
+        'total_price' => 'decimal:2',
+        'remains_payment' => 'decimal:2',
     ];
 
     public function car(): BelongsTo
@@ -58,16 +66,17 @@ class Booking extends Model
         return $this->belongsTo(Customer::class);
     }
 
-    public function scopeForPeriod($query, $startDate, $endDate)
+    public function scopeForPeriod(Builder $query, mixed $startDate, mixed $endDate): Builder
     {
-        $endDate = Carbon::parse($endDate)->addDay();
+        // add 1 day to make the end_date inclusive (start_date < end_date+1)
+        $endDateInclusive = Carbon::parse($endDate)->addDay();
         return $query->where('start_date', '>=', $startDate)
-            ->where('start_date', '<', $endDate)
+            ->where('start_date', '<', $endDateInclusive)
             ->with('car')
             ->orderBy('start_date');
     }
 
-    public static function calculateRevenueForPeriod($startDate, $endDate)
+    public static function calculateRevenueForPeriod(mixed $startDate, mixed $endDate): mixed
     {
         return static::forPeriod($startDate, $endDate)->sum('final_total_price');
     }
@@ -76,7 +85,7 @@ class Booking extends Model
      * Query scope for filtering bookings by search term and status
      * Used on admin bookings index page
      */
-    public function scopeFilter($query, $request)
+    public function scopeFilter(Builder $query, Request $request): Builder
     {
         return $query->when($request->filled('search'), function ($q) use ($request) {
             $searchTerm = '%' . $request->search . '%';
