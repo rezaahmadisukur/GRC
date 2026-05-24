@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\DTOs\BookingDTO;
 use App\Http\Requests\StoreBookingRequest;
+use App\Models\Booking;
 use App\Models\Car;
 use App\Services\BookingService;
 use Carbon\Carbon;
@@ -12,7 +14,7 @@ use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
-    protected $bookingService;
+    protected BookingService $bookingService;
 
     public function __construct(BookingService $bookingService)
     {
@@ -21,20 +23,19 @@ class BookingController extends Controller
 
     public function store(StoreBookingRequest $request): RedirectResponse
     {
-        $data = $request->validated();
+        $bookingDTO = BookingDTO::fromRequest($request->validated());
 
         // Calculate end date first
-        $totalHours = (int) $data['duration_type'] + (int) ($data['extra_hours'] ?? 0);
-        $startDate = Carbon::parse($data['start_date']);
-        $endDate = $startDate->copy()->addHours($totalHours);
+        $startDate = $bookingDTO->startDate;
+        $endDate = $bookingDTO->endDate();
 
         // Check availability before creating booking
-        $car = Car::findOrFail($data['car_id']);
+        $car = Car::findOrFail($bookingDTO->carId);
         if (!$car->isAvailableForDateRange($startDate, $endDate)) {
             return back()->withInput()->with('error', 'Maaf, mobil sudah di booking orang lain pada rentang tanggal dan waktu yang anda pilih. Silahkan pilih tanggal lain.');
         }
 
-        $booking = $this->bookingService->createBooking($data);
+        $booking = $this->bookingService->createBooking($bookingDTO);
 
         $waURL = $this->bookingService->generateWhatsAppUrl($booking);
 
@@ -50,7 +51,7 @@ class BookingController extends Controller
         $search = $request->input('query');
 
         $bookings = $this->bookingService->searchBookings($search);
-        $totalAllBookings = \App\Models\Booking::count();
+        $totalAllBookings = Booking::count();
 
         if ($bookings->isEmpty()) {
             return back()->with('error', 'Data nggak ketemu nih!');
