@@ -44,11 +44,6 @@ class Booking extends Model
         'start_date' => 'datetime',
         'end_date' => 'datetime',
         'actual_end_date' => 'datetime',
-        'dp_amount' => 'decimal:2',
-        'penalty_amount' => 'decimal:2',
-        'final_total_price' => 'decimal:2',
-        'total_price' => 'decimal:2',
-        'remains_payment' => 'decimal:2',
     ];
 
     public function car(): BelongsTo
