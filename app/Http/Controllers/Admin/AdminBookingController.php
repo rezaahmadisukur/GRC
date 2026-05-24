@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\DTOs\BookingDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminStoreBookingRequest;
 use App\Models\Booking;
 use App\Models\Car;
 use App\Services\BookingService;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 
 class AdminBookingController extends Controller
 {
-    protected $bookingService;
+    protected BookingService $bookingService;
 
     public function __construct(BookingService $bookingService)
     {
@@ -31,11 +33,18 @@ class AdminBookingController extends Controller
         return view('admin.bookings.quick-create', compact('cars', 'bookedDates', 'carStats'));
     }
 
-    public function store(AdminStoreBookingRequest $request)
+    public function store(AdminStoreBookingRequest $request): RedirectResponse
     {
-        $booking = $this->bookingService->adminCreateBooking($request->validated());
-        return redirect()->route('admin.quick-booking.receipt', $booking)
-            ->with('success', 'Booking berhasil dibuat!');
+        try {
+            $bookingDTO = BookingDTO::fromRequest($request->validated());
+            $dpAmount = (float) ($request->validated()['dp_amount'] ?? 0);
+
+            $booking = $this->bookingService->adminCreateBooking($bookingDTO, $dpAmount);
+            return redirect()->route('admin.quick-booking.receipt', $booking)
+                ->with('success', 'Booking berhasil dibuat!');
+        } catch (\InvalidArgumentException $e) {
+            return back()->withInput()->with('error', $e->getMessage());
+        }
     }
 
     public function receipt(Booking $booking)
