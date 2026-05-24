@@ -23,23 +23,27 @@ class BookingController extends Controller
 
     public function store(StoreBookingRequest $request): RedirectResponse
     {
-        $bookingDTO = BookingDTO::fromRequest($request->validated());
+        try {
+            $bookingDTO = BookingDTO::fromRequest($request->validated());
 
-        // Calculate end date first
-        $startDate = $bookingDTO->startDate;
-        $endDate = $bookingDTO->endDate();
+            // Calculate end date first
+            $startDate = $bookingDTO->startDate;
+            $endDate = $bookingDTO->endDate();
 
-        // Check availability before creating booking
-        $car = Car::findOrFail($bookingDTO->carId);
-        if (!$car->isAvailableForDateRange($startDate, $endDate)) {
-            return back()->withInput()->with('error', 'Maaf, mobil sudah di booking orang lain pada rentang tanggal dan waktu yang anda pilih. Silahkan pilih tanggal lain.');
+            // Check availability before creating booking
+            $car = Car::findOrFail($bookingDTO->carId);
+            if (!$car->isAvailableForDateRange($startDate, $endDate)) {
+                return back()->withInput()->with('error', 'Maaf, mobil sudah di booking orang lain pada rentang tanggal dan waktu yang anda pilih. Silahkan pilih tanggal lain.');
+            }
+
+            $booking = $this->bookingService->createBooking($bookingDTO);
+
+            $waURL = $this->bookingService->generateWhatsAppUrl($booking);
+
+            return redirect()->away($waURL);
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Maaf, terjadi kesalahan saat memproses booking. Silahkan coba lagi.');
         }
-
-        $booking = $this->bookingService->createBooking($bookingDTO);
-
-        $waURL = $this->bookingService->generateWhatsAppUrl($booking);
-
-        return redirect()->away($waURL);
     }
 
     public function check(Request $request)
