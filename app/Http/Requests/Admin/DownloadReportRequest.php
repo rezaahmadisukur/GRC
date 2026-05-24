@@ -63,7 +63,7 @@ class DownloadReportRequest extends FormRequest
     {
         $validator->after(function ($validator) {
             // Cek maksimal periode laporan 1 tahun
-            if ($this->has(['start_date', 'end_date'])) {
+            if ($this->filled('start_date') && $this->filled('end_date')) {
                 $diff = now()->parse($this->end_date)->diffInDays($this->start_date);
 
                 if ($diff > 365) {
