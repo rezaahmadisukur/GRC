@@ -7,6 +7,7 @@ use App\DTOs\BookingDTO;
 use App\Models\Booking;
 use App\Models\Car;
 use App\Models\Customer;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -167,7 +168,7 @@ class BookingService
       "*Mobil:* {$car->name} ({$car->plate_code})\n" .
       "*Mulai:* {$booking->start_date}\n" .
       "*Durasi:* {$booking->duration_hours} Jam\n" .
-      "*Total:* Rp " . number_format($booking->total_price, 0, ',', '.') . "\n\n" .
+      "*Total:* Rp " . number_format((float) $booking->total_price, 0, ',', '.') . "\n\n" .
       "Halo Admin, saya sudah melakukan booking di website. Mohon instruksi selanjutnya.";
 
     return "https://wa.me/" . $adminNumber . "?text=" . rawurlencode($message);
@@ -182,7 +183,7 @@ class BookingService
       ->get();
   }
 
-  public function getDashboardStatistics($user, $from = null, $to = null): array
+  public function getDashboardStatistics(User $user, $from = null, $to = null): array
   {
     $isOwner = $user->role === 'owner';
     $from = $from ?? now()->subDays(7);
@@ -209,7 +210,7 @@ class BookingService
         'growth' => $growth,
         'label' => 'Total Pendapatan',
         'totalDP' => Booking::whereBetween('created_at', [$from, $to])->sum('dp_amount'),
-        'staffCount' => \App\Models\User::where('role', 'admin')->count(),
+        'staffCount' => User::where('role', 'admin')->count(),
       ]
       : [
         'primaryAmount' => $currentTotal,
@@ -296,8 +297,6 @@ class BookingService
   public function adminCreateBooking(BookingDTO $bookingDTO, float $dpAmount = 0): Booking
   {
     return DB::transaction(function () use ($bookingDTO, $dpAmount) {
-      $extraHours = $bookingDTO->extraHours;
-      // $totalHours = (int) $data['duration_type'] + $extraHours;
       $startDate = $bookingDTO->startDate;
       $endDate = $bookingDTO->endDate();
 
@@ -330,7 +329,6 @@ class BookingService
           'status' => $booking->status
         ];
       });
-    ;
   }
 
   public function getCarStats()
