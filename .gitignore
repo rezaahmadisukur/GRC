@@ -19,3 +19,14 @@ yarn-error.log
 /.vscode
 /.agents
 /playwright
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+
+*.md
+!README.md
