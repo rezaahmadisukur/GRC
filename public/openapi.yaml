@@ -1,0 +1,609 @@
+openapi: 3.1.0
+info:
+  title: "Pusat Rentcar Purwakarta"
+  description: "Dokumentasi API untuk sistem manajemen Pusat Rentcar Purwakarta"
+  version: 1.0.0
+  contact:
+    name: "Pusat Rentcar Purwakarta Team"
+servers:
+  - url: http://localhost:8000
+    description: "Development server"
+paths:
+  # ============= PUBLIC ENDPOINTS =============
+  /cars:
+    get:
+      summary: "Daftar mobil"
+      description: "Menampilkan daftar mobil yang tersedia untuk disewa"
+      tags:
+        - Cars - Public
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+          description: "Cari mobil berdasarkan nama"
+        - name: category
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [SUV, MPV, Hatchback, Sedan]
+          description: "Filter berdasarkan kategori"
+        - name: seats
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: "Filter berdasarkan jumlah kursi"
+        - name: transmission
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [Manual, Matic]
+          description: "Filter berdasarkan transmisi"
+        - name: fuel_type
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [Bensin, Solar, Listrik]
+          description: "Filter berdasarkan jenis bahan bakar"
+      responses:
+        "200":
+          description: "Halaman daftar mobil berhasil dimuat"
+
+  /cars/{plate_code}:
+    get:
+      summary: "Detail mobil"
+      description: "Menampilkan detail mobil berdasarkan plat nomor"
+      tags:
+        - Cars - Public
+      parameters:
+        - name: plate_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: "Plat nomor mobil (contoh: B1234XYZ)"
+      responses:
+        "200":
+          description: "Halaman detail mobil berhasil dimuat"
+        "404":
+          description: "Mobil tidak temukan"
+  /bookings:
+    post:
+      summary: "Booking mobil"
+      description: "Melakukan pemesanan mobil baru"
+      tags:
+        - Bookings - Public
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - car_id
+                - customer_name
+                - whatsapp_number
+                - start_date
+                - duration_type
+                - terms
+              properties:
+                car_id:
+                  type: integer
+                  description: "ID mobil"
+                customer_name:
+                  type: string
+                  description: "Nama lengkap penyewa"
+                whatsapp_number:
+                  type: string
+                  description: "Nomor WhatsApp penyewa"
+                start_date:
+                  type: string
+                  format: date-time
+                  description: "Tanggal & jam mulai sewa (format: Y-m-d H:i:s)"
+                duration_type:
+                  type: integer
+                  enum: [12, 24]
+                  description: "Durasi sewa (12 jam atau 24 jam)"
+                extra_hours:
+                  type: integer
+                  description: "Jam tambahan (opsional)"
+                notes:
+                  type: string
+                  description: "Catatan tambahan (opsional)"
+                terms:
+                  type: boolean
+                  description: "Setuju syarat & ketentuan (harus true)"
+      responses:
+        "302":
+          description: "Redirect ke WhatsApp untuk konfirmasi"
+        "400":
+          description: "Validasi gagal atau mobil tidak tersedia"
+  /check-booking:
+    post:
+      summary: "Cek status booking"
+      description: "Mencari status pemesanan berdasarkan kode booking atau nomor telepon"
+      tags:
+        - Bookings - Public
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - query
+              properties:
+                query:
+                  type: string
+                  description: "Kode booking atau nomor telepon"
+      responses:
+        "200":
+          description: "Data booking ditemukan"
+        "404":
+          description: "Data booking tidak ditemukan"
+  # ============= AUTH ENDPOINTS (Admin/Owner only) =============
+  /login:
+    get:
+      summary: "Halaman login"
+      description: "Menampilkan halaman login untuk admin/owner"
+      tags:
+        - Authentication
+      responses:
+        "200":
+          description: "Halaman login"
+    post:
+      summary: "Proses login"
+      description: "Melakukan autentikasi login menggunakan username"
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  description: "Username admin/owner"
+                password:
+                  type: string
+                  format: password
+                  description: "Password"
+                remember:
+                  type: boolean
+                  description: "Ingat saya"
+      responses:
+        "302":
+          description: "Redirect ke dashboard jika berhasil"
+        "422":
+          description: "Username atau password salah"
+
+  /logout:
+    post:
+      summary: "Logout"
+      description: "Keluar dari sesi login"
+      tags:
+        - Authentication
+      responses:
+        "302":
+          description: "Redirect ke halaman utama"
+
+  # ============= ADMIN ENDPOINTS =============
+  /dashboard:
+    get:
+      summary: "Dashboard"
+      description: "Menampilkan dashboard admin dengan ringkasan data booking"
+      tags:
+        - Admin - Dashboard
+      responses:
+        "200":
+          description: "Halaman dashboard"
+        "401":
+          description: "Belum login"
+
+  /admin/bookings:
+    get:
+      summary: "Daftar booking (admin)"
+      description: "Menampilkan daftar semua booking"
+      tags:
+        - Admin - Bookings
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+          description: "Cari berdasarkan nama customer, kode booking, no WA, atau mobil"
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [pending, active, completed, cancelled, all]
+          description: "Filter berdasarkan status booking"
+      responses:
+        "200":
+          description: "Halaman daftar booking"
+        "401":
+          description: "Belum login"
+
+  /admin/bookings/{booking}/status:
+    patch:
+      summary: "Update status booking"
+      description: "Mengubah status booking (pending -> active -> completed / cancelled)"
+      tags:
+        - Admin - Bookings
+      parameters:
+        - name: booking
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: "ID booking"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - status
+              properties:
+                status:
+                  type: string
+                  enum: [active, completed, cancelled]
+                  description: "Status baru"
+      responses:
+        "302":
+          description: "Redirect setelah update status"
+        "401":
+          description: "Belum login"
+
+  /admin/quick-booking:
+    get:
+      summary: "Form booking cepat"
+      description: "Menampilkan form untuk admin membuat booking langsung"
+      tags:
+        - Admin - Bookings
+      responses:
+        "200":
+          description: "Halaman form booking cepat"
+        "401":
+          description: "Belum login"
+    post:
+      summary: "Proses booking cepat"
+      description: "Admin membuat booking baru langsung dari panel"
+      tags:
+        - Admin - Bookings
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - car_id
+                - customer_name
+                - whatsapp_number
+                - start_date
+                - duration_type
+              properties:
+                car_id:
+                  type: integer
+                  description: "ID mobil"
+                customer_name:
+                  type: string
+                  description: "Nama penyewa"
+                whatsapp_number:
+                  type: string
+                  description: "Nomor WhatsApp"
+                start_date:
+                  type: string
+                  format: date-time
+                  description: "Tanggal & jam mulai sewa (Y-m-d H:i:s)"
+                duration_type:
+                  type: integer
+                  enum: [12, 24]
+                  description: "Durasi sewa"
+                extra_hours:
+                  type: integer
+                  description: "Jam tambahan (opsional)"
+                dp_amount:
+                  type: number
+                  format: float
+                  description: "Jumlah DP (opsional)"
+                notes:
+                  type: string
+                  description: "Catatan (opsional)"
+      responses:
+        "302":
+          description: "Redirect ke halaman receipt"
+        "401":
+          description: "Belum login"
+
+  /admin/bookings/{booking_code}/receipt:
+    get:
+      summary: "Receipt booking"
+      description: "Menampilkan struk / receipt booking"
+      tags:
+        - Admin - Bookings
+      parameters:
+        - name: booking_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: "Kode booking"
+      responses:
+        "200":
+          description: "Halaman receipt"
+        "404":
+          description: "Booking tidak ditemukan"
+
+  /admin/cars:
+    get:
+      summary: "Daftar mobil (admin)"
+      description: "Menampilkan daftar mobil dengan filter dan statistik (tersedia/tidak)"
+      tags:
+        - Admin - Cars
+      responses:
+        "200":
+          description: "Halaman daftar mobil"
+        "401":
+          description: "Belum login"
+    post:
+      summary: "Simpan mobil baru"
+      description: "Menyimpan data mobil baru"
+      tags:
+        - Admin - Cars
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - name
+                - category
+                - plate_code
+                - seats
+                - transmission
+                - fuel_type
+                - price_12h
+                - price_24h
+              properties:
+                name:
+                  type: string
+                  description: "Nama mobil"
+                category:
+                  type: string
+                  enum: [SUV, MPV, Hatchback, Sedan]
+                  description: "Kategori mobil"
+                plate_code:
+                  type: string
+                  description: "Plat nomor"
+                color:
+                  type: string
+                  description: "Warna mobil"
+                seats:
+                  type: integer
+                  description: "Jumlah kursi"
+                transmission:
+                  type: string
+                  enum: [Manual, Matic]
+                  description: "Transmisi"
+                fuel_type:
+                  type: string
+                  enum: [Bensin, Solar, Listrik]
+                  description: "Jenis bahan bakar"
+                price_12h:
+                  type: integer
+                  description: "Harga sewa 12 jam"
+                price_24h:
+                  type: integer
+                  description: "Harga sewa 24 jam"
+                image:
+                  type: string
+                  format: binary
+                  description: "Foto mobil"
+                is_available:
+                  type: boolean
+                  description: "Status tersedia"
+      responses:
+        "302":
+          description: "Redirect ke daftar mobil"
+
+  /admin/cars/create:
+    get:
+      summary: "Form tambah mobil"
+      description: "Menampilkan form untuk menambah mobil baru"
+      tags:
+        - Admin - Cars
+      responses:
+        "200":
+          description: "Halaman form tambah mobil"
+
+  /admin/cars/{plate_code}/edit:
+    get:
+      summary: "Form edit mobil"
+      description: "Menampilkan form edit data mobil"
+      tags:
+        - Admin - Cars
+      parameters:
+        - name: plate_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: "Plat nomor mobil"
+      responses:
+        "200":
+          description: "Halaman form edit mobil"
+
+  /admin/cars/{plate_code}:
+    put:
+      summary: "Update mobil"
+      description: "Menyimpan perubahan data mobil"
+      tags:
+        - Admin - Cars
+      parameters:
+        - name: plate_code
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                category:
+                  type: string
+                  enum: [SUV, MPV, Hatchback, Sedan]
+                plate_code:
+                  type: string
+                color:
+                  type: string
+                seats:
+                  type: integer
+                transmission:
+                  type: string
+                  enum: [Manual, Matic]
+                fuel_type:
+                  type: string
+                  enum: [Bensin, Solar, Listrik]
+                price_12h:
+                  type: integer
+                price_24h:
+                  type: integer
+                image:
+                  type: string
+                  format: binary
+                is_available:
+                  type: boolean
+      responses:
+        "302":
+          description: "Redirect ke daftar mobil"
+    delete:
+      summary: "Hapus mobil"
+      description: "Menghapus data mobil"
+      tags:
+        - Admin - Cars
+      parameters:
+        - name: plate_code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "302":
+          description: "Redirect ke daftar mobil"
+
+  /admin/reports:
+    get:
+      summary: "Laporan keuangan"
+      description: "Menampilkan halaman laporan keuangan"
+      tags:
+        - Admin - Reports
+      responses:
+        "200":
+          description: "Halaman laporan"
+        "401":
+          description: "Belum login"
+
+  /admin/reports/download:
+    get:
+      summary: "Download laporan PDF"
+      description: "Mengunduh laporan dalam format PDF"
+      tags:
+        - Admin - Reports
+      responses:
+        "200":
+          description: "File PDF laporan"
+
+  /admin/staff:
+    get:
+      summary: "Daftar staff"
+      description: "Menampilkan daftar staff (hanya owner)"
+      tags:
+        - Owner - Staff
+      responses:
+        "200":
+          description: "Halaman daftar staff"
+        "403":
+          description: "Hanya owner"
+    post:
+      summary: "Tambah staff"
+      description: "Menambahkan akun staff baru (hanya owner)"
+      tags:
+        - Owner - Staff
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - name
+                - username
+                - password
+              properties:
+                name:
+                  type: string
+                  description: "Nama staff"
+                username:
+                  type: string
+                  description: "Username staff"
+                password:
+                  type: string
+                  format: password
+                  description: "Password"
+      responses:
+        "302":
+          description: "Redirect ke daftar staff"
+
+  /admin/staff/{user}/toggle:
+    patch:
+      summary: "Aktif/nonaktifkan staff"
+      description: "Toggle status aktif staff (hanya owner)"
+      tags:
+        - Owner - Staff
+      parameters:
+        - name: user
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: "ID user"
+      responses:
+        "302":
+          description: "Status staff diubah"
+
+  /admin/staff/{user}/reset-password:
+    patch:
+      summary: "Reset password staff"
+      description: "Mereset password staff (hanya owner)"
+      tags:
+        - Owner - Staff
+      parameters:
+        - name: user
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "302":
+          description: "Password staff direset"
