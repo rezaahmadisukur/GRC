@@ -1,7 +1,5 @@
 import { test, expect, Page } from "@playwright/test";
-import { ensureAdminUser } from "./db";
-
-const PASSWORD = "grcrental123";
+import { ADMIN_PASSWORD, ensureAdminUser } from "./db";
 
 const adminLogin = async (page: Page) => {
     const admin = await ensureAdminUser();
@@ -15,7 +13,7 @@ const adminLogin = async (page: Page) => {
     await page.waitForTimeout(500);
     await page.fill("input[name='username']", admin!.username);
     await page.waitForTimeout(300);
-    await page.fill("input[name='password']", PASSWORD);
+    await page.fill("input[name='password']", ADMIN_PASSWORD);
     await page.waitForTimeout(300);
     await page.click("button[type='submit']");
     await page.waitForLoadState("networkidle");
