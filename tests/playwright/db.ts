@@ -1,5 +1,7 @@
 import mysql, { RowDataPacket } from "mysql2/promise";
-import { execSync } from "child_process";
+
+export const ADMIN_PASSWORD = "grcrental123";
+export const OWNER_PASSWORD = "password123";
 
 export async function getDb() {
     return mysql.createConnection({
@@ -23,66 +25,54 @@ export async function getOwnerUser() {
  * Pastikan admin user tersedia dan must_change_password = false.
  * Pakai Laravel artisan untuk manage password hash (bcrypt compat).
  */
-export async function ensureAdminUser(): Promise<{
-    username: string;
-    must_change_password: number;
-}> {
+export async function ensureAdminUser() {
     const db = await getDb();
 
-    const [rows] = await db.execute<RowDataPacket[]>(
-        "SELECT id, username, must_change_password FROM users WHERE role = 'admin' AND is_active = 1 LIMIT 1",
-    );
+    try {
+        // Cari admin aktif
+        const [rows] = await db.execute<RowDataPacket[]>(
+            "SELECT id, username, must_change_password FROM users WHERE role = 'admin' AND is_active = 1 LIMIT 1",
+        );
 
-    if (rows.length > 0) {
-        const admin = rows[0] as {
+        if (rows.length > 0) {
+            const admin = rows[0] as {
+                id: number;
+                username: string;
+                must_change_password: number;
+            };
+            if (admin.must_change_password) {
+                await db.execute(
+                    "UPDATE users SET must_change_password = 0 WHERE id = ?",
+                    [admin.id],
+                );
+            }
+            return { username: admin.username, must_change_password: 0 };
+        }
+
+        // Coba cari admin nonaktif (kena toggle oleh owner test)
+        const [inactiveRows] = await db.execute<RowDataPacket[]>(
+            "SELECT id, username, must_change_password FROM users WHERE role = 'admin' AND is_active = 0 LIMIT 1",
+        );
+
+        if (inactiveRows.length === 0) {
+            return undefined;
+        }
+
+        const inactive = inactiveRows[0] as {
             id: number;
             username: string;
             must_change_password: number;
         };
 
-        if (admin.must_change_password) {
-            await db.execute(
-                "UPDATE users SET must_change_password = 0 WHERE id = ?",
-                [admin.id],
-            );
-        }
+        await db.execute(
+            "UPDATE users SET is_active = 1, must_change_password = 0 WHERE id = ?",
+            [inactive.id],
+        );
 
+        return { username: inactive.username, must_change_password: 0 };
+    } finally {
         await db.end();
-        return { username: admin.username, must_change_password: 0 };
     }
-
-    // Generate unique username
-    const username = "admin_" + Date.now();
-
-    // Gunakan Laravel artisan untuk create user (bcrypt hash compatible)
-    // Laravel sudah jalan di localhost:8000, kita bisa pakai exec ke php artisan
-    try {
-        const escapedName = "Admin Test " + Date.now();
-        const escapedUser = username;
-
-        execSync(
-            `php artisan tinker --execute="
-                \\App\\Models\\User::create([
-                    'name' => '${escapedName}',
-                    'username' => '${escapedUser}',
-                    'password' => \\Illuminate\\Support\\Facades\\Hash::make('grcrental123'),
-                    'role' => 'admin',
-                    'is_active' => true,
-                    'must_change_password' => false,
-                ]);
-            " 2>&1`,
-            { cwd: process.cwd() },
-        );
-    } catch (e) {
-        // Jika gagal, mungkin user sudah ada (race condition)
-        console.error(
-            "ensureAdminUser: Gagal create via artisan, fallback ke cek ulang",
-            e,
-        );
-    }
-
-    await db.end();
-    return { username, must_change_password: 0 };
 }
 
 export async function getBookingCode() {
