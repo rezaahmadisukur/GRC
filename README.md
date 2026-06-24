@@ -1,8 +1,16 @@
 # Pusat Rentcar Purwakarta
 
-Pilih bahasa untuk membaca dokumentasi proyek:
+Pilih bahasa dokumentasi di bawah ini.
 
-- [Bahasa Indonesia](id-readme.md)
-- [English](en-readme.md)
-
-Kedua file di atas berisi panduan setup, fitur, dan penggunaan yang sudah dipisah per bahasa.
+<table>
+	<tr>
+		<td align="center">
+			<a href="id-readme.md"><strong>Bahasa Indonesia</strong></a><br>
+			<sub>Panduan setup, fitur, dan penggunaan</sub>
+		</td>
+		<td align="center">
+			<a href="en-readme.md"><strong>English</strong></a><br>
+			<sub>Setup, features, and usage guide</sub>
+		</td>
+	</tr>
+</table>
