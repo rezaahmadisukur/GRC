@@ -21,6 +21,28 @@
       @endif
 
       <!-- Force Change Password Form -->
+      <script>
+        function togglePassword(inputId) {
+          const input = document.getElementById(inputId);
+          const eyeOpen = document.getElementById('eye-' + inputId);
+          const eyeClose = document.getElementById('eye-off-' + inputId);
+
+          if (!input || !eyeOpen || !eyeClose) {
+            console.error('Element not found for inputId:', inputId);
+            return;
+          }
+
+          if (input.type === 'password') {
+            input.type = 'text';
+            eyeOpen.classList.add('hidden');
+            eyeClose.classList.remove('hidden');
+          } else {
+            input.type = 'password';
+            eyeOpen.classList.remove('hidden');
+            eyeClose.classList.add('hidden');
+          }
+        }
+      </script>
       <form method="POST" action="{{ route('password.force-update') }}">
         @csrf
         @method('patch')
@@ -34,8 +56,8 @@
             <input id="password" name="password" type="password" required
               class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-slate-900 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 hover:border-gray-300 placeholder:text-slate-400 pr-12"
               placeholder="Masukkan password baru..." />
-            <button type="button" onclick="togglePassword('password', this)"
-              class="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600 transition-colors">
+            <button type="button" onclick="togglePassword('password'); return false;"
+              class="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600 transition-colors pointer-events-auto">
               <!-- Eye Open Icon -->
               <svg id="eye-password" class="w-5 h-5 eye-open" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -68,8 +90,8 @@
             <input id="password_confirmation" name="password_confirmation" type="password" required
               class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-slate-900 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 hover:border-gray-300 placeholder:text-slate-400 pr-12"
               placeholder="Ulangi password baru..." />
-            <button type="button" onclick="togglePassword('password_confirmation', this)"
-              class="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600 transition-colors">
+            <button type="button" onclick="togglePassword('password_confirmation'); return false;"
+              class="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600 transition-colors pointer-events-auto">
               <!-- Eye Open Icon -->
               <svg id="eye-password_confirmation" class="w-5 h-5 eye-open" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">
@@ -107,24 +129,4 @@
       </form>
     </div>
   </div>
-
-  @push('scripts')
-    <script>
-      function togglePassword(inputId, button) {
-        const input = document.getElementById(inputId);
-        const eyeOpen = button.querySelector('.eye-open');
-        const eyeClose = button.querySelector('.eye-close');
-
-        if (input.type === 'password') {
-          input.type = 'text';
-          eyeOpen.classList.add('hidden');
-          eyeClose.classList.remove('hidden');
-        } else {
-          input.type = 'password';
-          eyeOpen.classList.remove('hidden');
-          eyeClose.classList.add('hidden');
-        }
-      }
-    </script>
-  @endpush
 </x-guest-layout>
