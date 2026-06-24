@@ -72,6 +72,9 @@ class ProfileController extends Controller
                     }
                 }
             ]
+        ], [
+            'password.required' => 'Password harus diisi',
+            'password.confirmed' => 'Konfirmasi password tidak cocok',
         ]);
 
         $request->user()->update([
