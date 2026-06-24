@@ -1,6 +1,6 @@
 # Pusat Rentcar Purwakarta
 
-Pilih bahasa dokumentasi di bawah ini.
+DOCUMENTATION
 
 <table>
 	<tr>
