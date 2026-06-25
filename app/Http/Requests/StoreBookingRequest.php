@@ -14,6 +14,14 @@ class StoreBookingRequest extends FormRequest
         return true;
     }
 
+    public function prepareForValidation(): void
+    {
+        $this->merge([
+            'customer_name' => ucwords(strtolower($this->customer_name)),
+            'whatsapp_number' => preg_replace('/[^0-9+]/', '', $this->whatsapp_number),
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,7 +32,7 @@ class StoreBookingRequest extends FormRequest
         return [
             'car_id' => 'required|exists:cars,id',
             'customer_name' => 'required|string|max:255',
-            'whatsapp_number' => 'required|string|max:20',
+            'whatsapp_number' => ['required', 'string', 'regex:/^(\+62|62|0)[0-9]{9,12}$/'],
             'start_date' => 'required|date',
             'duration_type' => 'required|in:12,24',
             'extra_hours' => 'nullable|numeric|min:0',
@@ -41,7 +49,7 @@ class StoreBookingRequest extends FormRequest
             'customer_name.required' => 'Nama lengkap wajib diisi.',
             'customer_name.max' => 'Nama lengkap maksimal :max karakter.',
             'whatsapp_number.required' => 'Nomor WhatsApp wajib diisi.',
-            'whatsapp_number.max' => 'Nomor WhatsApp maksimal :max karakter.',
+            'whatsapp_number.regex' => 'Format nomor WhatsApp tidak valid. Gunakan format seperti 0812xxxxxxx atau +62812xxxxxxx.',
             'start_date.required' => 'Tanggal mulai sewa wajib dipilih.',
             'start_date.date' => 'Format tanggal mulai tidak valid.',
             'duration_type.required' => 'Durasi sewa wajib dipilih.',
@@ -52,5 +60,4 @@ class StoreBookingRequest extends FormRequest
             'terms.accepted' => 'Anda harus menyetujui syarat & ketentuan.',
         ];
     }
-
 }
