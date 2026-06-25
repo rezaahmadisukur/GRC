@@ -275,7 +275,7 @@ $statCards = [
                                 <input type="text" name="customer_name" placeholder="Nama lengkap..." class="w-full border border-gray-200 rounded-xl pl-10 pr-4 py-2.5
                                               text-sm text-gray-700 bg-gray-50 focus:bg-white
                                               focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100
-                                              outline-none transition-all duration-200" required>
+                                              outline-none transition-all duration-200">
                             </div>
                         </div>
                         <div>
@@ -294,7 +294,7 @@ $statCards = [
                                 <input type="text" name="whatsapp_number" placeholder="08xx-xxxx-xxxx" class="w-full border border-gray-200 rounded-xl pl-10 pr-4 py-2.5
                                               text-sm text-gray-700 bg-gray-50 focus:bg-white
                                               focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100
-                                              outline-none transition-all duration-200" required>
+                                              outline-none transition-all duration-200">
                             </div>
                         </div>
                     </div>
@@ -309,7 +309,7 @@ $statCards = [
                                 class="w-full border border-gray-200 rounded-xl pl-4 pr-10 py-2.5
                                           text-sm text-gray-700 bg-gray-50 focus:bg-white
                                           focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100
-                                          outline-none transition-all duration-200" required>
+                                          outline-none transition-all duration-200">
                             <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
