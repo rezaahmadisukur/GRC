@@ -104,7 +104,7 @@
                 btn.disabled = true;
                 btn.classList.add('opacity-75', 'cursor-not-allowed')
                 icon.classList.add('hidden');
-                text.textContent = 'Memproses...'
+                text.textContent = 'Masuk...'
                 spinner.classList.remove('hidden')
             })
         </script>
