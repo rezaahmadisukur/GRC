@@ -122,7 +122,6 @@ $statCards = [
                                 </div>
 
                                 @if(!$car->is_available)
-                                <!-- Non Aktif Overlay Center -->
                                 <div class="absolute inset-0 flex items-center justify-center z-20 bg-black/50 backdrop-blur-sm">
                                     <div class="bg-rose-600/90 text-white font-black text-sm px-6 py-2.5 rounded-xl transform -rotate-6 shadow-xl border border-white/20">
                                       TIDAK AKTIF
@@ -223,7 +222,7 @@ $statCards = [
             <form action="{{ route('admin.quick-booking.store') }}" method="POST"
                 class="flex flex-col h-full overflow-hidden">
                 @csrf
-                <input type="hidden" name="car_id" id="modal_car_id" value="">
+                <input type="hidden" name="car_id" id="modal_car_id" value="{{ old('car_id') }}">
 
                 {{-- ── Modal Header ── --}}
                 <div class="px-6 py-5 bg-gradient-to-r
@@ -272,11 +271,14 @@ $statCards = [
                                             d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                     </svg>
                                 </div>
-                                <input type="text" name="customer_name" placeholder="Nama lengkap..." class="w-full border border-gray-200 rounded-xl pl-10 pr-4 py-2.5
+                                <input type="text" name="customer_name" value="{{ old('customer_name') }}" placeholder="Nama lengkap..." class="w-full border border-gray-200 rounded-xl pl-10 pr-4 py-2.5
                                               text-sm text-gray-700 bg-gray-50 focus:bg-white
                                               focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100
                                               outline-none transition-all duration-200">
                             </div>
+                            @error('customer_name')
+                                <p class="text-xs text-red-500 mt-1 font-semibold">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
@@ -291,11 +293,14 @@ $statCards = [
                                             d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                     </svg>
                                 </div>
-                                <input type="text" name="whatsapp_number" placeholder="08xx-xxxx-xxxx" class="w-full border border-gray-200 rounded-xl pl-10 pr-4 py-2.5
+                                <input type="text" name="whatsapp_number" value="{{ old('whatsapp_number') }}" placeholder="08xx-xxxx-xxxx" class="w-full border border-gray-200 rounded-xl pl-10 pr-4 py-2.5
                                               text-sm text-gray-700 bg-gray-50 focus:bg-white
                                               focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100
                                               outline-none transition-all duration-200">
                             </div>
+                            @error('whatsapp_number')
+                                <p class="text-xs text-red-500 mt-1 font-semibold">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 
@@ -305,7 +310,7 @@ $statCards = [
                             Tanggal & Jam Mulai
                         </label>
                         <div class="relative">
-                            <input id="modal_start_date" type="text" name="start_date" placeholder="Pilih tanggal & waktu..." readonly
+                            <input id="modal_start_date" type="text" name="start_date" value="{{ old('start_date') }}" placeholder="Pilih tanggal & waktu..." readonly
                                 class="w-full border border-gray-200 rounded-xl pl-4 pr-10 py-2.5
                                           text-sm text-gray-700 bg-gray-50 focus:bg-white
                                           focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100
@@ -317,6 +322,9 @@ $statCards = [
                                 </svg>
                             </div>
                         </div>
+                        @error('start_date')
+                            <p class="text-xs text-red-500 mt-1 font-semibold">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     {{-- ── Durasi + Extra Jam ── --}}
@@ -328,13 +336,13 @@ $statCards = [
                             </label>
                             <div class="grid grid-cols-2 gap-2">
                                 <label class="relative cursor-pointer">
-                                    <input type="radio" name="duration_type" value="12" class="hidden peer" checked>
+                                    <input type="radio" name="duration_type" value="12" class="hidden peer" {{ old('duration_type', '12') == '12' ? 'checked' : '' }}>
                                     <div class="peer-checked:border-emerald-600 peer-checked:bg-gradient-to-r peer-checked:from-emerald-500 peer-checked:to-teal-500 peer-checked:text-white text-gray-700 border-2 border-gray-200 rounded-xl p-3 transition-all duration-200 text-center bg-gray-50">
                                         <p class="text-sm font-black transition-colors">12 Jam</p>
                                     </div>
                                 </label>
                                 <label class="relative cursor-pointer">
-                                    <input type="radio" name="duration_type" value="24" class="hidden peer">
+                                    <input type="radio" name="duration_type" value="24" class="hidden peer" {{ old('duration_type') == '24' ? 'checked' : '' }}>
                                     <div class="peer-checked:border-emerald-600 peer-checked:bg-gradient-to-r peer-checked:from-emerald-500 peer-checked:to-teal-500 peer-checked:text-white text-gray-700 border-2 border-gray-200 rounded-xl p-3 transition-all duration-200 text-center bg-gray-50">
                                         <p class="text-sm font-black transition-colors">24 Jam</p>
                                     </div>
@@ -351,7 +359,7 @@ $statCards = [
                                         bg-gray-50 focus-within:bg-white focus-within:border-indigo-400
                                         focus-within:ring-2 focus-within:ring-indigo-100
                                         transition-all duration-200 overflow-hidden">
-                                <input type="number" name="extra_hours" id="modal_extra_hours" value="0" min="0" class="flex-1 px-3 py-2.5 text-sm font-bold text-gray-700
+                                <input type="number" name="extra_hours" id="modal_extra_hours" value="{{ old('extra_hours', '0') }}" min="0" class="flex-1 px-3 py-2.5 text-sm font-bold text-gray-700
                                               bg-transparent outline-none w-0 border-none appearance-none">
                                 <span class="flex-shrink-0 w-10 flex items-center justify-center
                                              text-xs font-bold text-gray-400 border-l border-gray-200
@@ -408,7 +416,7 @@ $statCards = [
                             class="w-full border border-gray-200 rounded-xl px-4 py-2.5
                                       text-sm text-gray-700 bg-gray-50 focus:bg-white
                                       focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100
-                                      outline-none transition-all duration-200 resize-none"></textarea>
+                                      outline-none transition-all duration-200 resize-none">{{ old('notes') }}</textarea>
                     </div>
 
                     {{-- ── Immediate: Cash & Change ── --}}
@@ -430,7 +438,7 @@ $statCards = [
                                                  bg-gray-100 self-stretch">
                                         Rp
                                     </span>
-                                    <input type="number" name="dp_amount" id="modal_cash_paid" min="0" placeholder="0"
+                                    <input type="number" name="dp_amount" id="modal_cash_paid" value="{{ old('dp_amount') }}" min="0" placeholder="0"
                                         class="flex-1 px-3 py-2.5 text-sm font-bold text-gray-700
                                                   bg-transparent outline-none w-0 border-none appearance-none" >
                                 </div>
@@ -569,8 +577,10 @@ $statCards = [
                 modalCarId.value = selectedCar.id;
                 modalTitle.textContent =  selectedCar.name;
 
-                // Reset extra hours
-                elExtraHours.value = 0;
+                // Reset extra hours hanya jika bukan dari old input
+                if (!"{{ old('car_id') }}") {
+                    elExtraHours.value = 0;
+                }
 
                 // Destroy old flatpickr if exists
                 if (flatpickrInstance) {
@@ -589,7 +599,7 @@ $statCards = [
                     altInput: true,
                     altFormat: 'j F Y \\p\\u\\k\\u\\l H.i',
                     dateFormat: 'Y-m-d H:i',
-                    defaultDate: new Date(),
+                    defaultDate: elStartDate.value ? new Date(elStartDate.value) : new Date(),
                     onChange: function(selectedDates, dateStr) {
                         if (typeof calculateTotal === 'function') {
                             calculateTotal();
@@ -719,6 +729,26 @@ $statCards = [
         })();
 
         const bookedDates = @json($bookedDates);
+
+        // ── AUTO OPEN MODAL JIKA ADA ERROR VALIDASI ──
+        @if($errors->any())
+            window.addEventListener('DOMContentLoaded', (event) => {
+                const oldCarId = "{{ old('car_id') }}";
+                if (oldCarId) {
+                    // Cari tombol yang memiliki car id tersebut untuk memicu klik otomatis
+                    const btn = document.querySelector(`.openBookingModal[data-car-id="${oldCarId}"]`);
+                    if (btn) {
+                        btn.click(); // Memicu proses pengisian data mobil dan buka modal
+                    } else {
+                        document.getElementById('bookingModal').classList.remove('hidden');
+                        document.getElementById('bookingModal').classList.add('flex');
+                    }
+                } else {
+                    document.getElementById('bookingModal').classList.remove('hidden');
+                    document.getElementById('bookingModal').classList.add('flex');
+                }
+            });
+        @endif
     </script>
 
 </x-admin-layout>

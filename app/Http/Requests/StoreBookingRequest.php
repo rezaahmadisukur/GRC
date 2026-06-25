@@ -29,6 +29,7 @@ class StoreBookingRequest extends FormRequest
      */
     public function rules(): array
     {
+        // Menggunakan format array jika ada aturan regex agar karakter '|' tidak bentrok
         return [
             'car_id' => 'required|exists:cars,id',
             'customer_name' => 'required|string|max:255',
@@ -44,10 +45,13 @@ class StoreBookingRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'car_id.required' => 'Mobil harus dipilih.',
-            'car_id.exists' => 'Mobil yang dipilih tidak tersedia.',
-            'customer_name.required' => 'Nama lengkap wajib diisi.',
-            'customer_name.max' => 'Nama lengkap maksimal :max karakter.',
+            'car_id.required'          => 'Mobil harus dipilih.',
+            'car_id.exists'            => 'Mobil yang dipilih tidak tersedia.',
+            
+            'customer_name.required'   => 'Nama lengkap wajib diisi.',
+            'customer_name.max'        => 'Nama lengkap maksimal :max karakter.',
+            'customer_name.regex'      => 'Nama lengkap tidak boleh mengandung angka. Hanya boleh huruf, spasi, atau tanda baca nama yang valid.',
+            
             'whatsapp_number.required' => 'Nomor WhatsApp wajib diisi.',
             'whatsapp_number.regex' => 'Format nomor WhatsApp tidak valid. Gunakan format seperti 0812xxxxxxx atau +62812xxxxxxx.',
             'start_date.required' => 'Tanggal mulai sewa wajib dipilih.',
